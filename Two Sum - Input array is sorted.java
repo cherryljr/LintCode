@@ -5,24 +5,26 @@
      *  they add up to the target, where index1 must be less than index2. 
      *  Please note that your returned answers (both index1 and index2) are not zero-based.
      */
-     
-public int[] twoSum(int[] nums, int target) {
-    // write your code here
-    int[] result = new int[2];
-    int i, j;
-    if (nums == null || nums.length <= 1)
-        return result;
-    for (i = 0; i < nums.length; i++) 		//  Complexity: O(N²)
-        for (j = i+1; j < nums.length; j++) {
-            if (nums[i] + nums[j] < target)
-                ;
-            else if (nums[i] + nums[j] ==  target) {
-                result[0] = i + 1;
-                result[1] = j + 1;
-            } else
-                break;    
-        }
-    return result;
+
+public class Solution {     
+	public int[] twoSum(int[] nums, int target) {
+	    // write your code here
+	    int[] result = new int[2];
+	    int i, j;
+	    if (nums == null || nums.length <= 1)
+	        return result;
+	    for (i = 0; i < nums.length; i++) 		//  Complexity: O(N²)
+	        for (j = i+1; j < nums.length; j++) {
+	            if (nums[i] + nums[j] < target)
+	                ;
+	            else if (nums[i] + nums[j] ==  target) {
+	                result[0] = i + 1;
+	                result[1] = j + 1;
+	            } else
+	                break;    
+	        }
+	    return result;
+	}
 }
 
 /****************************************  The other way  ************************************/
