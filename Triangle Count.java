@@ -10,6 +10,22 @@
 	[3,6,7]
 	[4,6,7]
 	*/
+	
+	/*
+	Thoughts:
+	Pick 3 integers that fits the condition: 
+	A + B > C
+	B + C > A
+	A + C > B
+	If we sort the input, then we know A <= B <= C, so we can remove 2 conditoins above and only have:
+	A + B > C
+	That is, Pick one C, and pick two integers A,B in front. Similar to Two Sum - Input array is sorted.
+	Have a fixed C as target, and find A + B > target in the remaining array on left of C. 
+	How about just use 2 pointers left, right, and compare with a C (s[i] in for loop)
+	Time: O(n^2)
+
+	Note: don't forget to sort
+	*/
 public class Solution {
     /**
      * @param S: A list of integers
@@ -17,29 +33,30 @@ public class Solution {
      */
     public int triangleCount(int S[]) {
         // write your code here
+        if (S == null || S.length <3)
+        	return 0;
         int count = 0;
         int n = S.length;
 
         quicksort(S, 0, S.length-1);
-        for (int i = 0;i<n;i++)  
-        {  
-              
-            for (int j=i+1; j<n; j++)  
-            {  
-                int l = i + 1;  
-                int r = j;  
-                int target = S[j] - S[i];  
-                while(l < r)  
-                {  
-                    int mid = (l + r) / 2;  
-                    if(S[mid] > target)  
-                        r = mid;  
-                    else  
-                        l = mid + 1;  
-                }  
-                count += (j - l);  
-            }  
-        }  
+        // 这里可直接调用Arrays.sort(S);直接进行快速排序，
+        //	这边仅仅对快排进行重写稍作演示，之后的代码将直接调用Java已经实现的方法
+				for (int i = 2; i < S.length; i++) {
+					int left = 0;
+					int right = i -1;
+					while (left < right) {
+						if (S[left] + S[right] > S[i]) {
+							count += (right - left);		
+							//  因为已经按从小到大的顺序排序完，故一旦S[left]+S[right]>S[i]，
+							//	那么说明S中下标介于left~right的值与S[right]相加均大于S[i](C),故代表可right-left个三角形.
+							//	注意：这里是一定包含S[right]这条边的意思。
+							right--;
+						}
+						else{
+							left++;
+						}
+					}
+				}  
         
         return count;
     }

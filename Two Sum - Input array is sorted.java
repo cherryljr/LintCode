@@ -38,17 +38,17 @@ Complexity: O(N)
 */
 public class Solution {
     public int[] twoSum(int[] nums, int target) {
-        int[] rst = new int[2];
+        int[] result = new int[2];
         if (nums == null || nums.length <= 1) {
-            return rst;
+            return result;
         }
         int start = 0;
         int end = nums.length - 1;
         while(start < end) {
             long sum = (long)(nums[start] + nums[end]);
             if (target == sum) {
-                rst[0] = start + 1;
-                rst[1] = end + 1;
+                result[0] = start + 1;
+                result[1] = end + 1;
                 break;
             } else if (target > sum) {
                 start++;
@@ -56,6 +56,6 @@ public class Solution {
                 end--;
             }
         }//END while
-        return rst;
+        return result;
     }
 }
