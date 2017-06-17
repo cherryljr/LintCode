@@ -20,8 +20,9 @@ public class Solution {
 	            else if (nums[i] + nums[j] ==  target) {
 	                result[0] = i + 1;
 	                result[1] = j + 1;
+	                return result;
 	            } else
-	                break;    
+	                break;   
 	        }
 	    return result;
 	}
