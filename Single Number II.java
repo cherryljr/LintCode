@@ -24,7 +24,7 @@ public class Solution {
         for (int i = 0; i < 32; i++) {
             for (int j = 0; j < A.length; j++){
             //	将数组A中每个数的第i位进行相加，后再对每位上的数模3.
-                bits[i] += A[j] >> i & 1;
+                bits[i] += A[j] >> i & 1;		//	取出一个数的第i位
                 bits[i] %= 3;
             }
 						//	结果为未满足条件数的二进制表示，利用位运算将其转换为十进制.
