@@ -68,6 +68,9 @@ put right on stack
 put left on stack
 4. In next run, the ‘left’ will be on top of stack, and will be taken first. So the order becomes: parent -> left -> right
 
+This method just like : "Binary Search Tree Iterator.java"
+The code that how to Traversa the tree is very worth to learn. How smart way!!!
+
 */
 /**
  * Definition of TreeNode:
@@ -83,29 +86,27 @@ put left on stack
 public class Solution {
     /**
      * @param root: The root of binary tree.
-     * @return: Preorder in ArrayList which contains node values.
+     * @return: Inorder in ArrayList which contains node values.
      */
-    public ArrayList<Integer> preorderTraversal(TreeNode root) {
-         Stack<TreeNode> stack = new Stack<TreeNode>();
-         ArrayList<Integer> result = new ArrayList<Integer>();
-         //Check top
-         if (root == null) {
-             return result;
-         }
-         //save root
-         stack.push(root);
-         //add to result, and load on stack. Right-side at the bottom
-         while (!stack.empty()) {
-             TreeNode node = stack.pop();
-             result.add(node.val);
-             if (node.right != null) {
-                 stack.push(node.right);
-             }
-             if (node.left != null) {
-                 stack.push(node.left);
-             }
-         }//while
-         
-         return result;
-    }
+    public ArrayList<Integer> inorderTraversal(TreeNode root) {
+         ArrayList<Integer> rst = new ArrayList<Integer>();
+        if (root == null) {
+            return rst;
+        }
+
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        TreeNode curr = root;
+        
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+            TreeNode r = stack.pop();
+            curr = r.right;
+            rst.add((Integer)r.val);
+        }
+          
+        return rst;
+    } 
 }
