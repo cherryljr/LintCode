@@ -61,9 +61,7 @@ Binary Tree LintCode Copyright Non Recursion Binary Search Tree Google LinkedIn 
 		也是myStack最上面的node。
 
 		第一个while loop非常巧妙：当current不等于null时，一直查询left node，并把沿途left node存入myStack，
-		一直到最小的node的left node (值为null)，然后再从stack里面读出来上一个left node，虽然可以用while(current.left!=null)
-		来省略两步(current=current.left 和 current=myStack.pop() )， 但这样的话current == null的情况要多写一个if语句。
-		while(curerent != null) 包括了 if(current == null) 的情况。 之后的从myStack读出来是两个情况都要做的下一步。
+		一直到最小的node的left node (值为null)，然后再从stack里面读出来上一个left node.
 		
 		current 为结果时，再从以 current.right 为 root 的 tree 中找 next()， 所以最后要 current = current.right 
 */
