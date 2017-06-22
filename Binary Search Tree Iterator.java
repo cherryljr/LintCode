@@ -52,6 +52,21 @@ Binary Tree LintCode Copyright Non Recursion Binary Search Tree Google LinkedIn 
 */
 
 
+/*	O(h) space
+    核心：TreeNode next()
+		主要功能一直找出最小的那个node：
+		1. 如果current != null，一直找left.left.left.....就是所求结果； 
+		2. 如果current == null 并且current是 current.parent的left node时，current.parent 就是所求结果，也就是myStack最上面的node；
+		3. 如果current == null 并且current是 current.parent的right node时， current.parent已经被pop了，current.parent.parent是所求结果，
+		也是myStack最上面的node。
+
+		第一个while loop非常巧妙：当current不等于null时，一直查询left node，并把沿途left node存入myStack，
+		一直到最小的node的left node (值为null)，然后再从stack里面读出来上一个left node，虽然可以用while(current.left!=null)
+		来省略两步(current=current.left 和 current=myStack.pop() )， 但这样的话current == null的情况要多写一个if语句。
+		while(curerent != null) 包括了 if(current == null) 的情况。 之后的从myStack读出来是两个情况都要做的下一步。
+		
+		current 为结果时，再从以 current.right 为 root 的 tree 中找 next()， 所以最后要 current = current.right 
+*/
 
 /**
  * Definition of TreeNode:
@@ -70,63 +85,6 @@ Binary Tree LintCode Copyright Non Recursion Binary Search Tree Google LinkedIn 
  *    do something for node
  * } 
  */
-
-// O(h) space.
-// Stack, inorder traversal; first add left node till end. Each next() trigger a iteration. 
-public class BSTIterator {
-    public Stack<TreeNode> stack = new Stack<TreeNode>();
-    
-    //@param root: The root of binary tree.
-    //Add till end of left
-    public BSTIterator(TreeNode root) {
-        if (root == null) {
-            return;
-        }
-        stack.push(root);
-        while (root.left != null) {
-            stack.push(root.left);
-            root = root.left;
-        }
-    }
-
-    //@return: True if there has next node, or false
-    public boolean hasNext() {
-        return stack.size() > 0;
-    }
-    
-    //@return: return next node
-    public TreeNode next() {
-        TreeNode node = stack.pop();
-        if (node.right != null) {
-            TreeNode temp = node.right;
-            stack.push(temp);
-            while (temp.left != null) {
-                stack.push(temp.left);
-                temp = temp.left;
-            }            
-        }
-        return node;
-    }
-}
-
-
-
-/*	O(1) space
-    核心：TreeNode next()
-		主要功能一直找出最小的那个node：
-		1. 如果current != null，一直找left.left.left.....就是所求结果； 
-		2. 如果current == null 并且current是 current.parent的left node时，current.parent 就是所求结果，也就是myStack最上面的node；
-		3. 如果current == null 并且current是 current.parent的right node时， current.parent已经被pop了，current.parent.parent是所求结果，
-		也是myStack最上面的node。
-
-		第一个while loop非常巧妙：当current不等于null时，一直查询left node，并把沿途left node存入myStack，
-		一直到最小的node的left node (值为null)，然后再从stack里面读出来上一个left node，虽然可以用while(current.left!=null)
-		来省略两步(current=current.left 和 current=myStack.pop() )， 但这样的话current == null的情况要多写一个if语句。
-		while(curerent != null) 包括了 if(current == null) 的情况。 之后的从myStack读出来是两个情况都要做的下一步。
-		
-		current 为结果时，再从以 current.right 为 root 的 tree 中找 next()， 所以最后要 current = current.right 
-*/
-
 public class BSTIterator {
 	public Stack<TreeNode> stack = new Stack<TreeNode>();
 	public TreeNode current;
