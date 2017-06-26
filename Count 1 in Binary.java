@@ -1,6 +1,6 @@
 1. 可以把integer -> string -> char array.
 
-2. 或者就 count += num >> i & 1 （该操作为取出num的二进制表示的第i位上的数）
+2. 或者使用 num = num & (num - 1) （该操作为取出num的二进制表示的第i位上的数）
 
 ```
 /*
