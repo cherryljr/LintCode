@@ -68,7 +68,8 @@ class Solution {
         results.add(new ArrayList<Integer>(subset));
         
         for (int i = startIndex; i < nums.length; i++) {
-            if (i > 0 && i != startIndex && nums[i - 1] == nums[i]) {
+        	//	相比于Subset I,该程序只在这里添加了一个判断条件，这边体现出了模板的应用
+            if (i > 0 && i != startIndex && nums[i - 1] == nums[i]) {		
                 continue;
             }
             
