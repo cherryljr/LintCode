@@ -23,13 +23,15 @@ Tags Expand
 Array Two Pointers
 
 Thinking Process:
-Two pointers, i, j
+Two pointers, i, size
 i: the regular for loop
-j - jumper:
-If nums[i] == nums[j], do not update nums[j]. It stays the same.
-after i++, compare nums[j] with the new nums[i]. If not the same, means the position after j can have a new number that’s not duplicate of nums[j]. In this case, we update nums[j] = nums[i].
+size - jumper:
+If nums[i] == nums[size], do not update nums[size]. It stays the same.
+after i++, compare nums[size] with the new nums[i]. If not the same, 
+means the position after size can have a new number that’s not duplicate of nums[size]. 
+In this case, we update nums[++size] = nums[i].
 Do this until regular i runs out.
-At the end, j is actually the last index of new Array. j + 1 is the size.
+At the end, size is actually the last index of new Array. size + 1 is the size.
 */
 
 public class Solution {
