@@ -65,14 +65,22 @@ public class Solution {
 
 /*
     2. Non-recursive
-    Inorder traversal: use 1 stack, push left till end; pirnt/store curr; push right to stack
-    'Curr' is always moving along with the curret position, representing the current node.
+   
+*/
+
+/*
+
+ Inorder traversal: use 1 stack, push left till end; pirnt/store curr; push right to stack
 
     Note: after curr = curr.right, curr could be null; this will skip the while loop, and move on to next element.
 
     Trick: in Inorder, we care the right node least. So we keep going with left and curr; 
     only when there is a right node, we add it;
     even after this, we go deep into that right node's left children all the way down.
+    
+This method just like : "Binary Search Tree Iterator.java"
+The code that how to Traversa the tree is very worth to learn. How smart way!!!
+
 */
 
 public class Solution {
