@@ -1,7 +1,12 @@
 1. recursive with helper method   
-2. Stack(NON-recursive) push curr, push right, push left.   
+2. Stack(NON-recursive) push curr, push right, push left. Because Stack is FILO (first in, last out),
+	 we should push the right_child first.
+3. Divide and Conquer
 
-
+PS.
+	当我们想使用非递归的方法去实现一个原本递归的程序时，通常都会使用到栈这个数据结构。
+	因为这实际上就是在模拟递归时内存中的栈操作的过程。
+	遍历树的非递归方法均是使用栈来完成的。
 ```
 /*
 Given a binary tree, return the preorder traversal of its nodes' values.
@@ -24,54 +29,43 @@ Can you do it without recursion?
 
 Tags Expand 
 Tree Binary Tree
-//Recommend way: using a stack
-//Recursive way can be seen here: http://www.ninechapter.com/solutions/binary-tree-preorder-traversal/
-
 */
 
-/*
 
-    Draw a few nodes and will realize to use stack
-        Cannot use queue, because whatever added on it first, will first process. 
-        That means if we add curr,left,right; they will be processed first... but we want to traverse all left nodes first.
-    IN FACT: binary tree traversal are all using stack...
-*/
-
-//recursive
+//Version 1: Traverse / Recursive
 public class Solution {
     public ArrayList<Integer> preorderTraversal(TreeNode root) {
-        ArrayList<Integer> rst = new ArrayList<Integer>();
-        if (root == null) {
-            return rst;
-        }   
-        helper(rst, root);
-        return rst;
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        traverse(root, result);
+        return result;
     }
-
-    public void helper(ArrayList<Integer>rst, TreeNode node){
-        if (node != null) {
-            rst.add(node.val);
-            helper(rst, node.left);
-            helper(rst, node.right);
+    // 把root为跟的preorder加入result里面
+    private void traverse(TreeNode root, ArrayList<Integer> result) {
+        if (root == null) {
+            return;
         }
+
+        result.add(root.val);
+        traverse(root.left, result);
+        traverse(root.right, result);
     }
 }
 
 
+//	Version 2: Use Stack to complete it.
 /*
 Thinking process:
+Binary tree traversal are all using stack...
+
 Check if root is null
 use a container to save results
 
 use current node
 put right on stack
 put left on stack
-4. In next run, the ‘left’ will be on top of stack, and will be taken first. So the order becomes: parent -> left -> right
-
-This method just like : "Binary Search Tree Iterator.java"
-The code that how to Traversa the tree is very worth to learn. How smart way!!!
-
+In next run, the ‘left’ will be on top of stack, and will be taken first. So the order becomes: parent -> left -> right
 */
+
 /**
  * Definition of TreeNode:
  * public class TreeNode {
@@ -84,29 +78,48 @@ The code that how to Traversa the tree is very worth to learn. How smart way!!!
  * }
  */
 public class Solution {
-    /**
-     * @param root: The root of binary tree.
-     * @return: Inorder in ArrayList which contains node values.
-     */
-    public ArrayList<Integer> inorderTraversal(TreeNode root) {
-         ArrayList<Integer> rst = new ArrayList<Integer>();
+    public List<Integer> preorderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        List<Integer> preorder = new ArrayList<Integer>();
+        
         if (root == null) {
-            return rst;
+            return preorder;
+        }
+        
+        stack.push(root);
+        while (!stack.empty()) {
+            TreeNode node = stack.pop();
+            preorder.add(node.val);
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+        
+        return preorder;
+    }
+}
+
+
+//Version 3: Divide & Conquer
+public class Solution {
+    public ArrayList<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        // null or leaf
+        if (root == null) {
+            return result;
         }
 
-        Stack<TreeNode> stack = new Stack<TreeNode>();
-        TreeNode curr = root;
-        
-        while (curr != null || !stack.isEmpty()) {
-            while (curr != null) {
-                stack.push(curr);
-                curr = curr.left;
-            }
-            TreeNode r = stack.pop();
-            curr = r.right;
-            rst.add((Integer)r.val);
-        }
-          
-        return rst;
-    } 
+        // Divide
+        ArrayList<Integer> left = preorderTraversal(root.left);
+        ArrayList<Integer> right = preorderTraversal(root.right);
+
+        // Conquer
+        result.add(root.val);
+        result.addAll(left);
+        result.addAll(right);
+        return result;
+    }
 }
