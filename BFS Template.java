@@ -1,3 +1,32 @@
+/*
+Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+
+Example
+Given binary tree {3,9,20,#,#,15,7},
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+ 
+
+return its level order traversal as:
+
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+Tags Expand 
+Queue Binary Tree Breadth First Search Binary Tree Traversal Uber LinkedIn Facebook
+
+*/
+
+//	BFS的其他两种实现方法与层序遍历的DFS实现可以参见: Binary Tree Level Order Traversal.java
+//	One Queue is the best way
+
 public class Solution {
     public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
         ArrayList result = new ArrayList();
