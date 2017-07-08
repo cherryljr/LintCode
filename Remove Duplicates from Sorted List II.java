@@ -51,6 +51,7 @@ public class Solution {
         
         while (head.next != null && head.next.next != null) {
             if (head.next.val == head.next.next.val) {
+            		//	因为需要将重复的节点全部删除，故使用duplicateVal来记录重复值以便与后面的节点值进行比较
                 int duplicateVal = head.next.val;
                 while (head.next != null && head.next.val == duplicateVal) {
                     head.next = head.next.next;
