@@ -1,7 +1,5 @@
-M
-
 方法1:
-Mark visited. 并且要检查上一层recursive时有没有略过重复element. 并且要排序，通过permutation规律查看是否排出了重复结果。
+Mark visited. 并且要检查上一层recursive时有没有略过重复element. 因此需要排序，通过permutation规律查看是否排出了重复结果。
 
 背景1:在recursive call里面有for loop, 每次从i=0开始, 试着在当下list上加上nums里面的每一个。    
 从i=0开始，所以会依次recursive每一个nums：因此，例如i=2,肯定比i=3先被访问。也就是:取i=2的那个list permutation肯定先排出来。   
@@ -45,39 +43,62 @@ LinkedIn Recursion
 /*
 Use visited[i] to mark visited copies
 */
-public class Solution {
+class Solution {
+    /**
+     * @param nums: A list of integers.
+     * @return: A list of unique permutations.
+     */
     public List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> rst = new ArrayList<List<Integer>>();
-        if (nums == null || nums.length == 0) {
-            return rst;
+    
+        ArrayList<List<Integer>> results = new ArrayList<List<Integer>>();
+    
+        if (nums == null) {
+            return results;
         }
+    		//	注意：nums == null与nums.length == 0是不同的
+    		//	虽然大部分情况下他们的处理方式是相同的，但是在本题中是不一样的
+        if(nums.length == 0) {
+            results.add(new ArrayList<Integer>());
+            return results;
+        }
+
         Arrays.sort(nums);
+        ArrayList<Integer> list = new ArrayList<Integer>();
         boolean[] visited = new boolean[nums.length];
-        helper(rst, new ArrayList<Integer>(), nums, visited);
-
-        return rst;
+     
+        helper(results, list, visited, nums);    
+        return results;
     }
-
-    public void helper(List<List<Integer>> rst, ArrayList<Integer> list, int[] nums, boolean[] visited) {
-        if (list.size() == nums.length) {
-            rst.add(new ArrayList<Integer>(list));
+    
+    
+    public void helper(ArrayList<List<Integer>> results, 
+                   ArrayList<Integer> list, boolean[] visited, int[] nums) {
+        
+        if(list.size() == nums.length) {
+            results.add(new ArrayList<Integer>(list));
             return;
         }
-
-        for (int i = 0; i < nums.length; i++) {
-            if (visited[i] || (i != 0 && visited[i - 1] && nums[i] == nums[i - 1])) {
+        
+        for(int i = 0; i < nums.length; i++) {
+            if (visited[i] || ( i != 0 && nums[i] == nums[i - 1]
+            && !visited[i-1])){
                 continue;
             }
+            /*
+            上面的判断主要是为了去除重复元素影响。
+            比如，给出一个排好序的数组，[1,2,2]，那么第一个2和第二2如果在结果中互换位置，
+            我们也认为是同一种方案，所以我们强制要求相同的数字，原来排在前面的，在结果
+            当中也应该排在前面，这样就保证了唯一性。所以当前面的2还没有使用的时候，就
+            不应该让后面的2使用。
+            */
             list.add(nums[i]);
             visited[i] = true;
-            helper(rst, list, nums, visited);
+            helper(results, list, visited, nums);
             list.remove(list.size() - 1);
             visited[i] = false;
-        
         }
-    }
+     } 
 }
-
 
 /*
     Thoughts:
