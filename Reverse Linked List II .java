@@ -1,3 +1,6 @@
+因为head无法确定，若使用if语句，会导致使用过多的if语句。
+故这里使用Dummy Node解决问题
+
 遍历到M前，
 存一下那个点，
 从M开始， for loop， reverse [m~n]。 然后把三段链接在一起。
@@ -34,56 +37,41 @@ Note, when doing reverse, always:
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) {
- *         val = x;
- *         next = null;
- *     }
  * }
  */
 public class Solution {
-    /**
-     * @param ListNode head is the head of the linked list 
-     * @oaram m and n
-     * @return: The head of the reversed ListNode
-     */
     public ListNode reverseBetween(ListNode head, int m, int n) {
-        if (head == null || m >= n) {
+        if (m >= n || head == null) {
             return head;
         }
-
-        ListNode dummyNode = new ListNode(0);
-        dummyNode.next = head;
-        head = dummyNode;
-        ListNode nodeFront = null;
-    
         
-        for (int countM = 1; countM < m; countM++) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        head = dummy;
+        
+        for (int i = 1; i < m; i++) {
             if (head == null) {
-                return head;
+                return null;
             }
             head = head.next;
         }
         
-        nodeFront = head;
-        ListNode mNode = head.next; //Head is Mth node. Reserve it
-        ListNode reversedList = mNode;
-        ListNode postNode = mNode.next;
-        
-        for (int countN = m; countN < n; countN++) {
-            ListNode temp = postNode.next;
-            postNode.next = reversedList;
-            reversedList = postNode;
-            postNode = temp;
+        ListNode premNode = head;
+        ListNode mNode = head.next;
+        ListNode nNode = mNode, postnNode = mNode.next;
+        for (int i = m; i < n; i++) {
+            if (postnNode == null) {
+                return null;
+            }
+            ListNode temp = postnNode.next;
+            postnNode.next = nNode;
+            nNode = postnNode;
+            postnNode = temp;
         }
+        //	Connect three sections: [0 ~ m-1], [m ~ n], [n+1 ~ size]
+        mNode.next = postnNode;
+        premNode.next = nNode;
         
-        //List front, middle and end section
-        nodeFront.next = reversedList;
-        mNode.next = postNode;
-        
-        return dummyNode.next;
+        return dummy.next;
     }
 }
-
-
-
-```
