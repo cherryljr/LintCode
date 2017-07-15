@@ -7,7 +7,6 @@ PriorityQueue需要存储单位。自己建一个Class Node 存val, x,y index.
 /*
 Given k sorted integer arrays, merge them into one sorted array.
 
-Have you met this question in a real interview? Yes
 Example
 Given 3 sorted arrays:
 
@@ -51,7 +50,7 @@ public class Solution {
             return rst;
         }
         
-        PriorityQueue<Node> queue = new PriorityQueue<Node>(arrays.length,
+        PriorityQueue<Node> heap = new PriorityQueue<Node>(arrays.length,
             new Comparator<Node>() {
                 public int compare(Node a, Node b){
                     return a.val - b.val;
@@ -62,17 +61,17 @@ public class Solution {
         //init
         for (int i = 0; i < arrays.length; i++) {
             if (arrays[i].length != 0) {
-                queue.offer(new Node(arrays[i][0], i, 0));
+                heap.offer(new Node(arrays[i][0], i, 0));
             }
         }
         
         Node node;
         
-        while (!queue.isEmpty()) {
-            node = queue.poll();
+        while (!heap.isEmpty()) {
+            node = heap.poll();
             rst.add(node.val);
             if (node.y < arrays[node.x].length - 1) {
-                queue.offer(new Node(arrays[node.x][node.y + 1], node.x, node.y + 1));
+                heap.offer(new Node(arrays[node.x][node.y + 1], node.x, node.y + 1));
             }   
         }
         
