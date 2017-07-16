@@ -59,7 +59,7 @@ public class Solution {
      * @param head: The first node of linked list.
      * @return: a tree node
      */
-    private ListNode findpreMid(ListNode head) {	
+    private ListNode findpreMid(ListNode head) {
         ListNode slow = head;
         ListNode fast = head.next;
         
@@ -79,11 +79,11 @@ public class Solution {
             return new TreeNode(head.val);
         }
         
-        ListNode mid = findpreMid(head);
-        TreeNode root = new TreeNode(mid.next.val);
+        ListNode premid = findpreMid(head);
+        TreeNode root = new TreeNode(premid.next.val);
         
-        TreeNode right = sortedListToBST(mid.next.next);
-        mid.next = null;
+        TreeNode right = sortedListToBST(premid.next.next);
+        premid.next = null;
         TreeNode left = sortedListToBST(head);
         
         root.left = left;
