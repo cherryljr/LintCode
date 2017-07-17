@@ -67,6 +67,7 @@ class Solution {
                               ArrayList<ArrayList<Integer>> results) {
         results.add(new ArrayList<Integer>(subset));
         
+        //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取
         for (int i = startIndex; i < nums.length; i++) {
         	//	相比于Subset I,该程序只在这里添加了一个判断条件，这边体现出了模板的应用
             if (i > 0 && i != startIndex && nums[i - 1] == nums[i]) {		
