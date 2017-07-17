@@ -1,11 +1,12 @@
 是一个排列组合问题，首先想到可以使用Recursive Search的模板
 递归，DFS.   
-记得求sum时候也pass一个sum进去，backtracking一下sum也，这样就不必每次都sum the list了。   
+记得求sum时候也pass一个sum进去，backtracking一下sum，这样就不必每次都sum the list了。   
+（这里Version2可以进一步优化，从而节省sum的这个空间）
 
 但是本题存在着一个问题：
 题目里面所同一个元素可以用n次，但是，同一种solution不能重复出现。如何handle?
 
-1. 用一个index （我们这里用了startIndex）来mark每次recursive的起始点。
+1. 用一个index（我们这里用了startIndex）来mark每次recursive的起始点。
 2. 每个recursive都从for loop里面的i开始，而i = startIndex。也就是,下一个Recursion,这个数字就会有机会被重复使用。
 （相比于Template中的每次递归传入的值为：startIndex + 1，但这里不能加上1。若加上1就表示下次从下一个位置开始取，这样就会导致该数字无法被重复使用）
 3. 同时，要确保解集中不能有重复的组合。这里可以直接使用Template中的方法解决。
@@ -43,10 +44,6 @@ A solution set is:
 Tags Expand 
 Backtracking Array
 
-Thinking process:
-Similar to 'Combination' problem, do back-tracking with ability to repeat itself at index i.
-In order to stop duplicates of result entry, use a 'prev' tracker to 'continue' if a value is repeating at any index. Skip repeating integers because we've already allow unlimited # of same integer in one single solution. (IMPORTANT: will have to sort the int[] in order to detect the duplicates)
-In particular, I pass a 'sum' to compare with 'target' (want to have sum == target). Some solution prefer to use 'target - someVlaue' == 0 to find solution.
 */
 
 // version 1: DFS Recursive Search
@@ -114,16 +111,16 @@ public class Solution {
 
      void helper(int[] candidates,
                  int index,
-                 int target,
+                 int remainTarget,
                  List<Integer> combination,
                  List<List<Integer>> result) {
-        if (target == 0) {
+        if (remainTarget == 0) {
             result.add(new ArrayList<Integer>(combination));
             return;
         }
 
         for (int i = index; i < candidates.length; i++) {
-            if (candidates[i] > target) {
+            if (candidates[i] > remainTarget) {
                 break;
             }
 
@@ -132,7 +129,7 @@ public class Solution {
             }
 
             combination.add(candidates[i]);
-            helper(candidates, i, target - candidates[i], combination, result);
+            helper(candidates, i, remainTarget - candidates[i], combination, result);
             combination.remove(combination.size() - 1);
         }
     }
