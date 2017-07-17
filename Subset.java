@@ -64,6 +64,7 @@ class Solution {
         // results.add(subset);
         results.add(new ArrayList<Integer>(subset));
         
+        //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取
         for (int i = startIndex; i < nums.length; i++) {
             // [1] -> [1,2]
             subset.add(nums[i]);
