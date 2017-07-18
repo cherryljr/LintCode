@@ -82,6 +82,7 @@ class Solution {
             */
             
             subset.add(nums[i]);
+            // 注意这里递归传入的是i + 1表示startIndex从下一个位置开始
             subsetHelper(subset, nums, i + 1, results);
             subset.remove(subset.size() - 1);
         }
