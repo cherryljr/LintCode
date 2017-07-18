@@ -1,4 +1,5 @@
-最基本的递归题目。   
+递归搜索模板 / DFS    
+虽然代码注释已经较为详细，但是还是建议参照文档一起阅读
 O(nlogn)
 
 注意：用startIndex来track到哪一步。
@@ -61,21 +62,23 @@ class Solution {
                         ArrayList<ArrayList<Integer>> results) {
         // 2. 递归的拆解
         // deep copy
-        // results.add(subset);
+        // results.add(subset);		这里是遍历所有的子集，所以无需判断条件
+        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中并且return
         results.add(new ArrayList<Integer>(subset));
         
         //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取
         for (int i = startIndex; i < nums.length; i++) {
             // [1] -> [1,2]
+            // 其他题目中可能存在不符合条件的情况，需要加上一个if语句来判断是否要add到subset中
             subset.add(nums[i]);
             // 寻找所有以 [1,2] 开头的集合，并扔到 results
+            // 注意这里递归传入的是i + 1表示startIndex从下一个位置开始
             helper(subset, nums, i + 1, results);
             // [1,2] -> [1]  回溯
             subset.remove(subset.size() - 1);
         }
         
         // 3. 递归的出口
-        // return;
     }
 }
 
