@@ -68,8 +68,10 @@ class Solution {
     private void helper(List<List<Integer>> rst,
                         List<Integer> list, 
                         int[] nums) {
+        //  results.add(subset); 将符合条件的答案加入到results中，并return
         if (list.size() == nums.length) {
             rst.add(new ArrayList<Integer>(list));
+            //	记得需要return
             return;
         }
         
