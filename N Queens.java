@@ -95,9 +95,11 @@ class Solution {
             if (cols.get(rowIndex) == column) {
                 return false;
             }
+            //	斜率为 1 -- 45度
             if (rowIndex + cols.get(rowIndex) == row + column) {
                 return false;
             }
+            //	斜率为 -1 -- 135度
             if (rowIndex - cols.get(rowIndex) == row - column) {
                 return false;
             }
