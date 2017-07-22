@@ -53,6 +53,7 @@ public class Solution {
             }
             sb.deleteCharAt(sb.length() - 1);
             result.add(sb.toString());
+            return;
         }
         
         //	IP地址每段长度最多只有3	
