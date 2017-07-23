@@ -137,6 +137,8 @@ public class Solution {
         int[][] f = new int[n][n];
         
         // initialize 
+        // 注意：自顶向下时如果动态规划是二维的数组，就需要把f[i][0]和f[0][i]都进行初始化，
+        // 即将矩阵的边缘进行一次初始化，因为我们基本都是要用到这些值的。
         f[0][0] = triangle[0][0];
         for (int i = 1; i < n; i++) {
             f[i][0] = f[i - 1][0] + triangle[i][0];
