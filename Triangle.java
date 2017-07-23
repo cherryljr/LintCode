@@ -82,7 +82,7 @@ public class Solution {
     }
 } 
 
-//	Version 1: Bottom-Up
+//	Version 2: Bottom-Up
 
 public class Solution {
     /**
