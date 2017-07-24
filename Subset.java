@@ -62,11 +62,13 @@ class Solution {
                         ArrayList<ArrayList<Integer>> results) {
         // 2. 递归的拆解
         // deep copy
-        // results.add(subset);		这里是遍历所有的子集，所以无需判断条件
-        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中并且return
+        // results.add(new ArrayList<>(subset)); 记住这里要new一个List空间用来存储结果才行
+        // 这里是遍历所有的子集，所以无需判断条件
+        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中并且 return
         results.add(new ArrayList<Integer>(subset));
         
-        //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取
+        //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取.
+        //  有些题目中可能会限制i与starIndex的关系.
         for (int i = startIndex; i < nums.length; i++) {
             // [1] -> [1,2]
             // 其他题目中可能存在不符合条件的情况，需要加上一个if语句来判断是否要add到subset中
