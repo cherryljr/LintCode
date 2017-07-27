@@ -21,7 +21,7 @@ Answer:
 State:
 	f[m][n]表示字符串从 m~n 是否是一个回文串
 Function:
-	当f[m][n]的子串为回文串，并且A[m] == A[n] 的时候f[m][n]为 true 
+	当f[m-1][n-1]的子串为回文串，并且A[m] == A[n] 的时候, f[m][n]为 true 
 	即 f[m - 1][n - 1] == true && s.charAt(m) == s.charAt(n)
 Initialize: 
 	每个字母其本身都是一个回文串，故令f[i][i] = true
