@@ -21,8 +21,8 @@ Answer:
 State:
 	f[m][n]表示字符串从 m~n 是否是一个回文串
 Function:
-	当f[m-1][n-1]的子串为回文串，并且A[m] == A[n] 的时候, f[m][n]为 true 
-	即 f[m - 1][n - 1] == true && s.charAt(m) == s.charAt(n)
+	当f[m+1][n-1]的子串为回文串，并且A[m] == A[n] 的时候, f[m][n]为 true 
+	即 f[m + 1][n - 1] == true && s.charAt(m) == s.charAt(n)
 Initialize: 
 	每个字母其本身都是一个回文串，故令f[i][i] = true
 Answer:
@@ -77,7 +77,7 @@ public class Solution {
             for (int j = 0; j < i; j++) {
             //  if (isPalindrome(s, j, i - 1)), 如果使用该方法将使得算法复杂度增加至O(N^3)
             //  故事先计算出是否为回文串的值，然后直接查阅即可，而查阅的复杂的是O(1)的.
-                if (isPalindrome[j][i - 1]) {
+                if (isPalindrome[j][i - 1]) {		// isPalindrome开辟的数组是[s.length()]大小的，故这里是 j ~ i - 1
                     count[i] = Math.min(count[i], count[j] + 1);
                 }
             }
