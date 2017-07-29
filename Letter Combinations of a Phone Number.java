@@ -8,9 +8,11 @@ Recursive Search / DFS
 同时参考：
 http://www.jiuzhang.com/solution/letter-combinations-of-a-phone-number
 
+还存在着另外一种方法，可以使用Arrays来替代map来存储字符与数字按键的对应关系。
+这种解法需要每次传递变量index，用来记录当前遍历到第几个数字。再利用digits[index] - '0'
+我们便可以得到具体的按键数字是多少，然后以此为数组下标遍历String数组中对应得值即可。
 
-还有其他两种解法，可以采用计状态的方式来解决问题，
-方法也同样采用的是递归遍历的方法。不过更加简洁
+方法三只是方法二在代码上面的进一步优化，掌握方法二即可。
 
 /*
 Given a digit string, return all possible letter combinations that the number could represent.
@@ -74,52 +76,62 @@ public class Solution {
     }
 }
 
-//  Version 2: 计状态 
+//	Version: 计状态，使用Arrays替代Map
 
 public class Solution {
     /**
      * @param digits A digital string
      * @return all posible letter combinations
      */
-    ArrayList<String> ans = new ArrayList<>();
-
-    void dfs(int x, int l, String str, String digits, String phone[]) {
-        if (x == l) {
-            ans.add(str);
-            return;
-        }
-        int d = digits.charAt(x) - '0';
-        for (char c : phone[d].toCharArray()) {
-            dfs(x + 1, l, str + c, digits, phone);
-        }
-    }
-
     public ArrayList<String> letterCombinations(String digits) {
         // Write your code here
-        String phone[] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-
-        if (digits.length() == 0) {
-            return ans;
+        ArrayList<String> result = new ArrayList<String>();
+        if (digits == null || digits.length() == 0) {
+            return result;
         }
-        dfs(0, digits.length(), "", digits, phone);
-        return ans;
+        
+        String[] phone = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        helper(result, new StringBuilder(), 0, digits, phone);
+        return result;
+    }
+    
+    private void helper(ArrayList<String> result, 
+                        StringBuilder sb,
+                        int x,
+                        String digits,
+                        String[] phone) {
+        if (sb.length() == digits.length()) {
+            result.add(sb.toString());
+            return;
+        }          
+        
+        int d = digits.charAt(x) - '0';
+        for (char c : phone[d].toCharArray()) {
+            sb.append(c);
+            helper(result, sb, x + 1, digits, phone);
+            //	Backtracking, 删去最后一个字符
+            sb.deleteCharAt(sb.length() - 1);		
+        }
     }
 }
 
-
-//	Version 3: 计状态
+//	Version 3: 在第二个版本的基础上，对代码进一步优化
 
 public class Solution {
     /**
      * @param digits A digital string
      * @return all posible letter combinations
      */
+    
+    //	将这些变量作为类的变量来声明，具有更广的作用域，使得DFS时不再需要传递这些参数。
     ArrayList<String> ans = new ArrayList<>();
 
     int l;
     String digits;
+    //	这是一个对应的关系表，定义后作为常量使用，无需改动，故定义为static final
     static final String phone[] = {"", "", "abc", "def", "ghi", "jkl",
-            "mno", "pqrs", "tuv", "wxyz"};
+            "mno", "pqrs", "tuv", "wxyz"};	
 
     void dfs(int x, String str) {
         if (x == l) {
