@@ -8,7 +8,9 @@ Recursive Search / DFS
 同时参考：
 http://www.jiuzhang.com/solution/letter-combinations-of-a-phone-number
 
-还有其他两种解法，可以采用计状态的方式来解决问题
+
+还有其他两种解法，可以采用计状态的方式来解决问题，
+方法也同样采用的是递归遍历的方法。不过更加简洁
 
 /*
 Given a digit string, return all possible letter combinations that the number could represent.
