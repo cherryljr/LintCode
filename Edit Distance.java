@@ -1,3 +1,19 @@
+Two Sequence DP
+与LCS非常类似
+
+State:
+	f[i][j]表示 A 的前i个字符配上 B 的前j个字符最少需要几次编辑才能够使它们相等
+Function:
+A进行一个insert操作 与 B进行一次delete操作其实是相同的，故这边仅仅针对A的操作进行分析
+	f[i][j] = Math.min(f[i-1][j-1], f[i-1][j] + 1, f[i][j-1] + 1)   //   A[i] == B[j]时
+										 // replace		// insert			 // delete
+	f[i][j] = Math.min(f[i-1][j-1], f[i-1][j],		 f[i][j-1]) + 1       //   A[i] ！= B[j]时	
+Initialize:
+	f[i][0] = i
+	f[0][j] = j
+Answer:
+	f[A.length()][B.length()]
+
 /*
 Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. 
 (each operation is counted as 1 step.)
@@ -25,31 +41,43 @@ And, we have 3 different calculations for the 3 methods:
 Note: just remember to start from i=1,j=1, because we are using DP[i-1][j-1], becareful with border case
 */
 
-
-
 public class Solution {
+/**
+     * @param word1 & word2: Two string.
+     * @return: The minimum number of steps.
+     */
     public int minDistance(String word1, String word2) {
-		if (word1 == null && word2 != null) {
-			return word2.length();
-		} else if (word1 != null && word2 == null) {
-			return word1.length();
-		} else if (word1 == null && word2 == null) {
-			return 0;
-		}
-		int[][] DP = new int[word1.length() + 1][word2.length() + 1];
-		for (int i = 1; i <= word1.length(); i++) {
-			DP[i][0] = i;
-		}
-		for (int j = 1; j <= word2.length(); j++) {
-			DP[0][j] = j;
-		}
-
-		for (int i = 1; i <= word1.length(); i++) {
-			for (int j = 1; j <= word2.length(); j++) {
-				DP[i][j] = Math.min(Math.min(DP[i - 1][j] + 1, DP[i][j - 1] + 1), word1.charAt(i - 1) == word2.charAt(j - 1) ? DP[i - 1][j - 1] : DP[i - 1][j - 1] + 1);
-			}
-		}
-
-		return DP[word1.length()][word2.length()];
+        // write your code here
+        if (word1 == null || word1.length() == 0) {
+            return word2.length();
+        }
+        if (word2 == null || word2.length() == 0) {
+           return word1.length(); 
+        }
+        
+        // State
+        int[][] f = new int[word1.length() + 1][word2.length() + 1];
+        
+        // Initialize
+        for (int i = 0; i <= word1.length(); i++) {
+            f[i][0] = i;
+        }
+        for (int j = 0; j <= word2.length(); j++) {
+            f[0][j] = j;
+        }
+        
+        // Function
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    f[i][j] = Math.min(f[i-1][j-1], Math.min(f[i-1][j] + 1, f[i][j-1] + 1));
+                } else {
+                    f[i][j] = Math.min(f[i-1][j-1], Math.min(f[i-1][j], f[i][j-1])) + 1; 
+                }
+            }
+        }
+        
+        // Answer
+        return f[word1.length()][word2.length()];
     }
 }
