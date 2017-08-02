@@ -2,6 +2,19 @@
 http://blog.csdn.net/fightforyourdream/article/details/17346385?reload#comments
 要理解其思路，画表分析有助于解决该问题
 
+State:
+	f[i][j]表示由S的前i个字符组成的序列的子序列中T的前j个字符组成的序列出现的个数
+Initialize:
+	f[0][0] = 1; // T和S都是空串.
+	f[1 ... S.length() - 1][0] = 1; // T是空串，S只有一种子序列匹配。
+	f[0][1 ... T.length() - 1] = 0; // S是空串，T不是空串，S没有子序列匹配。
+Function:
+	f[i][j] = f[i - 1][j]
+	f[i][j] = f[i - 1][j] + f[i - 1][j - 1]   //  S[i - 1] == T[j - 1]
+	范围：1 <= i <= S.length(), 1 <= j <= T.length()
+Answer:
+	f[S.length()][T.length()]
+	
 /*
 Given a string S and a string T, count the number of distinct subsequences of T in S.
 
