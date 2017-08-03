@@ -4,9 +4,9 @@ State:
 	f[i][j]表示前”i”个数，取出一些能否组成j
 Function:
 	f[i][j] = f[i - 1][j – a[i]] && j >= a[i]	(取第i个数，组成j)  
-or  f[i - 1][j] 				(不取第i个数，组成j)
+					or  f[i - 1][j] 				(不取第i个数，组成j)
 Initialize: 
-	f[0][j] = false (一个数都不去，无法组成j)
+	f[0][j] = false (一个数都不取，无法组成j)
 	f[i][0] = true (只要一个数不取，均能够组成0)
 Answer:
 	f[i][j]为true的情况下，使得f[n][x]最大的x (0 <= x <= m)
@@ -107,7 +107,8 @@ Similar two cases:
 1. Can't fit in, set false;
 2. Can fit in, then just return if (j - A[i - 1]) works 
 
-Core difference: only set the DP[j] when (j - A[i - 1] >= 0 && DP[j - A[i - 1]]): since we are running from m ~ 0, we don't want to override some existing values 
+Core difference: only set the DP[j] when (j - A[i - 1] >= 0 && DP[j - A[i - 1]]): since we are running from m ~ 0, 
+we don't want to override some existing values 
 */
 
 public class Solution {
