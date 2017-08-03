@@ -7,7 +7,7 @@ Function:
 or  f[i - 1][j] 				(不取第i个数，组成j)
 Initialize: 
 	f[0][j] = false (一个数都不去，无法组成j)
-f[i][0] = true (只要一个数不取，均能够组成0)
+	f[i][0] = true (只要一个数不取，均能够组成0)
 Answer:
 	f[i][j]为true的情况下，使得f[n][x]最大的x (0 <= x <= m)
 	
