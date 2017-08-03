@@ -1,10 +1,13 @@
 Two Sequence DP
-与LCS非常类似
+与LCS非常类似,可以根据LCS的值计算出该题的值：
+EditDistance(A, B) = Maxlength(A, B) - LCS(A, B)
+即计算出二者之间不需要编辑的部分，然后A，B中用最长的长度减去这个LCS的长度即可
+至于 A => B 还是 B => A 都不重要，因为这都是一样的
 
 State:
 	f[i][j]表示 A 的前i个字符配上 B 的前j个字符最少需要几次编辑才能够使它们相等
 Function:
-A进行一个insert操作 与 B进行一次delete操作其实是相同的，故这边仅仅针对A的操作进行分析
+	A进行一个insert操作 与 B进行一次delete操作其实是相同的，故这边仅仅针对A的操作进行分析
 	f[i][j] = Math.min(f[i-1][j-1], f[i-1][j] + 1, f[i][j-1] + 1)   //   A[i] == B[j]时
 										 // replace		// insert			 // delete
 	f[i][j] = Math.min(f[i-1][j-1], f[i-1][j],		 f[i][j-1]) + 1       //   A[i] ！= B[j]时	
