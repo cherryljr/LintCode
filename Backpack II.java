@@ -6,9 +6,13 @@ Function:
 	f[i][j] = f[i - 1][j]  （不取第i个数）
 	f[i][j] = Math.max(f[i - 1][j], f[i - 1][j - A[i - 1]] + V[i - 1])  （取第i个数） // 当 j >= a[i] 时
 Initialize: 
-	f[i][j] = 0
+	f[i][0] = 0
+	f[0][1...m] = Integer.MIN_VALUE (该方案是不可能被取到的，本题中我们要取的数是最大值，故令其为负无穷大)
+	DP问题中我们经常会遇到某些方案是不可能被用到的，那么在初始化的时候我们就需要注意：
+		如果我们需要取最小值，则令该方案的值为正无穷大
+		如果我们需要取最大值，则令该方案的值为负无穷大
 Answer:
-	f[A.length][m]
+	f[A.length][1...m]中的最大值
 
 O(m)的做法:   
 想想，我们只care 最后一行，所以一个存value的就够了。    
@@ -58,6 +62,7 @@ LintCode Copyright Dynamic Programming Backpack
 	when creating dp, we do (A.length + 1) for row size, simply because we get used to checking A[i-1] for prevous record ... Just keep this style. Don't get confused.
 */
 
+// 该方法虽然能够AC,但是并不严谨，但是本题所有参数均为非负数，所以该种解法也是可以的
 public class Solution {
     /**
      * @param m: An integer m denotes the size of a backpack
@@ -69,7 +74,7 @@ public class Solution {
         int[][] f = new int[A.length + 1][m + 1];
         
         // Initialize
-        // 因为初始化的值均为0，而这在Java创建二维数组时已经帮我们实现了
+        // 相当于全部初始化为0
         
         // Function
         for (int i = 1; i <= A.length; i++) {
@@ -86,6 +91,43 @@ public class Solution {
     }
 }
 
+// 更加严谨的写法，也是根据上面分析所得的做法
+
+public class Solution {
+    /**
+     * @param m: An integer m denotes the size of a backpack
+     * @param A & V: Given n items with size A[i] and value V[i]
+     * @return: The maximum value
+     */
+    public int backPackII(int m, int[] A, int V[]) {
+        // State
+        int[][] f = new int[A.length + 1][m + 1];
+        
+        // Initialize
+        // f[i][0]初始化的值为0，Java在new出该数组时已经帮我么做好了
+        for (int j = 1; j <= m; j++) {
+        	f[0][j] = Integer.MIN_VALUE;
+        }
+        
+        // Function
+        for (int i = 1; i <= A.length; i++) {
+            for (int j = 0; j <= m; j++) {
+                f[i][j] = f[i - 1][j];
+                if (j >= A[i - 1]) {
+                    f[i][j] = Math.max(f[i - 1][j], f[i - 1][j - A[i - 1]] + V[i - 1]);
+                }
+            }
+        }
+        
+        // Answer
+        int max = 0;
+        for (int i = 1; i <= m; i++) {
+        	max = Math.max(max, f[A.length][i]);        	
+        }
+				
+				return max;
+    }
+}
 
 /*
 	To use just O(m) sapce.
@@ -118,8 +160,3 @@ public class Solution {
     	return dp[m];
     }
 }
-
-
-
-
-```
