@@ -56,6 +56,7 @@ public class Solution {
         
         // State
         int[] f = new int[nums.length];
+        int max = 0;
         
         // Initialize
         for (int i = 0; i < nums.length; i++) {
