@@ -10,6 +10,10 @@ Intialize:
 	问具体的所有方案 (递归 / 搜索)
 Answer:
 	f[A.length][k][target]
+优化：f[i] 只需要用到 f[i - 1]的数，故可以用滚动数组来对额外空间进行优化 f[i % 2]
+
+此外我们可以在原有基础上，对额外的储存空间进一步优化为二维的数组空间来储存。
+详细分析见：http://www.cnblogs.com/yuzhangcmu/p/4279676.html
 	
 /*
 
@@ -30,6 +34,9 @@ Tags
 LintCode Copyright Dynamic Programming
 
 */
+
+// Version 1
+// O(N^3) extra space 3D-Arrays
 
 public class Solution {
     /**
@@ -61,5 +68,38 @@ public class Solution {
         
         // Answer
         return f[A.length][k][target];
+    }
+}
+
+// Version 2: Opitimized 
+// O(N^2) extra space 2D-Arrays
+
+public class Solution {
+    /**
+     * @param A: an integer array.
+     * @param k: a positive integer (k <= length(A))
+     * @param target: a integer
+     * @return an integer
+     */
+    public int  kSum(int A[], int k, int target) {
+        // State
+        int[][] f = new int[k + 1][target + 1];
+        
+        // Initialize, only one solution for the empty set.
+        f[0][0] = 1;
+        
+        // Function
+        for (int i = 1; i <= A.length; i++) {
+            for (int t = target; t > 0; t--) {
+                for (int j = 1; j <= k; j++) {
+                    if (t - A[i - 1] >= 0) {
+                        f[j][t] += f[j - 1][t - A[i - 1]];
+                    }
+                }
+            }
+        }
+        
+        // Answer
+        return f[k][target];
     }
 }
