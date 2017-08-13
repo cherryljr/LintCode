@@ -16,6 +16,7 @@ HashMap来实现快速查找。
 注：1. 为了方便操作，链表拥有头节点和尾节点, 作用类似 Dummy Node
 		2. 虽然HashMap能帮我们快速定位到要查找的节点，但是链表要删除一个节点需要知道
 		其前面以及后面一个的节点是什么。所以我们使用了双向链表。
+		涉及到的知识点：双向链表的 删除 与 插入. （画图分析，先做好一个方向）
 	
 /*
 Description
@@ -96,7 +97,8 @@ public class LRUCache {
         hs.put(key, insert);
         move_to_tail(insert);
     }
-    
+    // 双向链表的插入画图再写，可以保证清晰不会乱
+    // 顺序为：从插入节点开始，先保证一个方向全部改好，然后再去改另一个方向
      private void move_to_tail(Node current) {
         current.pre = tail.pre;
         tail.pre = current;
