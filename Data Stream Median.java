@@ -28,46 +28,53 @@ Tags Expand
 LintCode Copyright Heap Priority Queue
 */
 
-
-
 public class Solution {
     /**
      * @param nums: A list of integers.
      * @return: the median of numbers
      */
+    PriorityQueue<Integer> maxHeap = 
+        new PriorityQueue<Integer>(1, new Comparator<Integer>() {
+            public int compare(Integer left, Integer right) {
+                return right - left;
+            }    
+        });
+    PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
+     
     public int[] medianII(int[] nums) {
         int[] rst = new int[nums.length];
         if (nums == null || nums.length == 0) {
             return rst;
         }
         
-        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(10, new Comparator<Integer>() {
-            public int compare(Integer x, Integer y) {
-                return y - x;
-            }
-        });
-        
+        // Initialize
         rst[0] = nums[0];
-        maxHeap.offer(rst[0]);
+        maxHeap.offer(nums[0]);
         
-        for (int i = 1; i < rst.length; i++){
-            int preMedian = maxHeap.peek();
-            if (nums[i] > preMedian) {
-                minHeap.offer(nums[i]);
-            } else {
-                maxHeap.offer(nums[i]);
-            }
-
-            if (maxHeap.size() > minHeap.size() + 1) {
-                minHeap.offer(maxHeap.poll());
-            } else if (maxHeap.size() < minHeap.size()) {
-                maxHeap.offer(minHeap.poll());
-            }
-            rst[i] = maxHeap.peek();
+        // Function
+        for (int i = 1; i < nums.length; i++) {
+            addNumber(nums[i]);
+            rst[i] = getMedian();
         }
+        
         return rst;
     }
+    
+    private void addNumber(int value) {
+        if (value > maxHeap.peek()) {
+            minHeap.offer(value);
+        } else {
+            maxHeap.offer(value);
+        }
+        
+        if (maxHeap.size() > minHeap.size() + 1) {
+            minHeap.offer(maxHeap.poll());
+        } else if (maxHeap.size() < minHeap.size()) {
+            maxHeap.offer(minHeap.poll());
+        }
+    }
+    
+    private int getMedian() {
+        return maxHeap.peek();
+    } 
 }
-
-```
