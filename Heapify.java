@@ -1,25 +1,23 @@
 Default 的PriorityQueue就是一个现成的 minHeap：所有后面的对应element都比curr element 小。
 
 Heapify里面的siftdown的部分：
-	只能从for(i = n/2-1 ~ 0)， 而不能从for(i = 0 ~ n/2 -1): 必须中间开花，向上跑的时候才能确保脚下是符合heap规则的
+	只能从for(i = n/2-1 ~ 0)， 而不能从for(i = 0 ~ n/2 -1): 从右向左，扫描数组中一半的元素即可。跳过大小为 1 的子堆。
 
 Heapify / SiftDown做了什么？    
 确保在heap datastructure里面curr node下面的两个孩子，以及下面所有的node都遵循一个规律。   
 比如在这里，若是min-heap,就是后面的两孩子都要比自己大。若不是，就要swap。
-保证 Heap 的 结构性 与 有序性。 （详见：数据结构与算法分析 Java描述）     
+保证 Heap 的 结构性 与 有序性。     
 
 当然，除了 siftDown 还有 siftUp, 二者思路相同，只是方向不同。
-	siftDown的时间复杂度： O(N)
-	siftUp的时间复杂度：   O(NlogN)
+	siftDown构造堆的时间复杂度 从右向左： O(N)
+	siftUp构造堆的时间复杂度   从左向右： O(NlogN)
+	具体分析见：算法第四版 P206
 	
 Heap 的三种基本操作：
-	1.初始化：将一个无序的序列初始化成堆。对每个节点执行 siftDown 操作. O(N)
+	1.构造堆：将一个无序的序列初始化成堆。对每个节点执行 siftDown 操作（记住是从右到左，中间开花）. O(N)
 	2.插入：在数组的末尾插入新的元素，然后执行 siftUp 操作. O(logN)
 	3.删除：删除某一个value. 将该节点变为 null, 然后执行 siftDown / siftUp (只能执行其中一种)
 					比如 poll() 操作，删除 head节点，则执行 siftDown 操作。
-
-还是要记一下min-heap的判断规律:for each element A[i], we will get A[i * 2 + 1] >= A[i] and A[i * 2 + 2] >= A[i].
-
 
 /*
 Given an integer array, heapify it into a min-heap array.
@@ -42,7 +40,6 @@ where "push" add a new element the heap, "pop" delete the minimum/maximum elemen
 
 What is heapify?
 Convert an unordered integer array into a heap array. 
-If it is min-heap, for each element A[i], we will get A[i * 2 + 1] >= A[i] and A[i * 2 + 2] >= A[i].
 
 What if there is a lot of solutions?
 Return any of them.
