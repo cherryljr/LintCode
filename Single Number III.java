@@ -7,12 +7,16 @@ Given [1,2,2,3,4,4,5,3] return 1 and 5
 Challenge
 O(n) time, O(1) extra space.
 
-Thinking Process:
-The 2 exception must have this feature: a ^ b != 0, since they are different
-Still want to do 2n + 1 problem as in Single Number I, then we need to split a and b into 2 groups and deal with two 2n+1 problems
-Assume c = a^b, there must be a bit where a and b has the difference, so that bit in c is 1.
-Find this bit position and use it to split the group: shift number in the array by ‘bit-position’ indexes. 
-If the shifted number has 1 at the ‘bit-position’, set it to one group; otherwise to another group. 
+该题为 2n+2, 故如果 XOR 全部的数，则结果相当于 XOR(A) = a^b. 
+所以我们需要将a,b这两个数分开。由 Single Number I 联想到，我们是否能将 A 分成两个 
+2n+1 的组，然后分别进行处理得到a, b.而如何找到那个断点呢？
+我们需要用到 XOR(A) 的值。假设 c = a^b, 因为a, b必定不相等，故c的二进制肯定有一位不为0.
+而我们便以任意一个为 1 的位对 A 进行划分 (根据异或的定义，即值不等的那个位)。那么如何快速找到 c 中为 1 的那个位呢？
+我们可以利用运算：
+ x = c - c & (c - 1), 这样便能快速找到倒数第一个 1 的位置.
+ 而上式可以进一步简化为： x = c & (-c)
+ & x == 0  =>  0 的那组
+ & x != 0  =>  非0的那组
 
 PS.
 两个数的异或是不考虑进位的加法。那么如果考虑进位，完整的加法的位运算可以表示为：
@@ -37,18 +41,15 @@ public class Solution {
             XOR ^= A[i];
         }
         
-        int bitPosition = 0;
-        for (int i = 0; i < 32; i++) {
-            if ((XOR >> i & 1) == 1) {
-                bitPosition = i;
-            }
-        }
+        int bitPosition;
+        // bitPosition = XOR - (XOR & (XOR - 1));
+        bitPosition = XOR & (-XOR);
         
         int rstA = 0; 
         int rstB = 0;
         
         for (int i = 0; i < A.length; i++) {
-            if ((A[i] >> bitPosition & 1) == 1) {
+            if ((A[i] & bitPosition) != 0) {
                 rstA ^= A[i];    
             } else {
                 rstB ^= A[i];
@@ -60,4 +61,3 @@ public class Solution {
         return rst;
     }
 }
-
