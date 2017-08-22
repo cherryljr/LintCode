@@ -18,6 +18,13 @@ since all numbers appears twice, consider them as in bits format. Two identical 
 At the end, we use 0 XOR our target number, the result is actually the target number.
 Very smart trick to use bits.
 In order to compare from index 0 to the end, we need to extract index 0 first as result before for loop. And start for loop at i = 1.
+
+对于 XOR 运算的理解：
+ ① 相同为0，不同为1
+ ② 不进位的加法(important)
+ a XOR 0 = a,
+ a XOR a = 0.
+利用该运算进行抵消，从而达到目标。
 */
 
 public class Solution {
