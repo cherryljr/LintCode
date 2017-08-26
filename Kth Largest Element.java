@@ -45,41 +45,52 @@ class Solution {
         if (k <= 0) {
             return 0;
         }
-        return helper(nums, 0, nums.length - 1, nums.length - k + 1);
         
+        return helper(nums, 0, nums.length - 1, nums.length - k);  
     }
+ 
     public int helper(int[] nums, int l, int r, int k) {
         if (l == r) {
             return nums[l];
         }
+        
         int position = partition(nums, l, r);
-        if (position + 1 == k) {
+        // Found kth smallest number
+        if (position == k) {
             return nums[position];
-        } else if (position + 1 < k) {
+        } else if (position < k) {
+        	// Check the right part
             return helper(nums, position + 1, r, k);
         }  else {
+        	// Check the left part
             return helper(nums, l, position - 1, k);
         }
     }
+    
+    // Quick select: kth smallest
     public int partition(int[] nums, int l, int r) {
         // 初始化左右指针和pivot
         int left = l, right = r;
-        int pivot = nums[left];
+        // Take nums[right] as the pivot
+        int pivot = nums[right];
         
         // 进行partition
-        while (left < right) {
-            while (left < right && nums[right] >= pivot) {
-                right--;
-            }
-            nums[left] = nums[right];
-            while (left < right && nums[left] <= pivot) {
-                left++;
-            }
-            nums[right] = nums[left];
-        }
+		for (int i = l; i < r; i++) {
+	    	// 将所有 小于 pivot 的数放到 pivot 的左边
+			if (nums[i] < pivot) {
+				swap(nums, left++, i);
+			}	
+		}
+		// 最后,交换 nums[right] (pivot) 和 nums[left]
+		swap(nums, left, right);
         
         // 返还pivot点到数组里面
-        nums[left] = pivot;
         return left;         
+    }
+    
+    private void swap(int[] nums, int i, int j) {
+    	int temp = nums[i];
+    	nums[i] = nums[j];
+    	nums[j] = temp;
     }
 };
