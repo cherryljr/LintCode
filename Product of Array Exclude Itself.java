@@ -10,6 +10,9 @@ Solution 2: O(N)
 	然后对List进行一次 从后往前 的一次遍历。得到出去第 i 个数值的，右边 i-1 个数字的积。
 	最后将各个位置上对应的 左边数值积 乘以 右边数值积 便可以得到最终的结果。
 
+the same as : https://leetcode.com/problems/product-of-array-except-self/description/
+这题目还是数组写着方便啊~~~
+
 /*
 Description
 Given an integers array A.
