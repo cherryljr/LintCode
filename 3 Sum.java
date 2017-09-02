@@ -1,13 +1,15 @@
 思路：
-	首先第一种解法，也是最暴力的解法： DFS
+	首先第一种解法，也是最暴力的解法： DFS		O(2^N)
 		先对numbers进行排序（为了去重）,然后使用DFS对该数组的subset进行遍历，
 	然后将符合条件的添加到results中，但是该方法时间复杂度过高（2^n）,
 	故我们需要考虑更优解。
 	
-	第二种解法：	Two Pointers
+	第二种解法：	Two Pointers   O(N^2)
 		依旧相对numbers进行排序（去重所需）,然后使用头尾两个指针从数组头尾分别
 	向中间移动。寻找两个数nums[left], nums[rigth].使其加上原来保存的target值为0
 	这样我们便得到了一组解。
+		实质上是将该问题转换为 2Sum 的问题来解决。找出一个数，然后在后面的部分中找到
+	两个和为 Target - num[i] 的数 (2Sum)。该题中 Target 为 0.即找到两个数和为 -num[i] 的即可。
 		
 /*
 Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? 
@@ -73,6 +75,7 @@ public class Solution {
 
 
 //	Version 2: Two Pointers
+//  Change it into 2Sum
 
 public class Solution {
     /**
