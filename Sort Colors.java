@@ -44,8 +44,6 @@ class Solution {
         int start = 0;
         int end = nums.length - 1;
         int i = 0;
-        // 注意当 i= end 时还需要进行一次判断，看 a[i] 是 0 or 1
-        // 这是因为本题中需要对 3 个值进行 sort, 而在针对 两个范围(即只需要用两个指针) 的 sort 中所不需要的
         while (i <= end) {
             if (nums[i] == 0) {
                 swap(nums, start, i);
