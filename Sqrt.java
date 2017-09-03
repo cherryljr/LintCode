@@ -35,6 +35,7 @@ class Solution {
      */
     public int sqrt(int x) {
         // find the last number which square of it <= x
+        // 注意数据类型要设置成 long 才行，不然会导致计算结果出错
         long start = 1, end = x;
         while (start + 1 < end) {
             long mid = start + (end - start) / 2;
