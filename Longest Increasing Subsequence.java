@@ -13,8 +13,16 @@ Initialize:
 Answer:
 	Math.max(f[0...n-1])
 	
-2. Binary Search	 O(NlogN)
+2. minLast Array & Binary Search  O(NlogN)
 该解法是根据O(NlogN)的复杂度与Tag提示想到的。
+首先我们需要引入最小结尾数组 minLast 这个概念：
+    它和原本数组长度相同，但是分为 有效区（左边部分） 和 无效区（右边部分）。
+    初始化时全部为无效区，随着数组的遍历，有效区将会逐渐扩大。
+    有效区中：minLast[i]表示，所有长度为 i+1 的递增子序列中最小结尾的值。
+做法：
+    遍历数组 nums[], 当遍历到 nums[i] 时，去 minLast[] 的有效区中二分查找第一个比它大的数，
+    若存在，更新该位置。若不存在，minLast[] 有效区扩大，将 nums[i] 写入有效区的下一个位置。
+    
 主要是使用二分查找法找到在minLast中第一个大于nums[i]的数。
 
 
@@ -82,16 +90,19 @@ public class Solution {
 }
 
 
-//	Version 2: Bianry Search		O(NlogN)
+//	Version 2: minLast Array & Bianry Search	O(NlogN)
 public class Solution {
     /**
      * @param nums: The integer array
      * @return: The length of LIS (longest increasing subsequence)
      */
     public int longestIncreasingSubsequence(int[] nums) {
-        int[] minLast = new int[nums.length + 1];
-        minLast[0] = Integer.MIN_VALUE;
-        for (int i = 1; i <= nums.length; i++) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        // 初始化 最小结尾数组，全部为无效区
+        int[] minLast = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
             minLast[i] = Integer.MAX_VALUE;
         }
         
@@ -100,10 +111,9 @@ public class Solution {
             int index = binarySearch(minLast, nums[i]);
             minLast[index] = nums[i];
         }
-        
-        for (int i = nums.length; i >= 1; i--) {
+        for (int i = nums.length - 1; i >= 0; i--) {
             if (minLast[i] != Integer.MAX_VALUE) {
-                return i;
+                return i + 1;
             }
         }
         
@@ -111,17 +121,20 @@ public class Solution {
     }
     
     // find the first number > num
-    private int binarySearch(int[] minLast, int num) {
-        int start = 0, end = minLast.length - 1;
+    private int binarySearch(int[] minLast, int n) {
+        int start = 0; 
+        int end = minLast.length - 1;
         while (start + 1 < end) {
-            int mid = (end - start) / 2 + start;
-            if (minLast[mid] < num) {
+            int mid = start + (end - start) / 2;
+            if (minLast[mid] < n) {
                 start = mid;
             } else {
                 end = mid;
             }
         }
-        
+        if (minLast[start] >= n) {
+            return start;
+        }
         return end;
     }
 }
