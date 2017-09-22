@@ -55,6 +55,7 @@ public class Solution {
             }
         }
         
+	// remember to reset the count of A, B
         countA = countB = 0;
         for (int i : nums) {
             if (i == candidateA) {
