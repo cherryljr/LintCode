@@ -1,8 +1,8 @@
-±à³ÌÖĞÓÅ»¯ÔËËãËÙ¶ÈµÄ³£¼û¼¼ÇÉÖ®Ò»
-Ê¹ÓÃÁË Bit Manipulation	£º n & (n - 1)
-¸ÃÔËËãÒ²ÔÚÏÂÃæÁ½¸öÎÊÌâÖĞÓ¦ÓÃµ½ÁË
-	1. Çó n µÄ¶ş½øÖÆµÄ×îºóÒ»Î»Îª1µÄÎ»Êı
-	2. Çó n µÄ¶ş½øÖÆÖĞ 1 µÄ¸öÊı
+ç¼–ç¨‹ä¸­ä¼˜åŒ–è¿ç®—é€Ÿåº¦çš„å¸¸è§æŠ€å·§ä¹‹ä¸€
+ä½¿ç”¨äº† Bit Manipulation	ï¼š n & (n - 1)
+è¯¥è¿ç®—ä¹Ÿåœ¨ä¸‹é¢ä¸¤ä¸ªé—®é¢˜ä¸­åº”ç”¨åˆ°äº†
+	1. æ±‚ n çš„äºŒè¿›åˆ¶çš„æœ€åä¸€ä½ä¸º1çš„ä½æ•°
+	2. æ±‚ n çš„äºŒè¿›åˆ¶ä¸­ 1 çš„ä¸ªæ•°
 
 /*
 Description
@@ -19,6 +19,8 @@ Tags
 Bit Manipulation
 */
 
+// Note:
+// == has higher priority than &. You might want to wrap your operations in () to specify your own priority.
 class Solution {
     /*
      * @param n: An integer
