@@ -4,6 +4,8 @@
  1. 首先遍历整个List,将元素添加到 HashMap 中。其中 key 为元素值，value 为出现的次数
  2. 当 Map 的大小大于等于 k 时，我们便 remove 这个 k 个不同的数。（抵消）
  3. 最后重新计算 Map 中各个值在List中出现的次数，并取出那个次数最大的，便是我们需要的结果
+ 
+ http://www.cs.utexas.edu/users/misra/scannedPdf.dir/FindRepeatedElements.pdf
 
 /*
 Description
