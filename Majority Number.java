@@ -8,7 +8,7 @@ Single Number 利用 XOR 运算实现了相同数字的抵消，最后得到需�
 
 Majority Number II，超1/3, 那么就分三份处理，三三不同的话抵消，countA, countB来计算最多出现的两个。
 
-Majority Number III, 超1/k, 那么自然分k份。这里用到 HashMap。
+Majority Number III, 超1/k, 那么自然分k份.这里用到 HashMap.
 
 /*
 Description
