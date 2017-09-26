@@ -22,7 +22,20 @@ Note：
  
 Solution2: BinarySearch
 由 Search a 2D Matrix 与 O(klogN) 的时间复杂度，我们想到该题或许也能够使用二分法进行计算。
-利用递增矩阵的性质，我们计算好当前元素是第几大的 count 即可。
+二分法计算的重点是：“搜索空间”(Search Space)。而搜索空间又可以被分为两种，也对应着二分法的两个解法：
+下标(index) 和 范围(range) (最小值与最大值之间的距离)。
+大多数情况下，当数组在一个方向上是排序好了的，我们可以使用 下标 作为搜索空间。
+而当数组是未被排序的，并且我们希望能够找到一个特定的数字，我们可以使用 范围 作为搜索空间。
+
+接下来我们来看两个例子：
+使用下标(index) -- https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/ ( the array is sorted)
+使用范围(range) -- https://leetcode.com/problems/find-the-duplicate-number/ (Unsorted Array)
+
+那么在本题我们不使用 下标 作为搜索空间的原因便是，矩阵是在两个方向上有序的。
+我们无法使用下标在其中找到一个线性的关系。因此我们在这里使用了 范围(range) 作为搜索空间。
+
+题外话：只要具有排他性，便能够使用二分法 -- 二分法求局部最小值.java in NowCoder
+https://github.com/cherryljr/NowCoder/blob/master/%E4%BA%8C%E5%88%86%E6%B3%95%E6%B1%82%E5%B1%80%E9%83%A8%E6%9C%80%E5%B0%8F%E5%80%BC.java
 
 /*
 Description
@@ -90,25 +103,31 @@ public class Solution {
 }
 
 // Solution2: BinarySearch
-public class Solution {
+class Solution {
     public int kthSmallest(int[][] matrix, int k) {
-        int lo = matrix[0][0];
-        int hi = matrix[matrix.length - 1][matrix[0].length - 1] + 1; //[lo, hi)
-       
-        while(lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            int count = 0,  j = matrix[0].length - 1;
-           
-            for(int i = 0; i < matrix.length; i++) {
-                while(j >= 0 && matrix[i][j] > mid) {
+        int start = matrix[0][0];
+        int end = matrix[matrix.length - 1][matrix[0].length - 1] + 1; // [start, end)
+        
+        // Binary Search 
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            
+            int count = 0;
+            int j = matrix[0].length - 1;
+            for (int i = 0; i < matrix.length; i++) {
+                while (j >= 0 && matrix[i][j] > mid) {
                     j--;
-                }
+                }    
                 count += (j + 1);
             }
-            if(count < k) lo = mid + 1;
-            else hi = mid;
+            
+            if (count < k) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
         }
-       
-        return lo;
+        
+        return start;
     }
 }
