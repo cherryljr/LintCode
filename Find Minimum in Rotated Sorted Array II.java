@@ -37,6 +37,8 @@ public class Solution {
 }
 
 // version 2: use *fake* binary-search
+// When num[mid] == num[hi], we couldn't sure the position of minimum in mid's left or right, 
+// so just let upper bound reduce one.
 public class Solution {
     /**
      * @param num: a rotated sorted array
