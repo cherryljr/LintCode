@@ -1,8 +1,8 @@
 /*
 	Keypoints:
-		1. start + 1 < end;  µ±Á½¸öÖ¸ÕëÏàÁÚ»òÕßÏà½»Ê±ÍË³öwhileÑ­»·
+		1. start + 1 < end;  å½“ä¸¤ä¸ªæŒ‡é’ˆç›¸é‚»æˆ–è€…ç›¸äº¤æ—¶é€€å‡ºwhileå¾ªç¯
 		2. start = start + (end - start) / 2;
-		3. nums[mid] ==, <, > ÈıÖÖÇé¿öÈçºÎ´¦Àí
+		3. nums[mid] ==, <, > ä¸‰ç§æƒ…å†µå¦‚ä½•å¤„ç†
 		4. nums[start], nums[end] ? target.
 */
 
@@ -31,8 +31,8 @@ public class Solution {
         
         while (start + 1 < end) {
             int mid = start + (end - start) / 2;
-            //  	ÎªÊ²Ã´²»Ğ´³É mid = (start + end) / 2;
-            //    ·ÀÖ¹Òç³ö£¬µ±startÓëendµÄÖµ¶¼ÊÇ½Ó½üInteger.MAX_VALUEÊ±£¬½«»á·¢ÉúÒç³öÏÖÏó
+            //    ä¸ºä»€ä¹ˆä¸å†™æˆ mid = (start + end) / 2;
+            //    é˜²æ­¢æº¢å‡ºï¼Œå½“startä¸endçš„å€¼éƒ½æ˜¯æ¥è¿‘Integer.MAX_VALUEæ—¶ï¼Œå°†ä¼šå‘ç”Ÿæº¢å‡ºç°è±¡
             if (nums[mid] == target) {
                 end = mid;
                 //  if you want to find the last position, change it to :
@@ -44,7 +44,7 @@ public class Solution {
             }
         }
         
-        //	find the first position when target occurs
+        //  find the first position when target occurs
         //  if you want to find the end position
         //  change the order of the two if :
         /*
@@ -66,8 +66,8 @@ public class Solution {
     }
 }
 
-// ¶ş·Ö·¨µÚ¶şÌ×Ä£°å  Solution 2
-// ÈÔÈ»ÊÇ Find the First Position
+// äºŒåˆ†æ³•ç¬¬äºŒå¥—æ¨¡æ¿  Solution 2
+// ä»ç„¶æ˜¯ Find the First Position
 class Solution {
     /**
      * @param nums: The integer array.
@@ -75,7 +75,6 @@ class Solution {
      * @return: The first position of target. Position starts from 0.
      */
     public int binarySearch(int[] nums, int target) {
-        //write your code here
         if (nums == null || nums.length == 0) {
             return -1;
         }
@@ -93,8 +92,7 @@ class Solution {
         
         if (nums[start] == target) {
             return start;
-        }
-        
+        }  
         return -1;
     }
 }
