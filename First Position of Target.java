@@ -86,7 +86,7 @@ class Solution {
         int end = nums.length;  
         while (start < end) {
             int mid = start + (end - start) / 2;
-            if (nums[mid] < target) {
+            if (nums[mid] < target) {   // 重点依然是处理好 equals 时, mid 的处理情况。参考模板1中的分析
                 start = mid + 1;
             } else {
                 end = mid;
