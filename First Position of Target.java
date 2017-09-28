@@ -1,4 +1,5 @@
 /*
+    第一个模板 （Pass） 仅作纪念，学会第二个模板即可
 	Keypoints:
 		1. start + 1 < end;  当两个指针相邻或者相交时退出while循环
 		2. start = start + (end - start) / 2;
@@ -66,9 +67,9 @@ public class Solution {
     }
 }
 
-// 二分法第二套模板  Solution 2
-// 仍然是 Find the First Position / First Bigger Number
-// 该模板无需对 nums[start] 和 nums[end] 再进行一次判断，看谁才是答案。nums[start]便是答案
+// 二分法第二套模板  Solution 2 使用该套！！！ （已经完善）
+// 仍然是 Find the First Position / First Bigger Number  (注释里提供了 Find Last Position 的方法)
+// 该模板无需对 nums[start] 和 nums[end] 再进行一次判断，看谁才是答案。
 class Solution {
     /**
      * @param nums: The integer array.
@@ -80,8 +81,9 @@ class Solution {
             return -1;
         }
         
+        // 注意这里 start 和 end 的取值范围，保证范围在 [start, end) 里面即可
         int start = 0;
-        int end = nums.length - 1;
+        int end = nums.length;  
         while (start < end) {
             int mid = start + (end - start) / 2;
             if (nums[mid] < target) {
@@ -90,6 +92,16 @@ class Solution {
                 end = mid;
             }
         }
+        //  if you want to find the last position, change it to :
+        //  while (start < end) {
+        //      int mid = start + (end - start) / 2;
+        //      if (nums[mid] <= target) {
+        //          start = mid + 1;
+        //      } else {
+        //          end = mid;
+        //      }
+        //  }
+        //  return end - 1;
         
         if (nums[start] == target) {
             return start;
