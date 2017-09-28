@@ -1,5 +1,6 @@
 /*
-    通常情况下使用第一个模板，当第一个模板无法解决时使用第二个模板
+    第一个模板 (有一定局限性，根据情况使用，find last position)
+    第二个模板 (更加简洁，泛用性高，优先使用)
 	Keypoints:
 		1. start + 1 < end;  当两个指针相邻或者相交时退出while循环
 		2. start = start + (end - start) / 2;
@@ -100,7 +101,7 @@ class Solution {
         //          end = mid;
         //      }
         //  }
-        //  return end - 1; （此时 end = nums.length）
+        //  return end - 1; （此时初始化时 end = nums.length）
         
         if (nums[start] == target) {
             return start;
