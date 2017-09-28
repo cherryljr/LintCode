@@ -106,13 +106,14 @@ public class Solution {
 class Solution {
     public int kthSmallest(int[][] matrix, int k) {
         int start = matrix[0][0];
-        int end = matrix[matrix.length - 1][matrix[0].length - 1] + 1; // [start, end)
+        int end = matrix[matrix.length - 1][matrix[0].length - 1];
+        int count = 0;
         
         // Binary Search 
         while (start < end) {
             int mid = start + (end - start) / 2;
             
-            int count = 0;
+            count = 0;
             int j = matrix[0].length - 1;
             for (int i = 0; i < matrix.length; i++) {
                 while (j >= 0 && matrix[i][j] > mid) {
