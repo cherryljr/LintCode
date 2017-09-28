@@ -124,3 +124,45 @@ public class Solution {
         return false;
     }
 }
+
+// Binary Search Once 
+// 更新后的模板写法
+public class Solution {
+    /**
+     * @param matrix, a list of lists of integers
+     * @param target, an integer
+     * @return a boolean, indicate whether matrix contains target
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) {
+            return false;
+        }
+        
+        int row = matrix.length;
+        int column = matrix[0].length;
+        int start = 0; 
+        int end = row * column - 1;
+        int r, c;
+        
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            //	use mid / column to calculate the position in  row
+            // 	use mid % column to calculate the position in column
+            r = mid / column;
+            c = mid % column;
+            if (matrix[r][c] < target) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        
+        r = start / column;
+        c = start % column;
+        if (matrix[r][c] == target) {
+            return true;
+        } 
+        
+        return false;
+    }
+}
