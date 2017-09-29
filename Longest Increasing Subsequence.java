@@ -1,6 +1,6 @@
 两种解法：
 
-1. Sequence DP	O(N^2)
+Solution 1: Sequence DP	O(N^2)
 求最小值，各个元素不能swap / sort.  故想到使用动态规划解决. 
 该解法容易想到，但是算法的时间复杂度为 O(N^2)
 State:
@@ -13,7 +13,7 @@ Initialize:
 Answer:
 	Math.max(f[0...n-1])
 	
-2. minLast Array & Binary Search  O(NlogN)
+Solution 2: minLast Array & Binary Search  O(NlogN)
 该解法是根据O(NlogN)的复杂度与Tag提示想到的。
 首先我们需要引入最小结尾数组 minLast 这个概念：
     它和原本数组长度相同，但是分为 有效区（左边部分） 和 无效区（右边部分）。
@@ -124,17 +124,15 @@ public class Solution {
     private int binarySearch(int[] minLast, int n) {
         int start = 0; 
         int end = minLast.length - 1;
-        while (start + 1 < end) {
+        while (start < end) {
             int mid = start + (end - start) / 2;
             if (minLast[mid] < n) {
-                start = mid;
+                start = mid + 1;
             } else {
                 end = mid;
             }
         }
-        if (minLast[start] >= n) {
-            return start;
-        }
-        return end;
+        
+        return start;
     }
 }
