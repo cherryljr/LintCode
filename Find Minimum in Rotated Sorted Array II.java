@@ -21,12 +21,12 @@ Binary Search Divide and Conqueri
 // version 1: just for loop is enough
 public class Solution {
     public int findMin(int[] num) {
-        //  ÕâµÀÌâÄ¿ÔÚÃæÊÔÖÐ²»»áÈÃÐ´ÍêÕûµÄ³ÌÐò
-        //  Ö»ÐèÒªÖªµÀ×î»µÇé¿öÏÂ [1,1,1....,1] ÀïÓÐÒ»¸ö0
-        //  ÕâÖÖÇé¿öÊ¹µÃÊ±¼ä¸´ÔÓ¶È±ØÐëÊÇ O(n)
-        //  Òò´ËÐ´Ò»¸öforÑ­»·¾ÍºÃÁË¡£
-        //  Èç¹ûÄã¾õµÃ£¬²»ÊÇÃ¿¸öÇé¿ö¶¼ÊÇ×î»µÇé¿ö£¬ÄãÏëÓÃ¶þ·Ö·¨½â¾ö²»ÊÇ×î»µÇé¿öµÄÇé¿ö£¬ÄÇÄã¾ÍÐ´Ò»¸ö¶þ·Ö°É¡£
-        //  ·´ÕýÃæÊÔ¿¼µÄ²»ÊÇÄãÔÚÕâ¸öÌâÉÏ»á²»»áÓÃ¶þ·Ö·¨¡£Õâ¸öÌâµÄ¿¼µãÊÇÄãÏë²»ÏëµÃµ½×î»µÇé¿ö¡£
+        //  è¿™é“é¢˜ç›®åœ¨é¢è¯•ä¸­ä¸ä¼šè®©å†™å®Œæ•´çš„ç¨‹åº
+        //  åªéœ€è¦çŸ¥é“æœ€åæƒ…å†µä¸‹ [1,1,1....,1] é‡Œæœ‰ä¸€ä¸ª0
+        //  è¿™ç§æƒ…å†µä½¿å¾—æ—¶é—´å¤æ‚åº¦å¿…é¡»æ˜¯ O(n)
+        //  å› æ­¤å†™ä¸€ä¸ªforå¾ªçŽ¯å°±å¥½äº†ã€‚
+        //  å¦‚æžœä½ è§‰å¾—ï¼Œä¸æ˜¯æ¯ä¸ªæƒ…å†µéƒ½æ˜¯æœ€åæƒ…å†µï¼Œä½ æƒ³ç”¨äºŒåˆ†æ³•è§£å†³ä¸æ˜¯æœ€åæƒ…å†µçš„æƒ…å†µï¼Œé‚£ä½ å°±å†™ä¸€ä¸ªäºŒåˆ†å§ã€‚
+        //  åæ­£é¢è¯•è€ƒçš„ä¸æ˜¯ä½ åœ¨è¿™ä¸ªé¢˜ä¸Šä¼šä¸ä¼šç”¨äºŒåˆ†æ³•ã€‚è¿™ä¸ªé¢˜çš„è€ƒç‚¹æ˜¯ä½ æƒ³ä¸æƒ³å¾—åˆ°æœ€åæƒ…å†µã€‚
         int min = num[0];
         for (int i = 1; i < num.length; i++) {
             if (num[i] < min)
@@ -49,26 +49,21 @@ public class Solution {
             return -1;
         }
         
-        int start = 0, end = nums.length - 1;
-        while (start + 1 < end) {
+        int start = 0;
+        int end = nums.length - 1;
+        while (start < end) {
             int mid = start + (end - start) / 2;
             if (nums[mid] == nums[end]) {
                 // if mid equals to end, that means it's fine to remove end
                 // the smallest element won't be removed
                 end--;
-            } else if (nums[mid] < nums[end]) {
-                end = mid;
-                // of course you can merge == & <
+            } else if (nums[mid] > nums[end]) {
+                start = mid + 1;
             } else {
-                start = mid;
-                // or start = mid + 1
+                end = mid;
             }
         }
         
-        if (nums[start] <= nums[end]) {
-            return nums[start];
-        }
-        return nums[end];
+        return nums[start];
     }
 }
-
