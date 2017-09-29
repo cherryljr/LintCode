@@ -2,7 +2,6 @@ Binary Search的典型应用之一
 Binary Search常常是寻找first position或者是last position,
 本题为寻找first position,故第一反应为试用二分法进行查找。
 
-```
 /*
 The code base version is an integer start from 1 to n. 
 One day, someone committed a bad version in the code case, 
@@ -33,6 +32,7 @@ Binary Search LintCode Copyright Facebook
 
 */
 
+
 /**
  * public class SVNRepo {
  *     public static boolean isBadVersion(int k);
@@ -46,61 +46,20 @@ class Solution {
      * @return: An integer which is the first bad version.
      */
     public int findFirstBadVersion(int n) {
-        // write your code here
         int start = 0;
         int end = n;
         
-        while (start + 1 < end) {
+        while (start < end) {
             int mid = start + (end - start) / 2;
-            if (SVNRepo.isBadVersion(mid)) {
-                end = mid;
+            if (!SVNRepo.isBadVersion(mid)) {
+                start = mid + 1;
             } else {
-                start = mid;
+                end = mid;
             }
         }
         
-        if (SVNRepo.isBadVersion(start)) {
-            return start;
-        }
-        return end;
+        return start;
     }
 }
 
 
-
-
-
-
-
-class Solution {
-    /**
-     * @param n: An integers.
-     * @return: An integer which is the first bad version.
-     */
-    public int findFirstBadVersion(int n) {
-        int start = 1;
-        int end = n;
-        int mid;
-        
-        while (start + 1 < end) {
-            mid = start + (end - start) / 2;
-            if (VersionControl.isBadVersion(mid)) {
-                end = mid;
-            } else {
-                start = mid;
-            }
-        }//end while
-        
-        if (VersionControl.isBadVersion(start)) {
-            return start;
-        } else if (VersionControl.isBadVersion(end)) {
-            return end;
-        } else {
-            return 0;
-        }
-        
-    }
-}
-
-
-```
