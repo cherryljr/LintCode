@@ -9,14 +9,14 @@ Initialize:
 	f[i][0] = 0
 	f[0][1...m] = Integer.MIN_VALUE (该方案是不可能被取到的，本题中我们要取的数是最大值，故令其为负无穷大)
 	DP问题中我们经常会遇到某些方案是不可能被用到的，那么在初始化的时候我们就需要注意：
-		如果我们需要取最小值，则令该方案的值为正无穷大
-		如果我们需要取最大值，则令该方案的值为负无穷大
+	如果我们需要取最小值，则令该方案的值为正无穷大
+	如果我们需要取最大值，则令该方案的值为负无穷大
 Answer:
 	f[A.length][1...m]中的最大值
 
 O(m)的做法:   
 想想，我们只care 最后一行，所以一个存value的就够了。    
-注意：和bakcpackI的 O(m)一样的，j是倒序的。如果没有更好的j，就不要更新。
+注意：和bakcpackI的 O(m)一样的，j是倒序的。如果没有更好的j，就不要更新。(背包九讲)
 
 /*
 Given n items with size Ai and value Vi, and a backpack with size m. 
@@ -125,38 +125,47 @@ public class Solution {
         	max = Math.max(max, f[A.length][i]);        	
         }
 				
-				return max;
+	return max;
     }
 }
 
 /*
 	To use just O(m) sapce.
 	Just like in Backpack I, at the end, we only care about the last row. 
-    Why not just maintain a row, always keep the max value.
+    	Why not just maintain a row, always keep the max value.
 
 	Note: Only update dp[j] if adding A[i-1] would be greater than current dp[j]
-
-	It's a bit hard to come up with this... but it's good exercise.
 */
 
 public class Solution {
-   
+    /**
+     * @param m: An integer m denotes the size of a backpack
+     * @param A & V: Given n items with size A[i] and value V[i]
+     * @return: The maximum value
+     */
     public int backPackII(int m, int[] A, int V[]) {
-    	if (A == null || V == null || A.length == 0 || V.length == 0 || A.length != V.length || m <= 0) {
+        if (A == null || V == null || A.length == 0 || V.length == 0 || A.length != V.length || m <= 0) {
     		return 0;
     	}
     	
-    	int[]dp = new int[m + 1];
-    	dp[0] = 0; // 0 item, to make pack size = 0, of course value = 0.
-
-    	for (int i = 1; i <= A.length; i++) {
-    		for (int j = m; j >= 0; j--) {
-    			if (j - A[i - 1] >= 0 && dp[j - A[i - 1]] + V[i - 1] > dp[j]) {
-    				dp[j] = dp[j - A[i - 1]] + V[i - 1];
-    			} 
-    		}
-    	}
-
-    	return dp[m];
+        // State
+        int[] dp = new int[m + 1];
+        
+        // Initialize
+        // 因为求最大的总价值，而非正好装满(背包九讲 01背包问题)
+        // 故dp[i]初始化的值为0，Java在new出该数组时已经帮我么做好了
+        
+        // Function
+        for (int i = 1; i <= A.length; i++) {
+            for (int j = m; j > 0; j--) {
+		// gurantee the size is big enough to put A[i-1] into the back.
+                if (j >= A[i - 1]) {
+                    dp[j] = Math.max(dp[j], dp[j - A[i- 1]] + V[i - 1]);   
+                }
+            }
+        }
+        
+        // Answer
+	return dp[m];
     }
 }
