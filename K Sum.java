@@ -1,19 +1,19 @@
-Çó·½°¸×Ü¸öÊı£¬´æÔÚÇóºÍ¶¯×÷£¬Ê¹Æä¸ÕºÃµÈÓÚTarget => Backpack DP
+æ±‚æ–¹æ¡ˆæ€»ä¸ªæ•°ï¼Œå­˜åœ¨æ±‚å’ŒåŠ¨ä½œï¼Œä½¿å…¶åˆšå¥½ç­‰äºTarget => Backpack DP
 State:
-	f[i][j][t] ±íÊ¾Ç°i¸öÊıÖĞÈ¡³öj¸öÊı³öÀ´Ê¹µÃºÍÎªtµÄ·½°¸×ÜÊı
+	f[i][j][t] è¡¨ç¤ºå‰iä¸ªæ•°ä¸­å–å‡ºjä¸ªæ•°å‡ºæ¥ä½¿å¾—å’Œä¸ºtçš„æ–¹æ¡ˆæ€»æ•°
 Function:
-	f[i][j][t] = f[i-1][j][t]    									// ²»È¡µÚi¸öÊı
-						 = f[i-1][j-1][t-a[i]]  t >= a[i]   // È¡µÚi¸öÊı
+	f[i][j][t] = f[i-1][j][t]    									// ä¸å–ç¬¬iä¸ªæ•°
+						 = f[i-1][j-1][t-a[i]]  t >= a[i]   // å–ç¬¬iä¸ªæ•°
 Intialize:
-	ÎÊÊÇ·ñ¿ÉĞĞ (DP) => f[x][0][0] = true
-	ÎÊ·½°¸×ÜÊı (DP) => f[x][0][0] = 1
-	ÎÊ¾ßÌåµÄËùÓĞ·½°¸ (µİ¹é / ËÑË÷)
+	é—®æ˜¯å¦å¯è¡Œ (DP) => f[x][0][0] = true
+	é—®æ–¹æ¡ˆæ€»æ•° (DP) => f[x][0][0] = 1
+	é—®å…·ä½“çš„æ‰€æœ‰æ–¹æ¡ˆ (é€’å½’ / æœç´¢)
 Answer:
 	f[A.length][k][target]
-ÓÅ»¯£ºf[i] Ö»ĞèÒªÓÃµ½ f[i - 1]µÄÊı£¬¹Ê¿ÉÒÔÓÃ¹ö¶¯Êı×éÀ´¶Ô¶îÍâ¿Õ¼ä½øĞĞÓÅ»¯ f[i % 2]
+ä¼˜åŒ–ï¼šf[i] åªéœ€è¦ç”¨åˆ° f[i - 1]çš„æ•°ï¼Œæ•…å¯ä»¥ç”¨æ»šåŠ¨æ•°ç»„æ¥å¯¹é¢å¤–ç©ºé—´è¿›è¡Œä¼˜åŒ– f[i % 2]
 
-´ËÍâÎÒÃÇ¿ÉÒÔÔÚÔ­ÓĞ»ù´¡ÉÏ£¬¶Ô¶îÍâµÄ´¢´æ¿Õ¼ä½øÒ»²½ÓÅ»¯Îª¶şÎ¬µÄÊı×é¿Õ¼äÀ´´¢´æ¡£
-ÏêÏ¸·ÖÎö¼û£ºhttp://www.cnblogs.com/yuzhangcmu/p/4279676.html
+æ­¤å¤–æˆ‘ä»¬å¯ä»¥åœ¨åŸæœ‰åŸºç¡€ä¸Šï¼Œå¯¹é¢å¤–çš„å‚¨å­˜ç©ºé—´è¿›ä¸€æ­¥ä¼˜åŒ–ä¸ºäºŒç»´çš„æ•°ç»„ç©ºé—´æ¥å‚¨å­˜ã€‚
+è¯¦ç»†åˆ†æè§ï¼šhttp://www.cnblogs.com/yuzhangcmu/p/4279676.html
 	
 /*
 
@@ -83,23 +83,24 @@ public class Solution {
      */
     public int  kSum(int A[], int k, int target) {
         // State
-        int[][] f = new int[k + 1][target + 1];
-        
-        // Initialize, only one solution for the empty set.
-        f[0][0] = 1;
+        int[][] dp = new int[A.length + 1][target + 1];
+        // Initialize
+        // æ±‚æ–¹æ¡ˆæ€»æ•°é—®é¢˜ dp[0][0] = 1
+        dp[0][0] = 1;
         
         // Function
         for (int i = 1; i <= A.length; i++) {
-            for (int t = target; t > 0; t--) {
-                for (int j = 1; j <= k; j++) {
-                    if (t - A[i - 1] >= 0) {
-                        f[j][t] += f[j - 1][t - A[i - 1]];
+            for (int j = target; j >= 0; j--) {
+                for (int c = 1; c <= k; c++) {
+                    // gurantee target is big enough
+                    if (j >= A[i - 1]) {
+                        dp[c][j] += dp[c - 1][j - A[i - 1]];   
                     }
                 }
             }
         }
         
         // Answer
-        return f[k][target];
+        return dp[k][target];
     }
 }
