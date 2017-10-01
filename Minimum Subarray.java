@@ -1,5 +1,5 @@
-Kadane’s Algorithm
-基本和 Maximum Subarray 一样
+Kadane's Algorithm 
+The same as Maximum Subarray
 
 /*
 Description
