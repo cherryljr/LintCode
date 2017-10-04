@@ -1,15 +1,15 @@
-Óë Partition Array ÊÇÏàÍ¬µÄ½â·¨
-Ë¼Â·£º
-	¿ìËÙÅÅĞòµÄË¼Ïë£¬Õû¸ö³ÌĞòÆäÊµ¾ÍÊÇ¿ìËÙÅÅĞò¹ı³ÌÖĞµÄÒ»´ÎÅÅĞò°ÕÁË¡£
+ä¸ Partition Array æ˜¯ç›¸åŒçš„è§£æ³•
+æ€è·¯ï¼š
+	å¿«é€Ÿæ’åºçš„æ€æƒ³ï¼Œæ•´ä¸ªç¨‹åºå…¶å®å°±æ˜¯å¿«é€Ÿæ’åºè¿‡ç¨‹ä¸­çš„ä¸€æ¬¡æ’åºç½¢äº†ã€‚
 
-	ÀûÓÃÁ½¸öÖ¸ÕëleftºÍright·Ö±ğÖ¸ÏòArrayµÄÆğÊ¼ºÍÄ©Î²¡£
+	åˆ©ç”¨ä¸¤ä¸ªæŒ‡é’ˆleftå’Œrightåˆ†åˆ«æŒ‡å‘Arrayçš„èµ·å§‹å’Œæœ«å°¾ã€‚
 
-	ÀûÓÃwhileÑ­»·£¬leftÖ¸Õë´Ó×óÏòÓÒ±éÀú£¬Ö±µ½leftÖ¸ÏòµÄ½ÚµãÎª UpperCase.
-	Í¬ÀírightÖ¸Õë´ÓÓÒÏò×ó±éÀú£¬Ö±µ½rightÖ¸ÏòµÄ½ÚµãÎª LowerCase.
+	åˆ©ç”¨whileå¾ªç¯ï¼ŒleftæŒ‡é’ˆä»å·¦å‘å³éå†ï¼Œç›´åˆ°leftæŒ‡å‘çš„èŠ‚ç‚¹ä¸º UpperCase.
+	åŒç†rightæŒ‡é’ˆä»å³å‘å·¦éå†ï¼Œç›´åˆ°rightæŒ‡å‘çš„èŠ‚ç‚¹ä¸º LowerCase.
 
-	½»»»leftºÍright½Úµã£¬Ö±´ïleftÓërightÁ½¸ö½ÚµãÏàÓö»òÕßÏà½»¡£
+	äº¤æ¢leftå’ŒrightèŠ‚ç‚¹ï¼Œç›´è¾¾leftä¸rightä¸¤ä¸ªèŠ‚ç‚¹ç›¸é‡æˆ–è€…ç›¸äº¤ã€‚
 
-	Ëã·¨¸´ÔÓ¶ÈÎª£ºO(N)
+	ç®—æ³•å¤æ‚åº¦ä¸ºï¼šO(N)
 
 /*
 Description
@@ -35,7 +35,7 @@ public class Solution {
      */
     public void sortLetters(char[] chars) {
         int left = 0;
-        int right = chars.length - 1;
+        int right = chars.length - 1;    
         while (left <= right) {
             while (left < right && Character.isLowerCase(chars[left])) {
                 left++;
