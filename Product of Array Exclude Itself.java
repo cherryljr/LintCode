@@ -55,25 +55,28 @@ public class Solution {
 
 // Solution 2: O(N) Time without extra space
 public class Solution {
-    /*
+    /**
      * @param nums: Given an integers array A
-     * @return: A long long array B and B[i]= A[0] * ... * A[i-1] * A[i+1] * ... * A[n-1]
+     * @return: A Long array B and B[i]= A[0] * ... * A[i-1] * A[i+1] * ... * A[n-1]
      */
-    public List<Long> productExcludeItself(List<Integer> nums) {
-        ArrayList<Long> rst = new ArrayList<Long>();
-        if (nums == null || nums.size() == 0) {
+    public List<Long> productExcludeItself(List<Integer> A) {
+        List<Long> rst = new ArrayList<>();
+        if (A == null || A.size() == 0) {
             return rst;
         }
-        // Backword Traverse
-        rst.add(1l);
-        for (int i = 1; i < nums.size(); i++) {
-            rst.add(rst.get(i - 1) * nums.get(i - 1));
+        
+        // Forward Traverse
+        long temp = 1;
+        for (int i = 0; i < A.size(); i++) {
+            rst.add(temp);
+            temp *= A.get(i);
         }
-        // Forward Traverses
-        int right = 1;
-        for (int i = nums.size() - 1; i >= 0; i--) {
-            rst.set(i, rst.get(i) * right);
-            right *= nums.get(i);
+        
+        // Backward Traverse
+        temp = 1;
+        for (int i = A.size() - 1; i >= 0; i--) {
+            rst.set(i, rst.get(i) * temp);
+            temp *= A.get(i);
         }
         
         return rst;
