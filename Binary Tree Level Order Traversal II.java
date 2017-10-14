@@ -38,14 +38,14 @@ Queue Binary Tree Binary Tree Traversal Breadth First Search
  * }
  */
  
+ 
 public class Solution {
     /**
      * @param root: The root of binary tree.
      * @return: buttom-up level order a list of lists of integer
      */
-    public ArrayList<ArrayList<Integer>> levelOrderBottom(TreeNode root) {
-        // write your code here
-        ArrayList<ArrayList<Integer>> rst = new ArrayList();
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> rst = new ArrayList<>();
         
         if (root == null) {
             return rst;
