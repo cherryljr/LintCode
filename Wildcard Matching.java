@@ -1,5 +1,6 @@
 Approach 1: DP
-
+Time Complexity:  O(n^2)
+Space Complexity: O(n^2)
 
 Approach 2: Two Pointers Traverse
 The basic idea is to have one pointer for the string and one pointer for the pattern. 
@@ -23,6 +24,42 @@ Example
 Tags 
 	Dynamic Programming String Backtracking Greedy Google
 */
+
+// Solutoin 1: DP
+public class Solution {
+    public boolean isMatch(String str, String pattern) {
+        boolean[][] match = new boolean[str.length() + 1][pattern.length() + 1];
+        match[str.length()][pattern.length()] = true;
+        
+        // Initialize, deal with the remaining characters in pattern
+        for (int i = pattern.length() - 1; i >= 0; i--) {
+            if (pattern.charAt(i) !='*') {
+                break;
+            }
+            else {
+                match[str.length()][i] = true;
+            }
+        }
+        
+        // Function 
+        for (int i = str.length() - 1; i >= 0; i--) {
+            for (int j = pattern.length() - 1; j >= 0; j--) {
+                if (str.charAt(i) == pattern.charAt(j) || pattern.charAt(j) == '?') {
+                    match[i][j] = match[i + 1][j + 1];
+                }
+                else if (pattern.charAt(j) == '*') {
+                    match[i][j] = match[i + 1][j] || match[i][j + 1];
+                }
+                else {
+                    match[i][j] = false;
+                } 
+            }
+        }
+        
+        // Answer
+        return match[0][0];
+    }
+}
 
 // Solution 2: Two Pointers
 public class Solution {
