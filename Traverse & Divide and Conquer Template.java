@@ -1,6 +1,6 @@
 Template 1: Traverse
-//	Í¨³£²»·µ»ØÊıÖµ
-//	´«Èë²ÎÊı£¬µ÷ÓÃ
+//	é€šå¸¸ä¸è¿”å›æ•°å€¼
+//	ä¼ å…¥å‚æ•°ï¼Œè°ƒç”¨
 public class Solution {
     public void traverse(TreeNode root) {
         if (root == null) {
@@ -16,8 +16,8 @@ public class Solution {
 
 
 Tempate 2: Divide & Conquer
-//	ÓĞ·µ»ØÖµ£¨ÓĞ¿ÉÄÜ·µ»Ø¶à¸ö²ÎÊı£¬ÈçBinary Tree Maximum Path Sum£©
-//	ÏÈ·ÖºóÖÎ£¬×¢ÒâÁÙ½çÖµÓëÒì³£µÄ´¦Àí
+//	æœ‰è¿”å›å€¼ï¼ˆæœ‰å¯èƒ½è¿”å›å¤šä¸ªå‚æ•°ï¼Œå¦‚Binary Tree Maximum Path Sumï¼‰
+//	å…ˆåˆ†åæ²»ï¼Œæ³¨æ„ä¸´ç•Œå€¼ä¸å¼‚å¸¸çš„å¤„ç†
 public class Solution {
     public ResultType traversal(TreeNode root) {
         // null or leaf
