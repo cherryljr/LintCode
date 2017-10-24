@@ -51,9 +51,9 @@ public class Solution {
             return minSum[x][y];
         }
         //	Divide 
-				int leftSum = search(x + 1, y);
-				int rightSum = search(x + 1, y + 1);
-				//	Merge
+        int leftSum = search(x + 1, y);
+        int rightSum = search(x + 1, y + 1);
+        //	Merge
         minSum[x][y] = Math.min(leftSum, rightSum) + triangle[x][y];
         
         return minSum[x][y];
@@ -71,7 +71,7 @@ public class Solution {
         this.triangle = triangle;
         this.minSum = new int[n][n];
 				
-				//	Initial the minSum
+        //	Initial the minSum
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 minSum[i][j] = Integer.MAX_VALUE;
