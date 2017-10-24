@@ -1,5 +1,5 @@
 分别进行两次Binary Search来查询left bound和right bound
-```
+
 /*
 Given a sorted array of integers, find the starting and ending position of a given target value.
 
@@ -16,7 +16,6 @@ Binary Search Array Sorted Array
 */
 
 /*
-    Recap: 12.08.2015
     input sorted
     2 binary search while loop.
     First one, keep looking for 1st occurnace.
@@ -24,9 +23,8 @@ Binary Search Array Sorted Array
     
     check border case:
     A = []
-
-
 */
+
 public class Solution {
     /** 
      *@param A : an integer sorted array
