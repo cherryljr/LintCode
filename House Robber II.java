@@ -17,6 +17,7 @@ Since every house is either robbed or not robbed and at least half of the houses
 the solution is simply the larger of two cases with consecutive houses, 
 i.e. house i not robbed, break the circle, solve it, or house i + 1 not robbed. 
 Hence, the following solution: I chose i = n and i + 1 = 0 for simpler coding. But, you can choose whichever two consecutive ones.
+
 Conclusion:
     Break the circle in ith house. So we can turn the question into House Robber.
     Solve it like the simpler question.
