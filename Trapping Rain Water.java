@@ -72,7 +72,7 @@ public class Solution {
 Algorithm
 	Initialize left pointer to 0 and right pointer to size-1
 	While left < right, do:
-		If \text{height[left]}height[left] is smaller than \text{height[right]}height[right]
+		If height[left] is smaller than height[right]
 			If height[left] >= left_max, update left_max
 			Else add left_max−height[left] to ans
 			move left to the next position (left++).
