@@ -37,6 +37,9 @@ Solution 2: DP Method 2
 	Learn form: https://discuss.leetcode.com/topic/8984/a-concise-dp-solution-in-java
 	Very Smart Way !!!
 	
+Good Conclusions about Best Time to Buy and Sell Stock serial quesionts:
+https://discuss.leetcode.com/topic/107998/most-consistent-ways-of-dealing-with-the-series-of-stock-problems
+    
 /*
 Say you have an array for which the ith element is the price of a given stock on day i.
 
