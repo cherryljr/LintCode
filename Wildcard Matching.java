@@ -62,6 +62,28 @@ public class Solution {
 }
 
 // Solution 2: Two Pointers
+We need the traverse the String and compare the sth character in String with the pth character in pattern.
+There are only four situation here:
+    1. str.charAt(s) == pattern.charAt(p)
+    In this situation, we need move pNode and sNode to the next position and continue the process.
+    2. str.charAt(s) != pattern.charAt(p) && pattern.charAt(p) == '?'. 
+    Cuz '?' Matches any single character, the situation is the same as situation 1. sNode++ and pNode++ then continue the process.
+    3. str.charAt(s) != pattern.charAt(p) && pattern.charAt(p) == '*'. 
+    Cuz '*' Matches any sequence of characters.
+    Here, we use starIndex to store the current position of pNode (the position of character '*')
+    and use match to store the current position of sNode (the starting position of String to match '*'). 
+    Then we only need to move the pNode to the next position (cuz '*' can alsoo matches the empty sequence, sNode needn't to move).
+    4. str.charAt(s) != pattern.charAt(p) && starIndex != -1. 
+    It means that we have encountered a '*' in pattern and we stored the position of it.
+    If the character in String has matched the '*' already, the match will move to the next position (match++), then sNode = match.
+    This is very important, you can think about this case: String - "abcdabcd", Pattern - "a*bcd" then you will understand it. 
+    Set pNode as the next position of '*' (pNode = starIndex + 1).
+if the situation isn't in above, we will return false.
+After traverse the String, we also need to check for remaining characters in pattern.
+If the remaining character is '*', then p++.
+At the end, we only need to check whether the pNode has traverse to the end or not. 
+
+// Code Beolow
 public class Solution {
     /*
      * @param s: A string 
@@ -83,7 +105,7 @@ public class Solution {
 				match = s;
 				p++;
 			}
-		   // pattern pointer was *, advancing string pointer
+		   // we have store a * position in pattern string, advancing string pointer
 			else if (starIndex != -1) {
 				p = starIndex + 1;
 				match++;
