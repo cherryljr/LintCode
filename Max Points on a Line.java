@@ -1,3 +1,6 @@
+This Question is about Mathematical Geometry 
+and there are some similar questions such as Convex Polygon in LeetCode (about Cross Product).
+
 Firstly, let's talk about mathematics.
 How to determine if three points are on the same line?
 The answer is to see if slopes of arbitrary two pairs are the same.
