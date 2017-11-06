@@ -1,9 +1,3 @@
-几种不同的方法flip：   
-坑： 1. 结尾不能有空格。 2. 注意，如果Input是 ‘ ’的话，split以后就啥也没有了。check split以后 length == 0
-
-另一个题目Reverse Words in String (char[]) 可以in-place，因为条件说char[]里面是没有首尾空格,所以更加简单.
-
-```
 /*
 Given an input string, reverse the string word by word.
 
@@ -12,7 +6,6 @@ Given s = "the sky is blue",
 return "blue is sky the".
 
 For C programmers: Try to solve it in-place in O(1) space.
-
 click to show clarification.
 
 Clarification:
@@ -25,68 +18,102 @@ Reduce them to a single space in the reversed string.
 Hide Company Tags Bloomberg
 Hide Tags String
 Hide Similar Problems Reverse Words in a String II
-
-
 */
 
-/*
-    Thoughts:
-    Have multiple two other ways to do it: 
-        1. flip all,then flip each individual word; 
-        2. break into parts and append from end to beginning.
-    For simplicity of code, try the appending from behind.
-*/
+// Approach 1: Using trim() and split() method
+After trim and split the String s, we will get string array that consist of each indivisual word.
+We only need to append them from end to start, we will approach reverse words in the string.
+Attention:
+    1. the input may be "  " or "   a   b  ", so we should use trim() to remove spaces
+    2. there maybe two or more spaces between indivisual words, so we use regular expression to remove them
+    3. Instead of using substring, insert the word-characters directly in the StringBuilder. 
+       Assuming they're using a linked-list or tree, this could be a whole last faster.
+// Code Below
 public class Solution {
     public static String reverseWords(String s) {
-        //write your code
-        if (s == null || s.length() == 0 || s.indexOf(" ") == -1) {
-            return s;
+        if (s == null || s.length() == 0) {
+            return "";
         }
         
-        String[] temp = s.split(" ");
+        String[] temp = s.trim().split("\\s+");  // Use regular expression to remove spaces
         StringBuilder rst = new StringBuilder();
         
-        for (int i = temp.length - 1; i >= 0; i--) {
-                rst.append(temp[i] + " ");
+        // for (int i = temp.length - 1; i >= 0; i--) {
+        for (int i = temp.length - 1; i > 0; i--) {
+            rst.append(temp[i] + " ");   
         }
         
-        return rst.toString();
+        // remove the last " "
+        // return rst.substring(0, rst.length() - 1);
+        return rst.append(temp[0]).toString();
     }
 }
 
-
-
-
-/*
-Thinking Process: 
-1. Reverse it like reversing a int array
-2. Use Split into arrays.
-3. When reversing, make sure not empty string ""
-*/
-public class Solution {
-    /**
-     * @param s : A string
-     * @return : A string
-     */
+// Approach 2: Two-pointers (no trim(), no split(), no StringBuilder)
+public class Solution { 
     public String reverseWords(String s) {
-        String[] strs = s.split(" ");
-        for (int i = 0, j = strs.length - 1; i < j; i++, j--) {
-            String temp = new String(strs[j]);
-            strs[j] = new String(strs[i]);
-            strs[i] = temp;
+        if (s == null) {
+            return null;
         }
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < strs.length; i++){
-            if (strs[i].length() > 0) {
-                sb.append(strs[i]);
-                if (i < strs.length - 1) {
-                    sb.append(" ");
-                }
+
+        char[] a = s.toCharArray();
+        int n = a.length;
+
+        // step 1. reverse the whole string
+        reverse(a, 0, n - 1);
+        // step 2. reverse each word
+        reverseWords(a, n);
+        // step 3. clean up spaces
+        return cleanSpaces(a, n);
+    }
+  
+    private void reverseWords(char[] a, int n) {
+        int i = 0, j = 0;
+        while (i < n) {
+            // skip spaces
+            while (i < j || i < n && a[i] == ' ') {
+                i++; 
+            }
+            // skip non spaces
+            while (j < i || j < n && a[j] != ' ') {
+                j++; 
+            }
+            reverse(a, i, j - 1);   // reverse the word
+        }
+    }
+  
+    // trim leading, trailing and multiple spaces
+    String cleanSpaces(char[] a, int n) {
+        int i = 0, j = 0;
+        while (j < n) {
+            // skip spaces
+            while (j < n && a[j] == ' ') {
+                j++;  
+            }
+            // keep non spaces
+            while (j < n && a[j] != ' ') {
+                a[i++] = a[j++]; 
+            }
+            // skip spaces
+            while (j < n && a[j] == ' ') {
+                j++;         
+            }
+            // keep only one space
+            if (j < n) {
+                a[i++] = ' ';    
             }
         }
-        return sb.toString();
+
+        return new String(a).substring(0, i);
     }
+  
+    // reverse a[] from a[i] to a[j]
+    private void reverse(char[] a, int i, int j) {
+        while (i < j) {
+          char t = a[i];
+          a[i++] = a[j];
+          a[j--] = t;
+        }
+    }
+  
 }
-
-
-```
