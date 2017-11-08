@@ -9,7 +9,7 @@
 	3. 利用到了 QuickSort 中的分支方法 (Quickselect算法)
 	O(N) 时间复杂度 / O(N^2) 最差情况下的时间复杂度 + O(1) 额外空间 
 	4. 对第 3 种方法进行优化，随机化输入。使得 O(N) 的时间复杂度得以保证 (BFPRT算法)
-    该算法的一个典型应用便是 Top K 问题
+    	该算法的一个典型应用便是 Top K 问题
 	O(N) 时间复杂度 + O(1) 额外空间
     关于 BFPRT算法，想要进一步了解的可以查看：http://www.jianshu.com/p/a43b0e1712d1
     
@@ -61,10 +61,10 @@ class Solution {
         if (position == k) {
             return nums[position];
         } else if (position < k) {
-        	// Check the right part
+            // Check the right part
             return helper(nums, position + 1, r, k);
         }  else {
-        	// Check the left part
+            // Check the left part
             return helper(nums, l, position - 1, k);
         }
     }
@@ -78,7 +78,7 @@ class Solution {
         
         // 进行partition
         for (int i = l; i < r; i++) {
-        // 将所有 小于 pivot 的数放到 pivot 的左边
+        // 根据快速排序的思想，将所有 小于 pivot 的数放到 pivot 的左边
             if (nums[i] < pivot) {
                 swap(nums, left++, i);
             }	
@@ -86,7 +86,7 @@ class Solution {
         // 最后,交换 nums[right] (pivot) 和 nums[left]
         swap(nums, left, right);
             
-        // 返还pivot点到数组里面
+        // 返回当前pivot所在的index
         return left;         
     }
     
