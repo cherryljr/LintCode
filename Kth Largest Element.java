@@ -13,8 +13,7 @@
 	O(N) 时间复杂度 + O(1) 额外空间
     关于 BFPRT算法，想要进一步了解的可以查看：http://www.jianshu.com/p/a43b0e1712d1
     
-Get more details here：https://discuss.leetcode.com/topic/14597/solution-explained
-	
+Get more details here：https://discuss.leetcode.com/topic/14597/solution-explained	
 
 /*
 Description
