@@ -78,15 +78,15 @@ class Solution {
         int pivot = nums[right];
         
         // 进行partition
-	for (int i = l; i < r; i++) {
-	// 将所有 小于 pivot 的数放到 pivot 的左边
-		if (nums[i] < pivot) {
-			swap(nums, left++, i);
-		}	
-	}
-	// 最后,交换 nums[right] (pivot) 和 nums[left]
-	swap(nums, left, right);
-        
+        for (int i = l; i < r; i++) {
+        // 将所有 小于 pivot 的数放到 pivot 的左边
+            if (nums[i] < pivot) {
+                swap(nums, left++, i);
+            }	
+        }
+        // 最后,交换 nums[right] (pivot) 和 nums[left]
+        swap(nums, left, right);
+            
         // 返还pivot点到数组里面
         return left;         
     }
