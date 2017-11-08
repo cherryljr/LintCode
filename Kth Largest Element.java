@@ -11,6 +11,8 @@
 	4. 对第 3 种方法进行优化，随机化输入。使得 O(N) 的时间复杂度得以保证 (BFPRT算法)
     	该算法的一个典型应用便是 Top K 问题
 	O(N) 时间复杂度 + O(1) 额外空间
+    BFPRT算法的思想只是在选取 pivot 值时通过 random 的方法进行选取罢了，因此我们可以通过 shuffle 函数来对
+    数组进行一次随机排序来实现。
     关于 BFPRT算法，想要进一步了解的可以查看：http://www.jianshu.com/p/a43b0e1712d1
     
 Get more details here：https://discuss.leetcode.com/topic/14597/solution-explained	
@@ -33,6 +35,8 @@ Tags
 Sort Quick Sort
 */
 
+// Quickselect算法
+// O(n) best case, O(n^2) worst case runnig time + O(1) memory
 class Solution {
     /*
      * @param k : description of k
@@ -96,3 +100,81 @@ class Solution {
     	nums[j] = temp;
     }
 };
+
+// BFPRT算法
+// O(N) guaranteed running time + O(1) space
+class Solution {
+    /*
+     * @param k : description of k
+     * @param nums : array of nums
+     * @return: description of return
+     */
+    public int kthLargestElement(int k, int[] nums) {
+        // write your code here
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (k <= 0) {
+            return 0;
+        }
+        
+        shuffle(nums);
+        return helper(nums, 0, nums.length - 1, nums.length - k);  
+    }
+ 
+    public int helper(int[] nums, int l, int r, int k) {
+        if (l == r) {
+            return nums[l];
+        }
+        
+        int position = partition(nums, l, r);
+        // Found kth smallest number
+        if (position == k) {
+            return nums[position];
+        } else if (position < k) {
+            // Check the right part
+            return helper(nums, position + 1, r, k);
+        }  else {
+            // Check the left part
+            return helper(nums, l, position - 1, k);
+        }
+    }
+    
+    // Quick select: kth smallest
+    public int partition(int[] nums, int l, int r) {
+        // 初始化左右指针和pivot
+        int left = l, right = r;
+        // Take nums[right] as the pivot
+        int pivot = nums[right];
+        
+        // 进行partition
+        for (int i = l; i < r; i++) {
+        // 根据快速排序的思想，将所有 小于 pivot 的数放到 pivot 的左边
+            if (nums[i] < pivot) {
+                swap(nums, left++, i);
+            }	
+        }
+        // 最后,交换 nums[right] (pivot) 和 nums[left]
+        swap(nums, left, right);
+            
+        // 返回当前pivot所在的index
+        return left;         
+    }
+    
+    // 将数组元素打乱，使得 pivot 值的选取为随机
+    private void shuffle(int nums[]) {
+        final Random random = new Random();
+        for(int index = 1; index < nums.length; index++) {
+            final int r = random.nextInt(index + 1);
+            swap(nums, index, r);
+        }
+    }
+    
+    private void swap(int[] nums, int i, int j) {
+    	int temp = nums[i];
+    	nums[i] = nums[j];
+    	nums[j] = temp;
+    }
+    
+};
+
