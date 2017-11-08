@@ -1,10 +1,9 @@
+QuickSelet Algorithm
 快速排序的思想，整个程序其实就是快速排序过程中的一次排序罢了。
 
 利用两个指针left和right分别指向Array的起始和末尾。
-
 利用while循环，left指针从左向右遍历，直到left指向的节点的值大于k.
 同理right指针从右向左遍历，直到right指向的节点的值小于k.
-
 交换left和right节点，直达left与right两个节点相遇或者相交。
 
 算法复杂度为：O(N)
