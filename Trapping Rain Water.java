@@ -19,6 +19,15 @@ Two Pointers Forward-Backward Traversal Array
 // Approach 1: Using Stack 
 This problem is like Largest Rectangle in Histogram to some extend. 
 But, we use stack to find the first bigger number beside it in the arrays in this problem.
+This difference between this problem and Largest Rectangle in Histogram is:
+In Largest Rectangle in Histogram, we use stack to find the first smaller element beside it.
+    Because we want to find a rectangle whose height is heights[stack.peek()]. 
+    When we know this position that the height is smaller than it, we can calculate the weight of the rectangle.
+In this quesiotn - Trapping Rain Water, we use stack to find the first bigger element beside it.
+    Because only when the beside heights is taller than the height[stack.peek()], the water could be trapped.
+    Just like a Basin.
+    When we know this position that the height is bigger than it, we can calculate the weight of the rectangle.
+    And the height is: Math.min(heights[i], heights[stack.peek()]) - heights[top].
 
 Algorithm
 	Use stack to store the indices of the bars.
