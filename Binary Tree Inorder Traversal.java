@@ -62,9 +62,9 @@ public class Solution {
 
     private void helper(ArrayList<Integer> rst, TreeNode node) {
         if (node != null) {
-	        	helper(rst, node.left);
-	        	rst.add(node.val);
-	        	helper(rst, node.right);
+		helper(rst, node.left);
+		rst.add(node.val);
+		helper(rst, node.right);
         }
  
     }
