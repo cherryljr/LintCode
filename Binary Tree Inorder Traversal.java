@@ -135,9 +135,9 @@ Time complexity : O(n).
 	the biggest problem lies in finding the time complexity of finding the predecessor nodes of all the nodes in the binary tree. 
 	Intuitively, the complexity is O(nlogn), because to find the predecessor node for a single node related to the height of the tree. 
 	But in fact, finding the predecessor nodes for all nodes only needs O(n) time. 
-	Because a binary Tree with nn nodes has n−1 edges, the whole processing for each edges up to 2 times, 
+	Because a binary Tree with n nodes has n−1 edges, the whole processing for each edges up to 2 times, 
 	one is to locate a node, and the other is to find the predecessor node. So the complexity is O(n).
-Space complexity : O(n). Arraylist of size nn is used.
+Space complexity : O(n). Arraylist of size n is used.
 */
 
 class Solution {
