@@ -62,9 +62,9 @@ public class Solution {
 
     private void helper(ArrayList<Integer> rst, TreeNode node) {
         if (node != null) {
-		helper(rst, node.left);
-		rst.add(node.val);
-		helper(rst, node.right);
+            helper(rst, node.left);
+            rst.add(node.val);
+            helper(rst, node.right);
         }
  
     }
@@ -130,14 +130,14 @@ In this method, we have to use a new data structure-Threaded Binary Tree, and th
 		a. In current's left subtree, make current the right child of the rightmost node
 		b. Go to this left child, i.e., current = current.left
 Complexity Analysis
-Time complexity : O(n). 
-	To prove that the time complexity is O(n), 
-	the biggest problem lies in finding the time complexity of finding the predecessor nodes of all the nodes in the binary tree. 
-	Intuitively, the complexity is O(nlogn), because to find the predecessor node for a single node related to the height of the tree. 
-	But in fact, finding the predecessor nodes for all nodes only needs O(n) time. 
-	Because a binary Tree with n nodes has n−1 edges, the whole processing for each edges up to 2 times, 
-	one is to locate a node, and the other is to find the predecessor node. So the complexity is O(n).
-Space complexity : O(n). Arraylist of size n is used.
+    Time complexity : O(n). 
+        To prove that the time complexity is O(n), 
+        the biggest problem lies in finding the time complexity of finding the predecessor nodes of all the nodes in the binary tree. 
+        Intuitively, the complexity is O(nlogn), because to find the predecessor node for a single node related to the height of the tree. 
+        But in fact, finding the predecessor nodes for all nodes only needs O(n) time. 
+        Because a binary Tree with n nodes has n−1 edges, the whole processing for each edges up to 2 times, 
+        one is to locate a node, and the other is to find the predecessor node. So the complexity is O(n).
+    Space complexity : O(n). Arraylist of size n is used.
 */
 
 class Solution {
@@ -155,20 +155,20 @@ class Solution {
                 // move to next right node
                 curr = curr.right;
             } else {    // has a left subtree
-                TreeNode succ = getSuccessor(curr);  // get rightmost node
+                TreeNode pre = getPredecessor (curr);  // get rightmost node
                 /* 
                  * If the right subtree is null, then we have never been here before.
-                 * the current node should be the right child of succ.
+                 * the current node should be the right child of pre.
                  */
-                if (succ.right == null) {
-                    succ.right = curr;
+                if (pre.right == null) {
+                    pre.right = curr;
                     curr = curr.left;
                 } else {
                 /* 
                  * If there is a right subtree, it is a link that we created on a
                  * previous pass, so we should unlink it and visit this node to avoid infinite loops
                  */
-                    succ.right = null;
+                    pre.right = null;
                     rst.add(curr.val);
                     curr = curr.right;
                 }
@@ -179,12 +179,12 @@ class Solution {
     }
     
     // Get the node with the largest value smaller than current node.
-    private TreeNode getSuccessor(TreeNode node) {
-        TreeNode succ = node.left;
-        while (succ.right != null && succ.right != node) {
-            succ = succ.right;
+    private TreeNode getPredecessor(TreeNode node) {
+        TreeNode pre = node.left;
+        while (pre.right != null && pre.right != node) {
+            pre = pre.right;
         }
-        return succ;
+        return pre;
     }
 }
 
