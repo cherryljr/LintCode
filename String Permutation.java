@@ -66,16 +66,16 @@ public class Solution {
 
 // Solution 3: HashMap O(N)
 public class Solution {
-    /**
-     * @param A a string
-     * @param B a string
-     * @return a boolean
+    /*
+     * @param A: a string
+     * @param B: a string
+     * @return: a boolean
      */
-    public static boolean stringPermutation(String A, String B) {
+    public boolean Permutation(String A, String B) {
         if (A == null || B == null) {
             return A == B;
         }
-        if (A.equlas(B)) {
+        if (A.equals(B)) {
             return true;
         }
         if (A.length() == B.length()) {
@@ -83,8 +83,9 @@ public class Solution {
         }
         return false;
     }
+    
     //  得到字符串各个字符的出现次数
-    public static Map<Character, Integer> charCount(String str) {
+    public Map<Character, Integer> charCount(String str) {
         Map<Character, Integer> map = new HashMap<>();
         char[] arr = str.toCharArray();
         
@@ -100,8 +101,9 @@ public class Solution {
         
         return map;
     }
+    
     //  比较两个map
-    public static boolean mapCompare(Map<Character, Integer> map1, Map<Character, Integer> map2) {
+    public boolean mapCompare(Map<Character, Integer> map1, Map<Character, Integer> map2) {
     	// 两个 map 的size 不相等则肯定也不能置换
         if (map1.size() != map2.size()) {
             return false;
