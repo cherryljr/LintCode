@@ -21,6 +21,12 @@ Solution 3: O(n) HashMap
 	想到乱序情况下的判断，毫无以为是我大 HashMap 了。
 	利用 HashMap 中的 key 来储存字符数值, value 来储存字符出现的相应次数。
 	然后对两个 map 进行比较便能够得出最后的结果。
+    
+Solution 4: O(n) 主要思想与 HashMap 相同
+    因为该题的 testcase 并不全面，故可以使用一个 256 大小的数组 record 来替代 HashMap.
+    对于 A 字符串中的字符，每遇到一次 record[A.charAt(i)]++ ;
+    对于 B 字符串中的字符，每遇到一次 record[B.charAt(i)]--;
+    最后我们只需要遍历 record 数组中看是否存在 非0 的元素即可，若存在则代表存在不同的字符，return false即可.
 	
 /*
 Description
@@ -118,6 +124,32 @@ public class Solution {
                 return false;
             }
         }
+        return true;
+    }
+}
+
+// Solution 4: Using Array
+public class Solution {
+    /*
+     * @param A: a string
+     * @param B: a string
+     * @return: a boolean
+     */
+    public boolean Permutation(String A, String B) {
+        int[] record = new int[256];
+        
+        for (int i = 0; i < A.length(); i++) {
+            record[A.charAt(i)]++;
+        }
+        for (int i = 0; i < B.length(); i++) {
+            record[B.charAt(i)]--;
+        }
+        for (int i : record) {
+            if (i != 0) {
+                return false;
+            }
+        }
+        
         return true;
     }
 }
