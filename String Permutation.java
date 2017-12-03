@@ -1,24 +1,26 @@
-������ 3 �ֽⷨ��
+本题有 3 种解法。
 
-Solution 1:	O(nlogn) Sort 
-	�÷���ֱ�ۣ�������ֱ�ӽ� Sting A, B ת��Ϊ char[], Ȼ����� Arrays.sort() �������򼴿�
-	Ȼ������ String.valueOf() ���ַ�����ת���� String
-	������� String �� equals �����Ƚ���������������ַ������ɡ�
-	���Ǹ÷���ʱ�临�Ӷȹ��ߣ����Ƽ�Ŷ~ 
-	������߾��������ⷨ���������Ͳ�ʵ����~ �����˳ɻ�Time Limit Exceeded~~
+Solution 1: O(nlogn) Sort 
+	该方法直观，暴力。直接将 Sting A, B 转换为 char[], 然后调用 Arrays.sort() 进行排序即可
+	然后利用 String.valueOf() 将字符数组转换回 String
+	最后利用 String 的 equals 方法比较两个经过排序的字符串即可。
+	但是该方法时间复杂度过高，不推荐哦~ 
+	所以这边就提出这个解法，具体代码就不实现啦~ 反正八成会Time Limit Exceeded~~
 
 Solution 2: O(n) Calculate the Sum of String
-	��Ϊ�ڼ������ÿһ���ַ���ʵ������һ�� int ��ֵ����ʾ�� (ASCII ��)
-	��˽� String ��ÿ���ַ�����������õ��� sum ���������������ַ��������û�
-	�����ܼ򵥣��� String ת��Ϊ char[] ֮��ȡ���ַ�������ÿ���ַ�ֵ��Ӽ���
-	ȱ�㣺һ���漰�����㣬һ��Ҫ���Ǳ߽����⡣������������Դ�������ʱ��sum ���ᳬ�� MAX_VALUE��
-	������~ ����� testcase ��������û����ô�󣬶������������д��~ �ٺٺ�~~~
-	Note��ʵ��Ӧ�ó����л���Ҫ�Ͻ�Ŷ�� �뿴 Solution 3
+	因为在计算机中每一个字符其实都是由一个 int 数值来表示的 (ASCII 码)
+	因此将 String 中每次字符相加起来若得到的 sum 相等则代表这两个字符串可以置换
+	做法很简单：将 String 转换为 char[] 之后，取出字符数组中每个字符值相加即可
+	缺点：
+	1. String中不能包含重复数据，不然会出现误判的情况。比如 "aa" 与 "bc" 的sum值是相同的，但是并不互为permutations.
+	2. 一旦涉及到运算，一定要考虑边界问题。毫无疑问在面对大量数据时，sum 将会超出 MAX_VALUE。
+	但是呢~ 本题的 testcase 毫无疑问没有这么大，而且这个代码书写简单~ 嘿嘿嘿~~~
+	Note：实际应用场合中还是要严谨哦， 请看 Solution 3
 
 Solution 3: O(n) HashMap
-	�뵽��������µ��жϣ�������Ϊ���Ҵ� HashMap �ˡ�
-	���� HashMap �е� key �������ַ���ֵ, value �������ַ����ֵ���Ӧ������
-	Ȼ������� map ���бȽϱ��ܹ��ó����Ľ����
+	想到乱序情况下的判断，毫无以为是我大 HashMap 了。
+	利用 HashMap 中的 key 来储存字符数值, value 来储存字符出现的相应次数。
+	然后对两个 map 进行比较便能够得出最后的结果。
 	
 /*
 Description
@@ -81,7 +83,7 @@ public class Solution {
         }
         return false;
     }
-    //  �õ��ַ��������ַ��ĳ��ִ���
+    //  得到字符串各个字符的出现次数
     public static Map<Character, Integer> charCount(String str) {
         Map<Character, Integer> map = new HashMap<>();
         char[] arr = str.toCharArray();
@@ -98,9 +100,9 @@ public class Solution {
         
         return map;
     }
-    //  �Ƚ�����map
+    //  比较两个map
     public static boolean mapCompare(Map<Character, Integer> map1, Map<Character, Integer> map2) {
-    	// ���� map ��size �������϶�Ҳ�����û�
+    	// 两个 map 的size 不相等则肯定也不能置换
         if (map1.size() != map2.size()) {
             return false;
         }
@@ -110,7 +112,7 @@ public class Solution {
                     return false;
                 }
             } catch (NullPointerException e) {
-                //  ˵��map2��û��map1�е�ĳ���ַ�
+                //  说明map2中没有map1中的某个字符
                 return false;
             }
         }
