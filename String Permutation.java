@@ -1,4 +1,4 @@
-本题有 3 种解法。
+本题有 4 种解法。
 
 Solution 1: O(nlogn) Sort 
 	该方法直观，暴力。直接将 Sting A, B 转换为 char[], 然后调用 Arrays.sort() 进行排序即可
