@@ -87,40 +87,29 @@ public class Solution {
         if (A.length() == B.length()) {
             return mapCompare(charCount(A), charCount(B));
         }
+        
         return false;
     }
     
-    //  得到字符串各个字符的出现次数
-    public Map<Character, Integer> charCount(String str) {
+    // 使用 map 记录字符串各个字符的出现次数
+    public Map<Character, Integer> charCount(String s) {
         Map<Character, Integer> map = new HashMap<>();
-        char[] arr = str.toCharArray();
-        
-        for (char item : arr) {
-            if (map.containsKey(item)) {
-                Integer num = map.get(item);
-                num += 1;
-                map.put(item, num);
-            } else {
-                map.put(item, 1);
-            }
+        for (int i = 0; i < s.length(); i++) {
+            // 利用JDK 1.8的新方法 getOrDefalut 函数对代码进行优化
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
         }
-        
         return map;
     }
     
-    //  比较两个map
+    // 比较两个map
     public boolean mapCompare(Map<Character, Integer> map1, Map<Character, Integer> map2) {
-    	// 两个 map 的size 不相等则肯定也不能置换
+        // 两个 map 的size 不相等则肯定也不能置换
         if (map1.size() != map2.size()) {
             return false;
         }
-        for (Character c : map1.keySet()) {
-            try {
-                if (map1.get(c) != map2.get(c)) {
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                //  说明map2中没有map1中的某个字符
+        for (Character ch : map1.keySet()) {
+         // 使用 getOrDefalut 函数对代码进行优化
+            if (map1.get(ch) - map2.getOrDefault(ch, -1) != 0) {
                 return false;
             }
         }
@@ -128,7 +117,7 @@ public class Solution {
     }
 }
 
-// Solution 4: Using Array
+// Solution 4: Using Array instead of HashMap
 public class Solution {
     /*
      * @param A: a string
