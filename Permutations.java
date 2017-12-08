@@ -1,7 +1,3 @@
-Recursive： 取，或者不取。    
-
-
-```
 /*
 Given a list of numbers, return all possible permutations.
 
@@ -29,19 +25,21 @@ Do it without recursion
 
 Tags Expand 
 Recursion Search
-
 */
 
 /*
-
-Thinking Process:
-1. Very similar idea: choose or not choose (1 / 0)
-    A key point is: when jumpped into next level of recursion, the 'list' will surely be filled up until it reach the max length.
-    That is: when 'not choose', the empty seat will be filled eventually with points not existed in 'list'.
-2. The recursion does not end before the list is filled.
-3. A for loop is doiong the filling of blank. Any order/combination will occur.
+    Approach 1: Backtracking
+    Main idea is the same as Subset.
+    https://github.com/cherryljr/LintCode/blob/master/Subset.java
+    But the results needn't be in non-descending order remove duplicate elements, 
+    so we don't need to sort the array.
+    
+    1. Very similar idea: choose or not choose (1 / 0)
+        A key point is: when jumpped into next level of recursion, the 'list' will surely be filled up until it reach the max length.
+        That is: when 'not choose', the empty seat will be filled eventually with points not existed in 'list'.
+    2. The recursion does not end before the list is filled.
+    3. A for loop is doiong the filling of blank. Any order/combination will occur.
 */
-
 class Solution {
     /**
      * @param nums: A list of integers.
@@ -76,6 +74,9 @@ class Solution {
         }
         
         for (int i = 0; i < nums.length; i++) {
+            // 该题为求 permutaions，故每次都是从 0 开始进行 dfs
+            // 所以当遇到已经加入(contains)的元素时需要跳过。
+            // 这里要和 求subsets 区分开。（把过程当作一棵树的遍历，便可以理解）
             if (list.contains(nums[i]))  {
                 continue;
             }
@@ -86,10 +87,59 @@ class Solution {
     }
 }
 
+/*
+    Approach 2: Regular Recursive
+    Swaps the current element with every other element in the array, lying towards its right, 
+    so as to generate a new ordering of the array elements. 
+    
+*/
+public class Solution {
+    /*
+     * @param nums: A list of integers.
+     * @return: A list of permutations.
+     */
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> rst = new ArrayList<>();
+        if (nums == null) {
+            return rst;
+        }
+        if (nums.length == 0) {
+            rst.add(new ArrayList<Integer>());
+            return rst;
+        }
+        
+        permute(rst, nums, 0);
+        return rst;
+    }
+    
+    private void permute(List<List<Integer>> rst, int[] nums, int start) {
+        if (start == nums.length) {
+            List<Integer> list = new ArrayList<>();
+            for (int i : nums) {
+                list.add(i);
+            }
+            rst.add(list);
+            return;
+        }
+        // 我们可以只将数两两交换，这样便能够枚举出所有的排列组合情况。
+        // 不过交换时只能跟自己后面的交换
+        for (int i = start; i < nums.length; i++) {
+            swap(nums, start, i);
+            permute(rst, nums, start + 1);
+            swap(nums, start, i);   // Backtracking
+        }
+    }
+    
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
 
 
 /*
-    recursive: 
+    Approach 3: Using Stack 
     pass list, rst, nums.
     when list.size() == nums.size(), add to rst and return.
     Need to re-add all of those non-added spots. So do for loop everytime to try all possible ways.
