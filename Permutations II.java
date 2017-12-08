@@ -41,7 +41,13 @@ LinkedIn Recursion
 */
 
 /*
-Use visited[i] to mark visited copies
+    Approach 1: Backtracking
+    Main idea is the same as Subsets II.
+    https://github.com/cherryljr/LintCode/blob/master/Subsets%20II.java
+    
+    Use visited[i] to mark visited elements.
+    So we can make sure the same charactor at same postion won't be reused. 
+    Do a backtrack on the dfs, to make sure a element has same chance of 'selectd' or 'non-solectd'
 */
 class Solution {
     /**
@@ -101,7 +107,7 @@ class Solution {
 }
 
 /*
-    Thoughts:
+    Approach 2: Using Queue
     Same as Permutation I, but check also check for duplicate, if duplicate, continue
     Use a queue of marker to track if that index has been visited.
 */
@@ -155,49 +161,3 @@ class Solution {
         return rst;
     }
 }
-
-
-
-
-/*
-
-Thougths:
-Use regular recursion, use a mark[] to make sure the same charactor at same postion won't be reused 
-Do a backtrack on the dfs, to make sure a element has same chance of 'selectd' or 'non-solectd'
-*/
-class Solution {
-    public ArrayList<ArrayList<Integer>> permuteUnique(ArrayList<Integer> nums) {
-        ArrayList<ArrayList<Integer>> rst = new ArrayList<ArrayList<Integer>>();
-        if (nums == null || nums.size() == 0) {
-            return rst;
-        }
-        Collections.sort(nums);
-        boolean[] mark = new boolean[nums.size()];
-        dfs(nums, new ArrayList<Integer>(), rst, mark);
-        return rst;
-    }
-
-    public void dfs (ArrayList<Integer> nums, ArrayList<Integer> list,
-                        ArrayList<ArrayList<Integer>> rst, boolean[] mark) {
-        if (list.size() == nums.size()) {
-            rst.add(new ArrayList<Integer>(list));
-            return;
-        }
-
-        for (int i = 0; i < nums.size(); i++) {
-            if (mark[i] || (i != 0 && mark[i - 1] && nums.get(i) == nums.get(i - 1))) {
-                continue;
-            }           
-            list.add(nums.get(i));
-            mark[i] = true;
-            dfs(nums, list, rst, mark);
-            list.remove(list.size() - 1);
-            mark[i] = false;
-        }
-        return;
-    }
-}
-
-
-
-```
