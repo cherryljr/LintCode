@@ -1,28 +1,3 @@
-1. HashMap 的做法. sort每个string, 存进HashMap, 重复的就是anagrams,最后输出。   
-   .toCharArray
-   Arrays.sort
-   Stirng.valueOf(char[])
-   时间n*L*O(logL),L是最长string的长度。
-
-2. Arrays.toString(arr)的做法。arr是int[26], assuming only have 26 lowercase letters.    
-Count occurrance, 然后convert to String，作为map的key.
-Time complexity: nO(L)
-
-3. 另一种做法：http://www.jiuzhang.com/solutions/anagrams/   
-   1. take each string, count the occurrance of the 26 letters. save in int[]count.   
-   2. hash the int[] count and output a unique hash value.   
-      hash = hash * a + num   
-      a = a * b.   
-   3. save to hashmap in the same way as we do. 
-
-这一步把for s: strs 里面的时间复杂度降到了O(L). L = s.length().   
-Need to work on the getHash() function.
-
-时间变成n*O(L). Better.
-
-Arrays.toString() 与 Object.toString() 与 String.valueOf()的应用与区别参考博客：
-http://www.cnblogs.com/cherryljr/p/7081585.html
-
 /*
 Given an array of strings, return all groups of strings that are anagrams.
 
@@ -34,85 +9,105 @@ Given ["ab", "ba", "cd", "dc", "e"], return ["ab", "ba", "cd", "dc"].
 Note
 All inputs will be in lower-case
 
-Tags Expand 
+Tags Expand
 String Hash Table
-
 */
 
-/*
- use int[26] assuming it's all lowercase letters
- count each string char in a letter array int[], convert the array into string.
- HashMap carray string as key, and actualy string as value
- outupt all values
-*/
+
+/**
+ * Approach 1: HashMap and Sorting the String
+ * Algorithm
+ * Two strings are anagrams if and only if their sorted strings are equal.
+ * So we can maintain a map ans : {String -> List<String>} where each key K is a sorted string,
+ * and each value is the list of strings from the initial input that when sorted, are equal to K.
+ *
+ * Complexity Analysis
+ * Time Complexity: O(NKlog(K))
+ * where N is the length of strs, and K is the maximum length of a string in strs.
+ * The outer loop has complexity O(N) as we iterate through each string.
+ * Then, we sort each string in O(KlogK) time.
+ * Space Complexity: O(N∗K), the total information content stored in ans.
+ */
 public class Solution {
-    public List<String> anagrams(String[] strs) {   
+    /*
+     * @param strs: A list of strings
+     * @return: A list of strings
+     */
+    public List<String> anagrams(String[] strs) {
         List<String> rst = new ArrayList<String>();
-        
         if (strs == null || strs.length == 0) {
             return rst;
         }
-        
-        HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-        
-        for (int i = 0; i < strs.length; i++) {
-            int[] arr = new int[26];
-            for (int j = 0; j < strs[i].length(); j++) {
-                arr[strs[i].charAt(j) - 'a'] += 1;
+
+        Map<String, ArrayList<String>> map = new HashMap<>();
+        for (String s : strs) {
+            char[] arr = s.toCharArray();
+            Arrays.sort(arr);
+            String key = String.valueOf(arr);
+            //	不能使用arr.toString()， 但是可以用Arrays.toString(arr);
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<String>());
             }
-            
-            String arrString =  Arrays.toString(arr);
-            //	不能使用String.valueOf(arr); / arr.toString();
-            if (!map.containsKey(arrString)) {
-                map.put(arrString, new ArrayList<String>());
-            }
-            map.get(arrString).add(strs[i]);
+            map.get(key).add(s);
         }
-        
-        //Output
+
+        // check instance occurs >= 2
         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-            if (entry.getValue().size() >= 2) 
+            if (entry.getValue().size() >= 2) {
                 rst.addAll(entry.getValue());
+            }
         }
-        
         return rst;
     }
 }
 
-
-/*
-    Feels like put into a hashmap of each string's sorted version. <String, ArrayList<Sting>>
-    compare each string. If match, add into it.
-    reurn all that has >= 2 items
-*/
+/**
+ * Approach 2: HashMap and Count The Frequencies of Each Words
+ * Algorithm
+ * Two strings are anagrams if and only if their character counts (respective number of occurrences of each character) are the same.
+ * We can transform each string s into a character count, consisting of 26 non-negative integers
+ * representing the number of a's, b's, c's, etc.
+ * We use these counts as the basis for our hash map.
+ * The String of count array is the key, and the list<String> store the anagrams.
+ * For example, abbccc will be (1, 2, 3, 0, 0, ..., 0), where there are 26 entries total.
+ *
+ * Complexity Analysis
+ * Time Complexity: O(N∗K), where N is the length of strs, and K is the maximum length of a string in strs.
+ * Counting each string is linear in the size of the string, and we count every string.
+ * Space Complexity: O(N∗K), the total information content stored in ans.
+ */
 public class Solution {
+    /*
+     * @param strs: A list of strings
+     * @return: A list of strings
+     */
     public List<String> anagrams(String[] strs) {
-	        List<String> rst = new ArrayList<String>();
-	        
-	        if (strs == null || strs.length == 0) {
-	            return rst;
-	        }
-	        
-	        HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-	        
-	        for (int i = 0; i < strs.length; i++) {
-	            char[] arr = strs[i].toCharArray(); 
-	            Arrays.sort(arr);
-	            String s = String.valueOf(arr);
-	            //	不能使用arr.toString()， 但是可以用Arrays.toString(arr);
-	            if (!map.containsKey(s)) {
-	                ArrayList<String> list = new ArrayList<String>();
-	                map.put(s, list);
-	            }
-	            map.get(s).add(strs[i]);
-	        } 
-	        //check instance occurs >= 2
-	        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-	            if (entry.getValue().size() >= 2) {
-	                rst.addAll(entry.getValue());
-	            }
-	        }
-	        return rst;
+        List<String> rst = new ArrayList<String>();
+        if (strs == null || strs.length == 0) {
+            return rst;
+        }
+
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        for (String s : strs) {
+            int[] arr = new int[26];
+            for (int j = 0; j < s.length(); j++) {
+                arr[s.charAt(j) - 'a'] += 1;
+            }
+
+            String key =  Arrays.toString(arr);
+            //	不能使用String.valueOf(arr) / arr.toString();
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(s);
+        }
+
+        // check instance occurs >= 2
+        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
+            if (entry.getValue().size() >= 2)
+                rst.addAll(entry.getValue());
+        }
+
+        return rst;
     }
 }
-
