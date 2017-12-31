@@ -31,6 +31,8 @@ public class Solution {
             for (int j = num2.length() - 1; j >= 0; j--) {
                 int p1 = i + j, p2 = i + j + 1;
                 int mul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                // The current sum equals mul plus the ten's digit from the last mul 
+                // (pos[p2], or you can find from the draft directly, they are in the same column)
                 int sum = mul + pos[p2];
                 
                 pos[p1] += sum / 10;
