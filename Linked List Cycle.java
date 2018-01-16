@@ -47,26 +47,31 @@ so they should not be cycle.
  *     }
  * }
  */ 
-    
 public class Solution {
-    public Boolean hasCycle(ListNode head) {
+    /**
+     * @param head: The first node of linked list.
+     * @return: True if it has a cycle, or false
+     */
+    public boolean hasCycle(ListNode head) {  
         if (head == null || head.next == null) {
             return false;
         }
 
         ListNode fast, slow;
         slow = head;
-        fast = head.next;
+        fast = head;
 
-        while (fast != slow) {
-            if(fast==null || fast.next==null)
-                return false;
+        while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
+            if (slow == fast) {
+                return true;
+            }
         } 
-        return true;
+        return false;
     }
 }
+
 
 
 
