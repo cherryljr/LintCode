@@ -99,4 +99,4 @@ public class Solution {
         // 因此需要从叶子节点向上返回到根节点, 去更新线段树上的值
         root.max = Math.max(root.left.max, root.right.max);
     }
-}
+} 
