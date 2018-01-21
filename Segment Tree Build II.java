@@ -99,7 +99,12 @@ public class Solution {
         // Divide and Conquer
         root.left = buildHelper(A, start, mid);
         root.right = buildHelper(A, mid + 1, end);
-        root.max = Math.max(root.left.max, root.right.max);
+        if (root.left != null && root.left.max > root.max) {
+            root.max = root.left.max;
+        }
+        if (root.right != null && root.right.max > root.max) {
+            root.max = root.right.max;
+        }
         // 如果需要区间的最小值:
         // root.min = Math.min(root.left.min, root.right.min);
         // 如果需要区间的和:
