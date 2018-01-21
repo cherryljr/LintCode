@@ -84,8 +84,13 @@ public class Solution {
         int mid = root.start + (root.end - root.start) / 2;
         root.left = buildHelper(A, start, mid);
         root.right = buildHelper(A, mid + 1, end);
-        root.sum = root.left.sum + root.right.sum;
-        
+        root.sum = 0;
+        if (root.left != null) {
+            root.sum += root.left.sum;
+        }
+        if (root.right != null) {
+            root.sum += root.right.sum;
+        }
         return root;
     }
 
