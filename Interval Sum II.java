@@ -24,13 +24,14 @@ Binary Search LintCode Copyright Segment Tree
 */
 
 /**
- * 这道题目是对于线段树的典型应用。
+ * Approach 1: Segment Tree 
+ * 这道题目是对于线段树的典型应用。（但线段树并不是最佳解法）
  * 主要涉及到了：线段树的构建；线段树的查询；线段树的单点修改
  * 对这3个操作不太清楚的可以参见以下代码与解析：
  * 线段树的构建：https://github.com/cherryljr/LintCode/blob/master/Segment%20Tree%20Build%20II.java
  * 线段树的查询：https://github.com/cherryljr/LintCode/blob/master/Segment%20Tree%20Query.java
  * 线段树的单点修改：https://github.com/cherryljr/LintCode/blob/master/Segment%20Tree%20Modify.java
- * 
+ *
  * Note:
  * 说到求区间和的方法，大家最容易想到的就是维护一个前缀和数组。
  * 因此在这里对于这道题目的解法，我将对 线段树 和 前缀和 这两种不同的方法进行一个比较。
@@ -163,3 +164,82 @@ public class Solution {
     }
 }
 
+ /**
+ * Approach 2: BITree
+ * 求区间和（并且支持单点修改）最好的数据结构无疑是树状数组了。
+ * 对于树状数组的详细分析与代码注释可以参见：Binary Index Tree Template
+ * https://github.com/cherryljr/LeetCode/blob/master/Binary%20Index%20Tree%20Template.java
+ * 该题与模板唯一的区别就是在于模板中 update是在原来的基础上加上 val,
+ * 而本题中是将 arr[index] 改成 val.
+ * 实现方法很简单，多建立一个大小与输入数组相同的数组 nums[] 用于在第一次进行初始化即可。
+ * 当然我们还能通过写一个新的 init() 方法来实现 BITree 的建立，这样就能节约 O(n) 的额外空间，
+ * 但同样代码的复用性就降低了。大家自行取舍即可。
+ */
+public class Solution {
+    /* you may need to use some attributes here */
+    private int size;
+    int[] BITree;
+    int[] nums;
+
+    /*
+    * @param A: An integer array
+    */
+    public Solution(int[] nums) {
+        // do intialization if necessary
+        size = nums.length;
+        BITree = new int[size + 1];
+        // this.nums = new int[size];
+        this.nums = nums;  // 不分配额外空间，使用 init() 方法建立BITree
+        for (int i = 0; i < size; i++) {
+            // update(i, nums[i]);
+            init(i, nums[i]);
+        }
+    }
+    
+    private void init(int index, int val) {
+        index += 1;
+        while (index <= size) {
+            BITree[index] += val;
+            index += index & -index;
+        }
+    }
+
+    /*
+     * @param start: An integer
+     * @param end: An integer
+     * @return: The sum from start to end
+     */
+    public long query(int start, int end) {
+        return (start > end || start < 0 || end >= size) ? 0 :
+                start == end ? nums[start] : getSum(end) - getSum(start - 1);
+    }
+    
+    private int getSum(int index) {
+        if (index < 0 || index >= size) {
+            return 0;
+        }
+        int sum = 0;
+        index += 1;
+        while (index > 0) {
+            sum += BITree[index];
+            index -= index & -index;
+        }
+
+        return sum;
+    }
+
+    /*
+     * @param index: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    public void modify(int index, int val) {
+        int delta = val - nums[index];
+        nums[index] = val;
+        index += 1;
+        while (index <= size) {
+            BITree[index] += delta;
+            index += index & -index;
+        }
+    }
+}
