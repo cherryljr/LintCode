@@ -198,7 +198,7 @@ public class Solution {
     
     private void init(int index, int val) {
         index += 1;
-        while (index <= size) {
+        while (index < BITree.length) {
             BITree[index] += val;
             index += index & -index;
         }
