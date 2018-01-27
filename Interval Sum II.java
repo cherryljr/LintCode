@@ -197,10 +197,8 @@ public class Solution {
     }
     
     private void init(int index, int val) {
-        index += 1;
-        while (index < BITree.length) {
+        for (index += 1; index < BITree.length; index += index & -index) {
             BITree[index] += val;
-            index += index & -index;
         }
     }
 
@@ -219,10 +217,8 @@ public class Solution {
             return 0;
         }
         int sum = 0;
-        index += 1;
-        while (index > 0) {
-            sum += BITree[index];
-            index -= index & -index;
+        for (index += 1; index > 0; index -= index & -index) {
+             sum += BITree[index];
         }
 
         return sum;
@@ -236,10 +232,8 @@ public class Solution {
     public void modify(int index, int val) {
         int delta = val - nums[index];
         nums[index] = val;
-        index += 1;
-        while (index < BITree.length) {
+        for (index += 1; index < BITree.length; index += index & -index) {
             BITree[index] += delta;
-            index += index & -index;
         }
     }
 }
