@@ -2,7 +2,9 @@
 
 2. 或者使用 num = num & (num - 1) （该操作为取出num的二进制表示的第i位上的数）
 
-3. 位操作的总结：http://blog.csdn.net/black_ox/article/details/46411997
+3. 位操作的总结与例题汇总：
+http://blog.csdn.net/black_ox/article/details/46411997
+http://www.jiuzhang.com/tutorial/bit-manipulation/82
 
 ```
 /*
@@ -47,7 +49,7 @@ public class Solution {
 };
 
 /************************************* The other way *************************************************/
-//	Use bit operation
+//	Use bit manipulation
 
 public class Solution {
     /**
