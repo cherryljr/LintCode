@@ -1,9 +1,3 @@
-递归搜索模板 / DFS / Backtracking   
-虽然代码注释已经较为详细，但是还是建议参照文档一起阅读
-O(nlogn)
-
-注意：用startIndex来track到哪一步。
-
 /*
 Given a set of distinct integers, return all possible subsets.
 
@@ -20,6 +14,7 @@ If S = [1,2,3], a solution is:
   [1,2],
   []
 ]
+
 Note
 Elements in a subset must be in non-descending order.
 The solution set must not contain duplicate subsets.
@@ -30,30 +25,34 @@ Tags Expand
 Recursion Facebook Uber
 */
 
-// 递归：实现方式，一种实现DFS算法的一种方式
+/**
+ * Approach 1: DFS / Backtracking
+ * DFS / Backtracking 模板
+ * 用startIndex来track到哪一步。
+ */
 class Solution {
     /**
-     * @param S: A set of numbers.
+     * @param nums: A set of numbers.
      * @return: A list of lists. All valid subsets.
      */
     public ArrayList<ArrayList<Integer>> subsets(int[] nums) {
         ArrayList<ArrayList<Integer>> results = new ArrayList<>();
-        
+
         if (nums == null) {
             return results;
         }
-        
+
         if (nums.length == 0) {
             results.add(new ArrayList<Integer>());
             return results;
         }
-        
+
         Arrays.sort(nums);
         helper(new ArrayList<Integer>(), nums, 0, results);
         return results;
     }
-    
-    
+
+
     // 递归三要素
     // 1. 递归的定义：在 Nums 中找到所有以 subset 开头的的集合，并放到 results
     private void helper(ArrayList<Integer> subset,
@@ -66,7 +65,7 @@ class Solution {
         // 这里是遍历所有的子集，所以无需判断条件
         // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中并且 return
         results.add(new ArrayList<Integer>(subset));
-        
+
         //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取.
         //  有些题目中可能会限制i与starIndex的关系.
         for (int i = startIndex; i < nums.length; i++) {
@@ -79,22 +78,32 @@ class Solution {
             // [1,2] -> [1]  回溯
             subset.remove(subset.size() - 1);
         }
-        
+
         // 3. 递归的出口
     }
 }
 
-// Non Recursion
-class Solution {
-    /**
-     * @param S: A set of numbers.
-     * @return: A list of lists. All valid subsets.
+/**
+ * Approach 2: Bit Manipulation
+ * 思路就是使用 一个正整数 二进制表示 的第i位是1还是0来代表 集合的第i个数 取或者不取。
+ * 所以从 0 到 2^n-1 总共 2^n 个整数，正好对应集合的 2^n 个子集。
+ * 过程就是 整数 => 二进制 => 对应集合。
+ * 当我们判断某一位上的数取或者不取时，仍然可以用到位运算来实现。
+ * 只需要用 1 和那一位上的数进行 与操作 即可。
+ */
+public class Solution {
+
+    /*
+     * @param nums: A set of numbers
+     * @return: A list of lists
      */
-    public ArrayList<ArrayList<Integer>> subsets(int[] nums) {
-        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
-        int n = nums.length;
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> rst = new ArrayList<>();
+        if (nums == null) {
+            return rst;
+        }
         Arrays.sort(nums);
-        
+
         // 1 << n is 2^n
         // each subset equals to an binary integer between 0 .. 2^n - 1
         // 0 -> 000 -> []
@@ -102,16 +111,18 @@ class Solution {
         // 2 -> 010 -> [2]
         // ..
         // 7 -> 111 -> [1,2,3]
-        for (int i = 0; i < (1 << n); i++) {
-            ArrayList<Integer> subset = new ArrayList<Integer>();
-            for (int j = 0; j < n; j++) {
-                // check whether the jth digit in i's binary representation is 1
+        int len = nums.length;
+        for (int i = 0; i < (1 << len); i++) {
+            List<Integer> temp = new ArrayList<>();
+            for (int j = 0; j < len; j++) {
+                // 取 i 的第 j 位上的数，判断是否为 0 => 取不取第 j 位上的数
                 if ((i & (1 << j)) != 0) {
-                    subset.add(nums[j]);
+                    temp.add(nums[j]);
                 }
             }
-            result.add(subset);
+            rst.add(temp);
         }
-        return result;
+
+        return rst;
     }
 }
