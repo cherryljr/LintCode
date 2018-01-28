@@ -49,7 +49,7 @@ public class Solution {
 };
 
 /************************************* The other way *************************************************/
-//	Use bit operation
+//	Use bit manipulation
 
 public class Solution {
     /**
