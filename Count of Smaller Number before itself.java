@@ -218,7 +218,7 @@ public class Solution {
 
         this.BITree = new int[maxValue + 1];
         Integer[] rst = new Integer[len];
-        for (int i = len - 1; i >= 0; i--) {
+        for (int i = 0; i < len; i++) {
             // 查询当期比 A[i] 小的元素的个数
             // 这也就意味着查询当前有几个与 minValue 差值小于 diff[i] 的数
             // 即对一个以 diff[i] 为下标的数组进行区域求和
