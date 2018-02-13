@@ -50,7 +50,7 @@ Backtracking
  */
 class Solution {
     // Marked the element that has been visited when DFS the board.
-    static boolean[][] visited;
+    // static boolean[][] visited;
 
     /**
      * @param board: A list of lists of character
@@ -65,13 +65,11 @@ class Solution {
             return true;
         }
 
-        visited = new boolean[board.length][board[0].length];
+        // visited = new boolean[board.length][board[0].length];
         for (int i = 0; i < board.length; i++) {
             for (int  j = 0; j < board[0].length; j++) {
-                // if the start character of word is equals to the character board[i][j]
-                // we can do the dfs from here.
-                // And if the dfs's result it true, it means that we can find the word in board.
-                if ((word.charAt(0) == board[i][j]) && dfs(board, i, j, word, 0)) {
+                // If the dfs's result it true, it means that we can find the word in board.
+                if (dfs(board, i, j, word, 0)) {
                     return true;
                 }
             }
@@ -84,20 +82,35 @@ class Solution {
         if (index == word.length()) {
             return true;
         }
-        if (i < 0 || i >= board.length || j < 0 || j >= board[i].length || board[i][j] != word.charAt(index) || visited[i][j]) {
+        // if (i < 0 || i >= board.length || j < 0 || j >= board[i].length || board[i][j] != word.charAt(index) || visited[i][j]) {
+        //     return false;
+        // }
+        if (i < 0 || i >= board.length || j < 0 || j >= board[i].length || board[i][j] != word.charAt(index)) {
             return false;
         }
 
-        visited[i][j] = true;
-        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1 }};
-        for (int[] dir : dirs) {
-            // go to the four directions, check whether we can find the next character of the word or not.
-            if (dfs(board, i + dir[0], j + dir[1], word, index + 1)) {
-                return true;
-            }
+        // visited[i][j] = true;
+        char temp = board[i][j];
+        board[i][j] = '#';
+        // 采用方向数组进行 dfs
+        // 该写法更加简洁便利，但是运行效率比直接写出各个方向的遍历函数要低一些
+        // 大家可根据情况自行取舍
+        // int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1 }};
+        // for (int[] dir : dirs) {
+        //     if (dfs(board, i + dir[0], j + dir[1], word, index + 1)) {
+        //         return true;
+        //     }
+        // }
+        // go to the four directions, check whether we can find the next character of the word or not.
+        if (dfs(board, i-1, j, word, index+1)
+                ||dfs(board, i+1, j, word, index+1)
+                ||dfs(board, i, j-1, word, index+1)
+                ||dfs(board, i, j+1, word, index+1)) {
+            return true;
         }
         // Backtracking
-        visited[i][j] = false;
+        // visited[i][j] = false;
+        board[i][j] = temp;
 
         return false;
     }
