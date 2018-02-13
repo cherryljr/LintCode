@@ -92,9 +92,10 @@ class Solution {
         // visited[i][j] = true;
         char temp = board[i][j];
         board[i][j] = '#';
-        // 采用方向数组进行 dfs
+        // 采用方向数组进行 dfs 个人还是非常青睐这个写法的。
         // 该写法更加简洁便利，但是运行效率比直接写出各个方向的遍历函数要低一些
-        // 大家可根据情况自行取舍
+        // 大家可根据情况自行取舍,当然如果在 DFS 前加入条件判断效率就会提升不少了，请灵活变通哦(●'◡'●)
+        // 具体应用可以参见: The Maze 系列问题
         // int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1 }};
         // for (int[] dir : dirs) {
         //     if (dfs(board, i + dir[0], j + dir[1], word, index + 1)) {
@@ -103,9 +104,9 @@ class Solution {
         // }
         // go to the four directions, check whether we can find the next character of the word or not.
         if (dfs(board, i-1, j, word, index+1)
-                ||dfs(board, i+1, j, word, index+1)
-                ||dfs(board, i, j-1, word, index+1)
-                ||dfs(board, i, j+1, word, index+1)) {
+                || dfs(board, i+1, j, word, index+1)
+                || dfs(board, i, j-1, word, index+1)
+                || dfs(board, i, j+1, word, index+1)) {
             return true;
         }
         // Backtracking
@@ -115,3 +116,4 @@ class Solution {
         return false;
     }
 }
+
