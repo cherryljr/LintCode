@@ -28,7 +28,11 @@ Recursion Facebook Uber
 /**
  * Approach 1: DFS / Backtracking
  * DFS / Backtracking 模板
- * 用startIndex来track到哪一步。
+ * 用 startIndex 来 track 到哪一步。
+ * 关于何时需要进行 Backtracking 以及 Backtracking 的相关分析?
+ * 请参见:
+ * Word Search
+ * https://github.com/cherryljr/LintCode/blob/master/Word%20Search.java
  */
 class Solution {
     /**
@@ -37,11 +41,9 @@ class Solution {
      */
     public ArrayList<ArrayList<Integer>> subsets(int[] nums) {
         ArrayList<ArrayList<Integer>> results = new ArrayList<>();
-
         if (nums == null) {
             return results;
         }
-
         if (nums.length == 0) {
             results.add(new ArrayList<Integer>());
             return results;
@@ -73,7 +75,7 @@ class Solution {
             // 其他题目中可能存在不符合条件的情况，需要加上一个if语句来判断是否要add到subset中
             subset.add(nums[i]);
             // 寻找所有以 [1,2] 开头的集合，并扔到 results
-            // 注意这里递归传入的是i + 1表示startIndex从下一个位置开始
+            // 注意这里递归传入的是 i+1 表示 startIndex 从下一个位置开始
             helper(subset, nums, i + 1, results);
             // [1,2] -> [1]  回溯
             subset.remove(subset.size() - 1);
