@@ -32,28 +32,26 @@ LintCode Copyright Heap Priority Queue
  *  题目定义 median = A[(n-1)/2],也就是说：
  *  当有 偶数 个元素时，此时 maxHeap.size() 与 minHeap.size() 相等，返回靠前的那个元素，即 median = maxHeap.peek()
  *  当有 奇数 个元素时，此时 maxHeap.size() 比 minHeap.size() 大一，返回中间的那个元素，即 median = maxHeap.peek()
+ *  
+ * 添加元素的时候，当要添加的元素 大于 中间值median，则 add 到 minHeap 中，否则 add 到 maxHeap 中。
+ * 完成添加操作后，因为两个 heap 的 size 发生了变换，
+ * 所以还需要判断是否要进行 调整，使其保持在一个我们需要的平衡状态。
  */
 public class Solution {
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b.compareTo(a));
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
     /**
      * @param nums: A list of integers.
      * @return: the median of numbers
      */
-    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b.compareTo(a));
-    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-
     public int[] medianII(int[] nums) {
-        int[] rst = new int[nums.length];
         if (nums == null || nums.length == 0) {
-            return rst;
+            return new int[]{};
         }
 
-        // Initialize the maxHeap
-        // Otherwise, it will throw Exception at addNumber Funtion when we visit maxHeap.peek()
-        rst[0] = nums[0];
-        maxHeap.offer(nums[0]);
-
-        // Function
-        for (int i = 1; i < nums.length; i++) {
+        int[] rst = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
             addNumber(nums[i]);
             rst[i] = getMedian();
         }
@@ -62,7 +60,7 @@ public class Solution {
     }
 
     private void addNumber(int value) {
-        if (value > maxHeap.peek()) {
+        if (value > getMedian()) {
             minHeap.offer(value);
         } else {
             maxHeap.offer(value);
@@ -78,6 +76,9 @@ public class Solution {
     }
 
     private int getMedian() {
+        if (maxHeap.isEmpty()) {
+            return 0;
+        }
         return maxHeap.peek();
     }
 }
