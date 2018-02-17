@@ -88,13 +88,8 @@ public class Solution {
      * @param nums: A list of integers.
      * @return: the median of numbers
      */
-    PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
-    PriorityQueue<Integer> maxHeap = 
-        new PriorityQueue<Integer>(1, new Comparator<Integer>() {
-            public int compare(Integer left, Integer right) {
-                return right - left;
-            }    
-        });
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b.compareTo(a));
     private int numOfElements = 0;
 
     public int[] medianII(int[] nums) {
