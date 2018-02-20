@@ -24,7 +24,7 @@ Challenge
 O(nlog(n)) time
 
 Tags
-LintCode Copyright Heap
+LintCode Copyright Heap 
  */
 
 /**
