@@ -41,9 +41,9 @@ Sort Array Two Pointers Facebook
  *  因此我们只需要遍历到 pivot的右边界 即可 (i < right)，并且在 swap 的时候，是 swap(nums, i, --end).
  *  而在本题中，swap 的对象则是 swap(nums, i, end--).
  *  原因就是在于：
- *      quickSort 中的 pivot 已经被选定为 a[end].
+ *      quickSort 中的 pivot 已经被选定为 a[end].我们需要保持 a[end] 为 pivot.
  *      因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。
- *      直到最后一步，将 等于pivot部分的右边界后的那个数 与 a[end] 交互，以完成 partition.
+ *      直到最后一步，将 等于pivot部分的右边界后的那个数 与 a[end](pivot) 交换，以完成 partition.
  *
  * 算法时间复杂度为 O(N)； 时间复杂度为 O(1)
  */
