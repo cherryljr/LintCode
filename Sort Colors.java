@@ -27,16 +27,25 @@ Sort Array Two Pointers Facebook
  * 因此我们需要 3 个指针来进行排序，分别代表 0, 1, 2 即 red, white, blue
  * 实际上就是 荷兰国旗问题。
  * 属于经过优化的 快速排序 的 partition 方法。
- * （将数组由原来的分成 2 个部分，改成分为 3 个部分。分别为：<x; =x; >x）
+ * （将数组由原来的分成 2 个部分，改成分为 3 个部分。分别为：<pivot; =pivot; >pivot）
  *
  * 具体做法:
  * start 指向头节点 red , i 从头节点开始向后遍历 white, end 指向最后一个节点 blue
  * 当 a[i] = 0 时，说明为 red, 应排在最前面，故 swap(a[start], a[i])
  * 当 a[i] = 1 时，说明为 white, 应排在中间，故 i 继续向后移动
  * 当 a[i] = 2 时，说明为 blue, 应排在末尾，故 swap(a[i], a[end])
- * 直至 i 与 end 相遇或相交，则结束遍历
+ * 直至 i 与 end 相遇或相交，则结束遍历。
+ * 注意点：
+ *  本题的 pivot 是外界给定的，所以我们需要一直遍历到 end (i <= end).
+ *  而在 quickSort 中，我们的 pivot 选取的就是 a[end].
+ *  因此我们只需要遍历到 pivot的右边界 即可 (i < right)，并且在 swap 的时候，是 swap(nums, i, --end).
+ *  而在本题中，swap 的对象则是 swap(nums, i, end--).
+ *  原因就是在于：
+ *      quickSort 中的 pivot 已经被选定为 a[end].
+ *      因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。
+ *      直到最后一步，将 等于pivot部分的右边界后的那个数 与 a[end] 交互，以完成 partition.
  *
- * 算法时间复杂度为 O(N)
+ * 算法时间复杂度为 O(N)； 时间复杂度为 O(1)
  */
 class Solution {
     /**
