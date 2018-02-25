@@ -54,7 +54,6 @@ class Solution {
      * @return: description of return
      */
     public int kthLargestElement(int k, int[] nums) {
-        // write your code here
         if (nums == null || nums.length == 0) {
             return 0;
         }
@@ -84,23 +83,26 @@ class Solution {
     }
 
     // Quick select: kth smallest
-    public int partition(int[] nums, int l, int r) {
+    public int partition(int[] nums, int start, int end) {
         // 初始化左右指针和pivot
-        int left = l, right = r;
+        int left = start, right = end;
         // Take nums[right] as the pivot
-        int pivot = nums[right];
+        int pivot = nums[end];
 
         // 进行partition
-        for (int i = l; i < r; i++) {
-            // 根据快速排序的思想，将所有 小于 pivot 的数放到 pivot 的左边
-            if (nums[i] < pivot) {
-                swap(nums, left++, i);
+        while (start < right) {
+            if (nums[start] < pivot) {
+                swap(nums, start++, left++);
+            } else if (nums[start] > pivot) {
+                swap(nums, start, --right);
+            } else {
+                start++;
             }
         }
-        // 最后,交换 nums[right] (pivot) 和 nums[left]
-        swap(nums, left, right);
+        // 最后,交换 nums[end] (pivot) 和 nums[right]
+        swap(nums, right, end);
 
-        // 返回当前pivot所在的index
+        // 返回 等于pivot部分数组的左边界
         return left;
     }
 
@@ -136,9 +138,8 @@ class Solution {
         if (l == r) {
             return nums[l];
         }
-        
         // swap a random value with nums[right] (shuffle the array)
-        swap(nums, l + (int) (Math.random() * (r - l + 1)), r);
+        swap(nums, l + (int)(Math.random() * (r - l)), r);
         int position = partition(nums, l, r);
         // Found kth smallest number
         if (position == k) {
@@ -153,23 +154,26 @@ class Solution {
     }
 
     // Quick select: kth smallest
-    public int partition(int[] nums, int l, int r) {
+    public int partition(int[] nums, int start, int end) {
         // 初始化左右指针和pivot
-        int left = l, right = r;
+        int left = start, right = end;
         // Take nums[right] as the pivot
-        int pivot = nums[right];
+        int pivot = nums[end];
 
         // 进行partition
-        for (int i = l; i < r; i++) {
-            // 根据快速排序的思想，将所有 小于 pivot 的数放到 pivot 的左边
-            if (nums[i] < pivot) {
-                swap(nums, left++, i);
+        while (start < right) {
+            if (nums[start] < pivot) {
+                swap(nums, start++, left++);
+            } else if (nums[start] > pivot) {
+                swap(nums, start, --right);
+            } else {
+                start++;
             }
         }
-        // 最后,交换 nums[right] (pivot) 和 nums[left]
-        swap(nums, left, right);
+        // 最后,交换 nums[end] (pivot) 和 nums[right]
+        swap(nums, right, end);
 
-        // 返回当前pivot所在的index
+        // 返回 等于pivot部分数组的左边界
         return left;
     }
 
@@ -178,6 +182,5 @@ class Solution {
         nums[i] = nums[j];
         nums[j] = temp;
     }
-
 }
 
