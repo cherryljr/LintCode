@@ -122,7 +122,6 @@ class Solution {
      * @return: description of return
      */
     public int kthLargestElement(int k, int[] nums) {
-        // write your code here
         if (nums == null || nums.length == 0) {
             return 0;
         }
@@ -137,7 +136,9 @@ class Solution {
         if (l == r) {
             return nums[l];
         }
-
+        
+        // swap a random value with nums[right] (shuffle the array)
+        swap(nums, l + (int) (Math.random() * (r - l + 1)), r);
         int position = partition(nums, l, r);
         // Found kth smallest number
         if (position == k) {
@@ -153,8 +154,6 @@ class Solution {
 
     // Quick select: kth smallest
     public int partition(int[] nums, int l, int r) {
-        // swap a random value with nums[right] (shuffle the array)
-        swap(nums, l + (int) (Math.random() * (r - l + 1)), r);
         // 初始化左右指针和pivot
         int left = l, right = r;
         // Take nums[right] as the pivot
