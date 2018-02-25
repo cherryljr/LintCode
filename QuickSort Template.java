@@ -1,28 +1,3 @@
-针对模板中的 key point 3.大家或者会存在着疑问，这边进行一个解答。
-1. 首先是 A[left] < pivot 而不是 A[left] <= pivot
-原因是，如果 pivot 刚好是最大值，那么我们对 n 个元素进行 partition 就会出现
-左边得到 n 个，右边得到 0 个元素的情况，这样左边继续递归下去有可能始终都是 n（每次取出的pivot都是最大值），
-那么会出现无限递归的情况。
-2. A[right] > pivot 而不是 A[right] >= pivot
-同理，如果 pivot 恰好是最小值，那么我们对 n 个元素进行 partition 就回会出现
-左边得到 0 个，右边得到 n 个元素的情况，这样右边继续递归下去有可能始终都是 n（每次取出的pivot都是最小值），
-那么会出现无限递归的情况。
-
-理解了以上原因之后，我们来 compare 一道题目，它同样是用到了 QuickSort 的思想。
-https://github.com/cherryljr/LintCode/blob/master/Sort%20Colors%20II.java
-但是这道题目中快排的书写为：
-    while (l <= r && colors[l] <= colorMid)
-这里使用了 <= 而不是 < 又是为什么呢?
-其实是这里与所谓的快排还是有些稍稍的不同的。情况以下分析：
- 1. 因为 rainbowSort 的递归中(..., colorMid + 1, colorTo), colorMid 的值不能混到右边去，
- 因为右边值得区间为 [colorMid + 1, colorTo], 左边值得区间为 [colorFrom, colorMid]，所以
- 我们需要把等于 colorMid 的值放在 partition 左侧，而不是像快排一样，等于 pivot 的值放在左侧或者右侧都是无所谓的。
- 故这里我们需要使用 colors[l] <= colorMid 和 colors[r] > colorMid.
- 2. 因为在条件 colorFrom >= colorTo 的时候我们已经 return 了，所以求 colorMid 的时候，colorFrom 一定不等于 colorTo。
- 又因为 colorMid = (colorFrom + colorTo) / 2，所以 colorMid 的值一定不会等于最大值 colorTo，这也就避免了
- 因为 pivot 是最大值而导致的无限递归问题。
- 综上两个原因，导致了 rainbowSort 和 quickSort Template 略有不同的原因。
-
 /*
 Given an integer array, sort it in ascending order. Use quick sort O(nlogn) algorithm.
 
@@ -30,47 +5,87 @@ Example
 Given [3, 2, 1, 4, 5], return [1, 2, 3, 4, 5].
 */
 
+/**
+ * Approach: QuickSort
+ * 快速排序的核心就是选定一个 pivot, 根据它来进行 partition.
+ * 使得所有 <pivot 的数都在其左边；所有 >pivot 的数都在其右边。
+ * 从而将数组划分成 3 个部分 (小于pivot的；等于pivot的；大于pivot的）
+ * 以上就是经典的 荷兰国旗 问题。均摊时间复杂度为 O(n)；空间复杂度为 O(1).
+ * 对于这个 partition 部分的详细解析可以参考：
+ * https://github.com/cherryljr/LintCode/blob/master/Sort%20Colors.java
+ *
+ * 然后我们需要对被划分好的左右两个部分再次进行 partition 操作，直到被划分的长度为 1 时 (left >= right).
+ * 而整个数组总共可以被划分多少次呢？答案是 logn 次.
+ * 因此 随机快速排序 的总体的时间复杂度为 O(nlogn) （均摊）
+ *
+ * 但是为什么这个时间复杂度是均摊的呢？（具有一定概率）
+ * 我们都知道 pivot 的选取，直接关系到了时间复杂度的大小。（不合适的 pivot 将导致非常糟糕的数据分布）
+ * 因此为了尽可能地保证 低时间复杂度，从而随机性地选择 pivot。这也就导致了时间复杂度为 O(nlogn) 是一个 概率性事件。
+ * 具体优化过程可以参考：
+ * https://github.com/cherryljr/LintCode/blob/master/Kth%20Largest%20Element.java
+ *
+ * partition 部分在代码实现上与 Sort Colors 相差不多，但是二者对于 pivot 的选择不同。
+ * QuickSort 中选择的是 nums[right] 作为 pivot,在数组内部；Sort Colors 的 pivot 则是由外界直接给定。
+ * 这就直接导致了以下两个不同点：
+ *  1. quickSort 中，我们只需要遍历到 等于pivot部分数组的右边界 即可，因为再后面的就是 >pivot 的部分了，partition 已经完成；
+ *  而 Sort Colors 中，因为 pivot 可能并不存在与数组中，并且 nums[end] 并不确定，所以我们要一直遍历到 end 为止。
+ *  2. quickSort 中的我们选定 pivot 为 nums[end]。
+ *  因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。
+ *  ( right 指的是 等于pivot部分数组的右边界+1 )
+ *  直到最后一步，将 nums[right] 与 nums[end] 交互，最终完成 partition.
+ */
 public class Solution {
     /**
-     * @param A an integer array
-     * @return void
+     * @param A: an integer array
+     * @return: nothing
      */
     public void sortIntegers2(int[] A) {
-        quickSort(A, 0, A.length - 1);
-    }
-    
-    private void quickSort(int[] A, int start, int end) {
-        // the condition of quiting recursion
-        if (start >= end) {
+        if (A == null || A.length < 2) {
             return;
         }
-        
-        int left = start, right = end;
-        // key point 1: pivot is the value, not the index
-        int pivot = A[(start + end) / 2];
 
-        // key point 2: every time you compare left & right, it should be 
-        // left <= right not left < right
-        while (left <= right) {
-            // key point3: it should be A[left] < pivot not A[left] <= pivot
-            // the same as A[right] > pivot not A[right] >= pivot
-            while (left <= right && A[left] < pivot) {
-                left++;
-            }
-            while (left <= right && A[right] > pivot) {
-                right--;
-            }
-            if (left <= right) {
-                int temp = A[left];
-                A[left] = A[right];
-                A[right] = temp;
-                
-                left++;
-                right--;
+        quickSort(A, 0, A.length - 1);
+    }
+
+    private void quickSort(int[] nums, int l, int r) {
+        if (l < r) {
+            // swap a random value with nums[right] (shuffle the array)
+            swap(nums, l + (int)(Math.random() * (r - l)), r);
+            int[] positioin = partition(nums, l, r);
+            // Sort the left part ( <pivot )
+            quickSort(nums, l, positioin[0] - 1);
+            // Sort the right part ( >pivot )
+            quickSort(nums, positioin[1] + 1, r);
+        }
+    }
+
+    private int[] partition(int[] nums, int start, int end) {
+        // 初始化左右指针 和 pivot
+        int left = start, right = end;
+        int pivot = nums[end];
+
+        // 遍历到 等于pivot数组部分的 右边界 即可
+        while (start < right) {
+            // 当前元素小于 pivot 则放到 pivot 的左边
+            if (nums[start] < pivot) {
+                swap(nums, left++, start++);
+            // 当前元素大于 pivot 则放到 pivot 的右边
+            // 注意 右边部分的最右端是 end-1. 因为 end 要最后用来与 right 进行 swap 以组成右边界.
+            } else if (nums[start] > pivot) {
+                swap(nums, start, --right);
+            } else {
+                start++;
             }
         }
-        
-        quickSort(A, start, right);
-        quickSort(A, left, end);
+        // 最后,交换 nums[right] 和 nums[end] (pivot) 完成 partition
+        swap(nums, right, end);
+
+        return new int[]{left, right};
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
