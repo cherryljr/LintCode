@@ -1,14 +1,3 @@
-与 Partition Array / Sort Letters by Case 属于同一类题
-不同在于该题中需要针对 3 个元素进行排序。
-因此我们需要 3 个指针来进行排序，分别代表 0, 1, 2 即 red, white, blue
-做法:
-	start 指向头节点 red , i 从头节点开始向后遍历 whilte, end 指向最后一个节点 blue
-	当 a[i] = 0 时，说明为 red, 应排在最前面，故 swap(a[start], a[i])
-	当 a[i] = 1 时，说明为 while, 应排在中间，故 i 继续向后移动
-	当 a[i] = 2 时，说明为 blue, 应排在末尾，故 swap(a[i], a[end])
-	直至 i 与 end 相遇或相交，则结束遍历
-
-	算法时间复杂度为 O(N)
 /*
 Description
 Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, 
@@ -31,34 +20,49 @@ Tags
 Sort Array Two Pointers Facebook
 */
 
+/**
+ * Approach: QuickSelect
+ * 与 Partition Array / Sort Letters by Case 属于同一类题
+ * 不同在于该题中需要针对 3 个元素进行排序。
+ * 因此我们需要 3 个指针来进行排序，分别代表 0, 1, 2 即 red, white, blue
+ * 实际上就是 荷兰国旗问题。
+ * 属于经过优化的 快速排序 的 partition 方法。
+ * （将数组由原来的分成 2 个部分，改成分为 3 个部分。分别为：<x; =x; >x）
+ *
+ * 具体做法:
+ * start 指向头节点 red , i 从头节点开始向后遍历 white, end 指向最后一个节点 blue
+ * 当 a[i] = 0 时，说明为 red, 应排在最前面，故 swap(a[start], a[i])
+ * 当 a[i] = 1 时，说明为 white, 应排在中间，故 i 继续向后移动
+ * 当 a[i] = 2 时，说明为 blue, 应排在末尾，故 swap(a[i], a[end])
+ * 直至 i 与 end 相遇或相交，则结束遍历
+ *
+ * 算法时间复杂度为 O(N)
+ */
 class Solution {
     /**
-     * @param nums: A list of integer which is 0, 1 or 2 
+     * @param nums: A list of integer which is 0, 1 or 2
      * @return: nothing
      */
     public void sortColors(int[] nums) {
         if (nums == null || nums.length == 0) {
             return;
         }
-        
+
         int start = 0;
         int end = nums.length - 1;
         int i = 0;
         while (i <= end) {
             if (nums[i] == 0) {
-                swap(nums, start, i);
-                start++;
-                i++;
+                swap(nums, start++, i++);
             } else if (nums[i] == 1) {
                 i++;
             } else {
-                swap(nums, i, end);
-                // 交换后 a[i] 位置上的数可能为 0 或 1,故需要再进行一次判断，不能进行 i++ 的操作 
-                end--;
+                // 交换后 a[i] 位置上的数可能为 0 或 1,故需要再进行一次判断，不能进行 i++ 的操作
+                swap(nums, i, end--);
             }
         }
     }
-    
+
     private void swap(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];
