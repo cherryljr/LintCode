@@ -29,17 +29,20 @@ Given [3, 2, 1, 4, 5], return [1, 2, 3, 4, 5].
  * 这就直接导致了以下两个不同点：
  *  1. quickSort 中，我们只需要遍历到 等于pivot部分数组的右边界 即可，因为再后面的就是 >pivot 的部分了，partition 已经完成；
  *  而 Sort Colors 中，因为 pivot 可能并不存在与数组中，并且 nums[end] 并不确定，所以我们要一直遍历到 end 为止。
- *  2. quickSort 中的我们选定 pivot 为 nums[end]。
- *  因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。
+ *  但是他们实质都是相同的：遍历到 等于pivot部分数组的右边界。此处的 end 也就是等于pivot部分的 右边界。
+ *  2. quickSort 中的我们选定 pivot 为 nums[end]。我们需要保持 nums[end] 为 pivot.
+ *  因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。即 swap(nums, i, --end)
  *  ( right 指的是 等于pivot部分数组的右边界+1 )
- *  直到最后一步，将 nums[right] 与 nums[end] 交互，最终完成 partition.
+ *  直到最后一步，将 nums[right] 与 nums[end] 交换，最终完成 partition.
+ *  而在 Sort Colors 中，pivot 由外部给定，因此我们不需要将 nums[end] 保持为 pivot,
+ *  而是可以一开始就对它进行交换了，即 swap(nums, i, end--)
  *
  * Tips:
  * 对于快速排序的时间复杂度为什么是均摊 O(nlogn)，最坏O(n^2) 呢？
  * 因为 pivot 的选取是随机的，每个值被选取到作为 pivot 的概率是相同的。而每次
  * partition 的时间复杂度为 O(n),因此经过数学分析证明可得：均摊时间复杂度为 O(nlogn).
  * 但是在少数情况下 ，pivot 每次都选取到了最右边界的那个值，导致退化成了 O(n^2)的时间复杂度。
- * 
+ *
  * 对于快速排序（随机快排）的空间复杂度为什么是均摊 O(logn)，最坏 O(n) 呢？
  * 因为快速排序必须每次记录下 pivot 的 index,这样才能根据这个 index 对数组进行划分。
  * 因此需要记录的划分点个数，就是其所需要的 额外空间 的大小。
