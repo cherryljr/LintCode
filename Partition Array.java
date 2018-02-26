@@ -1,13 +1,3 @@
-QuickSelet Algorithm
-快速排序的思想，整个程序其实就是快速排序过程中的一次排序罢了。
-
-利用两个指针left和right分别指向Array的起始和末尾。
-利用while循环，left指针从左向右遍历，直到left指向的节点的值大于k.
-同理right指针从右向左遍历，直到right指向的节点的值小于k.
-交换left和right节点，直达left与right两个节点相遇或者相交。
-
-算法复杂度为：O(N)
-
 /*
 Given an array nums of integers and an int k, partition the array (i.e move the elements in "nums") such that:
 
@@ -28,46 +18,49 @@ Can you partition the array in-place and in O(n)?
 
 Tags Expand 
 Two Pointers Sort Array
-
-Thoughts:
-Two pointer sort, still similar to quick sort.
-Move small to left and large to right.
-Until the two pinter meets
-
 */
 
+/**
+ * Approach: QuickSelect (Partition)
+ * 快速排序的思想，整个程序其实就是快速排序过程中的一次排序罢了。
+ * 具体解释可以参考：Sort Colors (荷兰国旗问题)
+ * https://github.com/cherryljr/LintCode/blob/master/Sort%20Colors.java
+ *
+ * 算法复杂度为：O(N)
+ */
 public class Solution {
-	/** 
+    /**
      *@param nums: The integer array you should partition
      *@param k: As description
      *return: The index after partition
      */
     public int partitionArray(int[] nums, int k) {
-	    //write your code here
-	    if (nums == null || nums.length == 0) {
-	        return 0;
-	    }
-	    
-	    int left = 0;
-	    int right = nums.length - 1;
-	    
-	    while (left <= right) {
-	        while (left <= right && nums[left] < k) {
-	            left++;
-	        }
-	        while (right >= left && nums[right] >= k) {
-	            right--;
-	        }
-	        
-	        if (left <= right) {
-	            int temp = nums[left];
-	            nums[left] = nums[right];
-	            nums[right] = temp;
-	            left++;
-	            right--;
-	        }
-	    }
-	    
-	    return left;
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        return partition(nums, 0, nums.length - 1, k);
+    }
+
+    private int partition(int[] nums, int left, int right, int k) {
+        // 初始化 小于k 和 大于k 部分数组的边界
+        int less = left - 1, more = right + 1;
+
+        // 当 left 指针遇到 大于k部分数组的 左边界 时停止遍历
+        while (left < more) {
+            if (nums[left] < k) {
+                swap(nums, ++less, left++);
+            } else {
+                swap(nums, --more, left);
+            }
+        }
+
+        return less + 1;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
