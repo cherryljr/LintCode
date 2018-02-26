@@ -26,16 +26,9 @@ Given [3, 2, 1, 4, 5], return [1, 2, 3, 4, 5].
  *
  * partition 部分在代码实现上与 Sort Colors 相差不多，但是二者对于 pivot 的选择不同。
  * QuickSort 中选择的是 nums[right] 作为 pivot,在数组内部；Sort Colors 的 pivot 则是由外界直接给定。
- * 这就直接导致了以下两个不同点：
- *  1. quickSort 中，我们只需要遍历到 等于pivot部分数组的右边界 即可，因为再后面的就是 >pivot 的部分了，partition 已经完成；
- *  而 Sort Colors 中，因为 pivot 可能并不存在与数组中，并且 nums[end] 并不确定，所以我们要一直遍历到 end 为止。
- *  但是他们实质都是相同的：遍历到 等于pivot部分数组的右边界。此处的 end 也就是等于pivot部分的 右边界。
- *  2. quickSort 中的我们选定 pivot 为 nums[end]。我们需要保持 nums[end] 为 pivot.
- *  因此对于 >pivot 的元素，我们都会放在 (right, end-1) 上面。即 swap(nums, i, --end)
- *  ( right 指的是 等于pivot部分数组的右边界+1 )
- *  直到最后一步，将 nums[right] 与 nums[end] 交换，最终完成 partition.
- *  而在 Sort Colors 中，pivot 由外部给定，因此我们不需要将 nums[end] 保持为 pivot,
- *  而是可以一开始就对它进行交换了，即 swap(nums, i, end--)
+ * 这就导致了 QuickSort 中 大于pivot部分左边界初始化有一点点不同。
+ * 这里 more 指针初始化为 right,而不是 right+1. 因为我们需要维持 nums[right] 来作为 pivot,
+ * 并在最后交换 nums[more] 和 nums[right]，完成 等于pivot数组部分的 右边界。
  *
  * Tips:
  * 对于快速排序的时间复杂度为什么是均摊 O(nlogn)，最坏O(n^2) 呢？
@@ -62,40 +55,41 @@ public class Solution {
         quickSort(A, 0, A.length - 1);
     }
 
-    private void quickSort(int[] nums, int l, int r) {
-        if (l < r) {
+    private void quickSort(int[] nums, int left, int right) {
+        if (left < right) {
             // swap a random value with nums[right] (shuffle the array)
-            swap(nums, l + (int)(Math.random() * (r - l)), r);
-            int[] positioin = partition(nums, l, r);
+            swap(nums, left + (int)(Math.random() * (right - left)), right);
+            int[] positioin = partition(nums, left, right);
             // Sort the left part ( <pivot )
-            quickSort(nums, l, positioin[0] - 1);
+            quickSort(nums, left, positioin[0] - 1);
             // Sort the right part ( >pivot )
-            quickSort(nums, positioin[1] + 1, r);
+            quickSort(nums, positioin[1] + 1, right);
         }
     }
 
-    private int[] partition(int[] nums, int start, int end) {
-        // 初始化左右指针 和 pivot
-        int left = start, right = end;
-        int pivot = nums[end];
+    private int[] partition(int[] nums, int left, int right) {
+        // 初始化左右指针 和 pivot (注意 more 指针初始化的位置)
+        int less = left - 1, more = right;
+        // int pivot = nums[right];
 
-        // 遍历到 等于pivot数组部分的 右边界 即可
-        while (start < right) {
+        // 遍历到 大于pivot数组部分的 左边界 即可
+        while (left < more) {
             // 当前元素小于 pivot 则放到 pivot 的左边
-            if (nums[start] < pivot) {
-                swap(nums, left++, start++);
-            // 当前元素大于 pivot 则放到 pivot 的右边
-            // 注意 右边部分的最右端是 end-1. 因为 end 要最后用来与 right 进行 swap 以组成右边界.
-            } else if (nums[start] > pivot) {
-                swap(nums, start, --right);
+            if (nums[left] < nums[right]) {
+                swap(nums, ++less, left++);
+                // 当前元素大于 pivot 则放到 pivot 的右边
+                // 注意 右边部分的最右端是 right-1. 因为 right 要最后用来与 more 进行 swap 以组成右边界.
+            } else if (nums[left] > nums[right]) {
+                swap(nums, left, --more);
             } else {
-                start++;
+                left++;
             }
         }
-        // 最后,交换 nums[right] 和 nums[end] (pivot) 完成 partition
-        swap(nums, right, end);
+        // 最后,交换 nums[more] 和 nums[right] (pivot) 完成 partition
+        swap(nums, more, right);
 
-        return new int[]{left, right};
+        // 返回 等于pivot部分数组的 左右边界
+        return new int[]{less + 1, more};
     }
 
     private void swap(int[] nums, int i, int j) {
