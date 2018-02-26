@@ -64,46 +64,46 @@ class Solution {
         return helper(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    public int helper(int[] nums, int l, int r, int k) {
-        if (l == r) {
-            return nums[l];
+    public int helper(int[] nums, int left, int right, int k) {
+        if (left == right) {
+            return nums[left];
         }
 
-        int position = partition(nums, l, r);
+        int position = partition(nums, left, right);
         // Found kth smallest number
         if (position == k) {
             return nums[position];
         } else if (position < k) {
             // Check the right part
-            return helper(nums, position + 1, r, k);
+            return helper(nums, position + 1, right, k);
         }  else {
             // Check the left part
-            return helper(nums, l, position - 1, k);
+            return helper(nums, left, position - 1, k);
         }
     }
 
     // Quick select: kth smallest
-    public int partition(int[] nums, int start, int end) {
+    public int partition(int[] nums, int left, int right) {
         // 初始化左右指针和pivot
-        int left = start, right = end;
+        int less = left - 1, more = right;
         // Take nums[right] as the pivot
-        int pivot = nums[end];
+        // int pivot = nums[right];
 
         // 进行partition
-        while (start < right) {
-            if (nums[start] < pivot) {
-                swap(nums, start++, left++);
-            } else if (nums[start] > pivot) {
-                swap(nums, start, --right);
+        while (left < more) {
+            if (nums[left] < nums[right]) {
+                swap(nums, ++less, left++);
+            } else if (nums[left] > nums[right]) {
+                swap(nums, --more, left);
             } else {
-                start++;
+                left++;
             }
         }
-        // 最后,交换 nums[end] (pivot) 和 nums[right]
-        swap(nums, right, end);
+        // 最后,交换 nums[right] (pivot) 和 nums[more]
+        swap(nums, more, right);
 
         // 返回 等于pivot部分数组的左边界
-        return left;
+        return less + 1;
     }
 
     private void swap(int[] nums, int i, int j) {
@@ -134,47 +134,48 @@ class Solution {
         return helper(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    public int helper(int[] nums, int l, int r, int k) {
-        if (l == r) {
-            return nums[l];
+    public int helper(int[] nums, int left, int right, int k) {
+        if (left == right) {
+            return nums[left];
         }
+        
         // swap a random value with nums[right] (shuffle the array)
-        swap(nums, l + (int)(Math.random() * (r - l)), r);
-        int position = partition(nums, l, r);
+        swap(nums, left + (int)(Math.random() * (right - left)), right);
+        int position = partition(nums, left, right);
         // Found kth smallest number
         if (position == k) {
             return nums[position];
         } else if (position < k) {
             // Check the right part
-            return helper(nums, position + 1, r, k);
+            return helper(nums, position + 1, right, k);
         }  else {
             // Check the left part
-            return helper(nums, l, position - 1, k);
+            return helper(nums, left, position - 1, k);
         }
     }
 
     // Quick select: kth smallest
-    public int partition(int[] nums, int start, int end) {
+    public int partition(int[] nums, int left, int right) {
         // 初始化左右指针和pivot
-        int left = start, right = end;
+        int less = left - 1, more = right;
         // Take nums[right] as the pivot
-        int pivot = nums[end];
+        // int pivot = nums[right];
 
         // 进行partition
-        while (start < right) {
-            if (nums[start] < pivot) {
-                swap(nums, start++, left++);
-            } else if (nums[start] > pivot) {
-                swap(nums, start, --right);
+        while (left < more) {
+            if (nums[left] < nums[right]) {
+                swap(nums, ++less, left++);
+            } else if (nums[left] > nums[right]) {
+                swap(nums, --more, left);
             } else {
-                start++;
+                left++;
             }
         }
-        // 最后,交换 nums[end] (pivot) 和 nums[right]
-        swap(nums, right, end);
+        // 最后,交换 nums[right] (pivot) 和 nums[more]
+        swap(nums, more, right);
 
         // 返回 等于pivot部分数组的左边界
-        return left;
+        return less + 1;
     }
 
     private void swap(int[] nums, int i, int j) {
