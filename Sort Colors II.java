@@ -24,14 +24,13 @@ Sort Two Pointers
  * 我们无法通过仅一次遍历便能够得到结果。因此我们考虑使用排序算法。
  * 而排序算法的时间复杂度最少也需要 O(nlogn),但该题已经给出了排序的范围 1~k.
  * 故我们考虑能够通过该信息将复杂度降低到 O(nlogk) 呢？
- * 
+ *
  * 于是我们想到了 二分 的思想。
- * 即处理方法与 Partition Array 相同，只是将 Partition Array 中的 k 每次替换成 colorMid 而已。
- * 做法：
- *  1. 利用while循环，left 指针从左向右遍历，直到 left 指向的节点的值大于 colorMid.
- *  2. 同理 right 指针从右向左遍历，直到 right 指向的节点的值小于 colorMid.
- *  3. 交换left和right节点，直达left与right两个节点相遇或者相交。
- *  4. 递归调用该方法，继续遍历 colorMid 的 左半部分 和 右半部分。 （即实质上也是快排的做法）
+ * 做法与 Sort Colors 几乎相同。只是将每次用于划分数组的 pivot 改成了 colorMid.
+ * 而 colorMid 则是每次通过二分的方法进行确定。
+ * 当前数组划分完毕后将形成 <colorMid; =colorMid; >colorMid 这三部分的数组。
+ * 然后我们再分别对 <colorMid 和 >colorMid 部分递归处理即可。
+ *
  * 算法时间复杂度为 O(nlogk)
  */
 class Solution {
@@ -44,42 +43,46 @@ class Solution {
         if (colors == null || colors.length == 0) {
             return;
         }
-        
+
         sortColors2Helper(colors, 0, colors.length - 1, 1, k);
     }
-    
+
     private void sortColors2Helper(int[] colors,
-                                   int left, 
-                                   int right, 
+                                   int  left,
+                                   int right,
                                    int colorFrom,
                                    int colorTo) {
-        if (colorFrom == colorTo) {
+        if (colorFrom >= colorTo) {
             return;
         }
         if (left >= right) {
             return;
         }
-        
-        int l = left, r = right;
+
+        int less = left - 1;    // 小于pivot部分的 右边界
+        int more = right + 1;   // 大于pivot部分的 左边界
+        // take colorMid as the pivot
         int colorMid = colorFrom + (colorTo - colorFrom) / 2;
-        while (l <= r) {
-            while (l <= r && colors[l] <= colorMid) {
-                l++;
-            } 
-            while (l <= r && colors[r] > colorMid) {
-                r--;
+        int i = left;
+        while (i < more) {
+            if (colors[i] < colorMid) {
+                swap(colors, ++less, i++);
+            } else if (colors[i] > colorMid) {
+                swap(colors, --more, i);
+            } else {
+                i++;
             }
-            
-            if (l <= r) {
-                int temp = colors[l];
-                colors[l] = colors[r];
-                colors[r] = temp;
-                l++;
-                r--;
-            }
-        } 
-        
-        sortColors2Helper(colors, left, r, colorFrom, colorMid);
-        sortColors2Helper(colors, l, right, colorMid + 1, colorTo);
+        }
+
+        // 对 <colorMid 部分的数组进行排序(partition)
+        sortColors2Helper(colors, left, less, colorFrom, colorMid - 1);
+        // 对 >colorMid 部分的数组进行排序(partition)
+        sortColors2Helper(colors, more, right, colorMid + 1, colorTo);
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
