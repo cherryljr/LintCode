@@ -219,7 +219,7 @@ public class Solution {
         this.BITree = new int[maxValue + 1];
         Integer[] rst = new Integer[len];
         for (int i = 0; i < len; i++) {
-            // 查询当期比 A[i] 小的元素的个数
+            // 查询当前比 A[i] 小的元素的个数
             // 这也就意味着查询当前有几个与 minValue 差值小于 diff[i] 的数
             // 即对一个以 diff[i] 为下标的数组进行区域求和
             // （该数组 counts[diff[i]] 含义为: 与最小值差值为 diff[i] 的元素有几个）
@@ -233,6 +233,86 @@ public class Solution {
 
     private void update(int index) {
         // 因为查询范围介于 [0...maxValue-1] 所以index 的值必定小于 BITree.length(maxValue)
+        while (index < BITree.length) {
+            BITree[index]++;
+            index += index & -index;
+        }
+    }
+
+    private int query(int index) {
+        int sum = 0;
+        while (index > 0) {
+            sum += BITree[index];
+            index -= index & -index;
+        }
+        return sum;
+    }
+}
+
+/**
+ * Approach 3: Binary Index Tree (with Discretization)
+ * 之前我们利用了 数组中各个元素的值 与 数组中最小元素值 的 差值 来建立BITree数组。
+ * 这个方法虽然解决了 负数问题 并 节约了一定的额外空间。
+ * 但是仍然浪费了一些空间，特别是当出现 [0, 1, 2, 10000] 这种数据时，将浪费巨大的额外空间。
+ * 因此我们可以通过对数据进行 离散化 来优化我们的额外空间。
+ *
+ * 所谓的 离散化 就是指把稀疏的数字映射到一个数组中，而这个数组的元素是紧凑的，这样就可以节约空间。
+ * 举个例子：
+ * 数组arr = [1, 3, 0, 5]，按照 计算差值的方法 映射到新的数组结果为：new_arr = [1, 1, 0, 1, 0, 1]。
+ * 可以看到，中间有两个 0 是没有用的，而离散化的具体表现就是去掉这些0，使存储空间更加紧凑；
+ * 由于去掉了没用的元素，因此，下标的意义就发生了变化，new_arr中的下标表示 原数据数组的排列顺序 ，下标对应的值表示 该元素在排序后的数组中所处的位置。
+ * 举例来说就是：
+ * arr = [1, 3, 0, 5] 排序后对应数组 sorted_arr = [0, 1, 3, 5]，那么对应的 new_arr = [1, 2, 0, 3]。
+ * 也就是说，arr[0] = 1 在sorted_arr对应在第二位，因此new_arr[0] = 1；
+ * arr[1] = 3在sorted_arr对应在第三位，因此new_arr[1] = 2，……依次类推。这样就完成了离散化。
+ * 具体实现就是：先拷贝一份原始数组进行 排序，然后遍历原始数组 data,利用 二分查找法 在 排序后的数组中 查找对应的位置。这个位置就是对应的 new_arr[i] 的值。
+ *
+ * 然后我们就可以利用 离散化 后的数组 new_arr 来构建我们的 BITree.
+ * 注意：这里的 new_arr 并不是 BITree 数组，而是我们为了构建 BITree 数组所进行离散化后的数组。
+ * 后面的操作与 Approach 2 相同。
+ *
+ * Note:
+ * 我们可以发现，通过离散化，我们可以大幅地节约额外空间的消耗。
+ * 但是同时，它也增加了算法的时间复杂度。（排序O(nlogn) + 对 n 个数进行二分查找 O(nlogn)）
+ * 因此，我们需要根据实际情况来决定是否使用离散化。
+ * 不使用离散化的话，可以理解为 空间 换 时间。
+ */
+public class Solution {
+    /*
+     * @param A: an integer array
+     * @return: A list of integers includes the index of the first number and the index of the last number
+     */
+    int[] BITree;
+
+    public List<Integer> countOfSmallerNumberII(int[] A) {
+        if (A == null || A.length == 0) {
+            return new ArrayList<Integer>();
+        }
+
+        int len = A.length;
+        // 离散化
+        int[] sorted_arr = Arrays.copyOf(A, len);
+        Arrays.sort(sorted_arr);
+        int[] discre = new int[len];
+        for (int i = 0; i < len; i++) {
+            discre[i] = Arrays.binarySearch(sorted_arr, A[i]) + 1;
+        }
+
+        this.BITree = new int[len + 1];
+        Integer[] rst = new Integer[len];
+        for (int i = 0; i < len; i++) {
+            // 查询当前比 A[i] 小的元素的个数
+            // 这也就意味着查询当前有几个 排序值 小于 当前元素A[i]排序值(discre[i]) 的数。
+            rst[i] = query(discre[i] - 1);
+            // 更新 BITree[discre[i]]
+            update(discre[i]);
+        }
+
+        return Arrays.asList(rst);
+    }
+
+    private void update(int index) {
+        // 因为查询范围介于 [0...len-1] 所以index 的值必定小于 BITree.length (A.length)
         while (index < BITree.length) {
             BITree[index]++;
             index += index & -index;
