@@ -27,7 +27,7 @@ All the numbers in the input array are in the range of 32-bit integer.
  * 每个 大区间的逆序对 均可以由各个 小区间的逆序对 与 小区间之间组成的逆序对 相加得来。
  * 因此这道题目也可以使用 归并排序 来进行解决。
  * 通过以上分析，我们可以发现该题不管是使用 Tree 还是 Merge Sort 其核心都是：分治思想
- * 下面请看 3 种解决方法的详细分析与代码实现。
+ * 下面请看 4 种解决方法的详细分析与代码实现。
  *
  * 参考资料：
  * https://leetcode.com/articles/reverse-pairs/
@@ -182,7 +182,59 @@ public class Solution {
 }
 
 /**
- * Approach 3: Merge Sort
+ * Approach 3: Binary Index Tree (with Discretization)
+ * 引入了 离散化 处理的 BITree 解决方法。
+ * 与 Count of Smaller Numbers After Self 的 Approach 2 相同。
+ * https://github.com/cherryljr/LeetCode/blob/master/Count%20of%20Smaller%20Numbers%20After%20Self.java
+ *
+ * 对于 离散化 的具体分析可以参见：
+ * https://github.com/cherryljr/LintCode/blob/master/Count%20of%20Smaller%20Number%20before%20itself.java
+ */
+public class Solution {
+    /*
+     * @param A: an array
+     * @return: total of reverse pairs
+     */
+    public long reversePairs(int[] A) {
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+
+        int len = A.length;
+        // Discretization
+        int[] sorted_arr = Arrays.copyOf(A, len);
+        Arrays.sort(sorted_arr);
+        int[] discre = new int[len];
+        for (int i = 0; i < len; i++) {
+            discre[i] = Arrays.binarySearch(sorted_arr, A[i]) + 1;
+        }
+
+        int[] BITree = new int[len + 1];
+        long rst = 0;
+        for (int i = A.length - 1; i >= 0; i--) {
+            rst += query(BITree, discre[i] - 1);
+            update(BITree, discre[i]);
+        }
+        return rst;
+    }
+
+    private int query(int[] BITree, int index) {
+        int sum = 0;
+        for (; index > 0; index -= (index & -index)) {
+            sum += BITree[index];
+        }
+        return sum;
+    }
+
+    private void update(int[] BITree, int index) {
+        for (; index < BITree.length; index += (index & -index)) {
+            BITree[index] += 1;
+        }
+    }
+}
+
+/**
+ * Approach 4: Merge Sort
  * 逆序对是指 i<j 并且 nums[i] > nums[j].
  * 那么在排序的过程中，会把 nums[i] 和 nums[j] 交换过来，这个交换的过程，每交换一次，就是一个逆序对的“正序”过程。
  *
