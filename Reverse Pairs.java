@@ -1,18 +1,13 @@
 /*
-Given an array nums, we call (i, j) an important reverse pair if i < j and nums[i] > 2*nums[j].
-You need to return the number of important reverse pairs in the given array.
+Description
+For an array A, if i < j, and A [i] > A [j], called (A [i], A [j]) is a reverse pair.
+return total of reverse pairs in A.
 
-Example1:
-Input: [1,3,2,3,1]
-Output: 2
+Example
+Given A = [2, 4, 1, 3, 5] , (2, 1), (4, 1), (4, 3) are reverse pairs. return 3
 
-Example2:
-Input: [2,4,3,5,1]
-Output: 3
-
-Note:
-The length of the given array will not exceed 50,000.
-All the numbers in the input array are in the range of 32-bit integer.
+Tags 
+Array Merge Sort
  */
  
  /**
@@ -243,17 +238,19 @@ public class Solution {
  * 最后求前面一半数组比后面一半数组中大的数的个数（也就是逆序对数）,这三个过程加起来就是整体的逆序数目了。
  * 看到这里是不是有点像归并排序呢？
  * 归并排序的思想就是把前一段排序，后一段排序，然后再整体排序。（先局部有序，再整体有序）
- * 而且，归并排序的规程中，需要判断前一半数组和后一半数组中当前数字的大小，这也就是刚刚描述的逆序的判断过程了。
+ * 而且，归并的规程中，需要判断前一半数组和后一半数组中当前数字的大小，这也就是刚刚描述的逆序的判断过程了。
  * 如果前一半数组的当前数字大于后一半数组的当前数字，那么这就是一个逆序对。
+ * 因此我们可以利用 merge 方法，在 merge 的过程中计算出 逆序对 的个数。
  *
  * 过程：
- * 我们使用两个指针 i, j分别指向左右两个 subarray 的起始位置。
- * 当 j <= end && nums[i] > nums[j] 时，右指针 j 继续向右移动。直到逆序对不成立为止。
- * 这样我们便能够计算出左边部分指针指向 i 时，有多少个逆序数对。
- * 最后当 i 遍历到 mid （即遍历完左边的 subarray）后，我们便可以得到总共有多少个逆序对。
- * 因此，可以在归并排序中的过程中计算逆序对数.
+ * 我们使用两个指针 p1, p2分别指向左右两个 subarray 的起始位置。
+ * 当 p2 <= right && nums[p1] > nums[p2] 时，右指针 p2 继续向右移动。直到逆序对不成立为止。
+ * 这样我们便能够计算出左边部分指针指向 p1 时，有多少个逆序数对。
+ * 最后当 p1 遍历到 mid （即遍历完左边的 subarray）后，我们便可以得到总共有多少个逆序对。
  * 最后我们需要将 左半部分的数组 与 右半部分的数组 merge 起来完成排序。
  * 这也体现了 归并排序 是先局部有序，再整体有序。
+ * 代码的具体实现与 MergeSort 差不多，可以参照 MergeSort Template：
+ * https://github.com/cherryljr/LintCode/blob/master/MergeSort%20Template.java
  * 时间复杂度为：O(nlogn)
  */
 public class Solution {
@@ -269,28 +266,43 @@ public class Solution {
         return mergeSort(A, 0, A.length - 1);
     }
 
-    private int mergeSort(int[] nums, int start, int end) {
-        if (start >= end) {
+    private int mergeSort(int[] nums, int left, int right) {
+        if (left >= right) {
             return 0;
         }
 
-        int mid = start + (end - start) / 2;
-        // 令 count 等于 左半段数组中的逆序对数 + 右半段数组中的逆序对数
-        int count = mergeSort(nums, start, mid) + mergeSort(nums, mid + 1, end);
-        // 计算 左边段数组中 与 右半段数组中 的元素组成的逆序对数
-        for (int i = start, j = mid + 1; i <= mid; i++) {
-            // 当 j<=end 并且 能够与 nums[i] 组成逆序对的时候，指针 j 向后移动
-            while (j <= end && nums[i] > nums[j]) {
-                j++;
-            }
-            // 计算出 nums[start...end] 中所有的逆序对数
-            count += j - (mid + 1);
-        }
-        // 将 左半段数组 与 右半段数组 merge 起来，完成排序
-        // 为了便利，这边直接调用了 sort() 方法
-        Arrays.sort(nums, start, end + 1);
+        int mid = left + ((right - left) >> 1);
+        // 结果为左半段数组中的逆序对数 + 右半段数组中的逆序对数 + 左边段数组中 与 右半段数组中 的元素组成的逆序对数
+        return mergeSort(nums, left, mid) + mergeSort(nums, mid + 1, right)
+                + merge(nums, left, mid, right);
+    }
 
-        return count;
+    private int merge(int[] nums, int left, int mid, int right) {
+        int[] helper = new int[right - left + 1];
+
+        int i = 0, rst = 0;
+        int p1 = left, p2 = mid + 1, p = mid + 1;
+        while (p1 <= mid) {
+            // 当 p<=right 并且 能够与 nums[p] 组成逆序对的时候，指针 p 向后移动
+            while (p <= right && nums[p1] > nums[p]) {
+                p++;
+            }
+            // 计算出 合并当前左右两个部分时，由 nums[p1] 所产生的逆序对数
+            rst += p - (mid + 1);
+
+            while (p2 <= right && nums[p1] > nums[p2]) {
+                helper[i++] = nums[p2++];
+            }
+            helper[i++] = nums[p1++];
+        }
+        while (p2 <= right) {
+            helper[i++] = nums[p2++];
+        }
+
+        // 将排序好的 helper 数组的值拷贝覆盖到原来的数组中
+        for (i = 0; i < helper.length; i++) {
+            nums[left + i] = helper[i];
+        }
+        return rst;
     }
 }
-
