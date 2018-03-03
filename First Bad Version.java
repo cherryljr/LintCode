@@ -29,7 +29,6 @@ You should call isBadVersion as few as possible.
 
 Tags Expand 
 Binary Search LintCode Copyright Facebook
-
 */
 
 
