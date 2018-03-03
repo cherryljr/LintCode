@@ -1,9 +1,3 @@
-栈这种数据结构是 先进后出 的，而队列则是 先进先出 的.
-对于Stack来说，我们将数据存入一个栈之后，再取出来它的顺序是倒过来的。
-那么我们便可以想到，是否可以通过两个栈来实现 Queue 这个数据结构：
- 将从第一个栈的数据全部取出来然后再次push到第二个栈里，
- 实现再一次翻转顺序，这样我们取出来的数据便是顺序的了。也就是队列的 FIFO.
-
 /*
 Description
 As the title described, you should only use two stacks to implement a queue's actions.
@@ -20,41 +14,59 @@ Tags Expand
 LintCode Copyright Stack Queue
 */
 
-public class MyQueue {
-    private Stack<Integer> stack1;
-    private Stack<Integer> stack2;
+/**
+ * 栈这种数据结构是 先进后出 的，而队列则是 先进先出 的.
+ * 对于Stack来说，我们将数据存入一个栈之后，再取出来它的顺序是倒过来的。
+ * 那么我们便可以想到，是否可以通过两个栈来实现 Queue 这个数据结构：
+ *      将从第一个栈的数据 全部取出来 然后再次 push 到第二个栈里，
+ *      实现再一次翻转顺序，这样我们取出来的数据便是顺序的了。也就是队列的 FIFO.
+ *
+ * 因此这里我们用到了两个栈: stackPush 和 stackPop.
+ *  每次想要向队列中添加元素的时候，我们都往 stackPush 里面 push 入元素；
+ *  当需要取出元素的时候：
+ *  我们看 stackPop 是否为空，如果非空，直接 pop 出元素即可。
+ *  如果为空，我们将 stackPush 中的全部元素 pop 出来，然后再 push 到 stackPop 中，然后从 stackPop 中取元素即可。
+ *
+ * 注意点有两个：
+ *  1. 每次将 stackPush 中的元素倒出来的时候，必须全部倒出来才行；
+ *  2. 每次将被 pop 出来的元素倒入 stackPop 中时，stackPop 必须为空。
+ *
+ * 参考文章：https://leetcode.com/articles/implement-queue-using-stacks/
+ */
+class MyQueue {
+    private Stack<Integer> stackPush;
+    private Stack<Integer> stackPop;
 
+    /** Initialize your data structure here. */
     public MyQueue() {
-       // do initialization if necessary
-       stack1 = new Stack<Integer>();
-       stack2 = new Stack<Integer>();
-    }
-    
-    public void push(int element) {
-        stack1.push(element);
+        stackPush = new Stack<>();
+        stackPop = new Stack<>();
     }
 
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        stackPush.push(x);
+    }
+
+    /** Removes the element from in front of queue and returns that element. */
     public int pop() {
-    	// 记得需要判断stack2是否为空
-    	// 将stack中的所有数据pop出来，然后push入stack2中，实现顺序的翻转
-        if (stack2.empty()) {
-            while (!stack1.empty()) {
-                stack2.push(stack1.pop());
+        // 记得需要判断 stackPop 是否为空
+        // 将 stackPush 中的 所有数据 pop出来，然后 push入stackPop 中，实现顺序的翻转
+        if (stackPop.isEmpty()) {
+            while (!stackPush.isEmpty()) {
+                stackPop.push(stackPush.pop());
             }
         }
-        
-        return stack2.pop();
+        return stackPop.pop();
     }
 
+    /** Get the front element. */
     public int top() {
-    	// 记得需要判断stack2是否为空
-    	// 将stack中的所有数据pop出来，然后push入stack2中，实现顺序的翻转
-        if (stack2.empty()) {
-            while (!stack1.empty()) {
-                stack2.push(stack1.pop());
+        if (stackPop.isEmpty()) {
+            while (!stackPush.isEmpty()) {
+                stackPop.push(stackPush.pop());
             }
         }
-        
-        return stack2.peek();
+        return stackPop.peek();
     }
 }
