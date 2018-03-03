@@ -9,7 +9,7 @@ Sort
  */
 
 /**
- * Approach: Insertion Sort
+ * Approach: Insertion Sort (稳定)
  * 具体算法描述如下：
  *  1. 从第一个元素开始，该元素可以认为已经被排序
  *  2. 取出下一个元素，在已经排序的元素序列中从后向前扫描
@@ -24,6 +24,11 @@ Sort
  * 该算法可以认为是插入排序的一个变种，称为二分查找排序。
  *
  * http://bubkoo.com/2014/01/14/sort-algorithm/insertion-sort/
+ *
+ * 注意点：
+ * 工程综合排序中，当样本量小于 60 时，直接使用 插排，因为其常数项特别小。
+ * 并且在样本量小的时候 n^2 的劣势并不会明显地体现出来。
+ * 因此在实际工程中，面对大数据时，通常先利用 快排/归并 将数组划分成小数组，然后符合插排条件时，直接 插排。
  */
 public class Solution {
     /*
@@ -36,7 +41,7 @@ public class Solution {
         }
 
         for (int i = 1; i < nums.length; i++) {
-            for (int j = i - 1; j >= 0 && nums[j] > nums[j + 1]; j++) {
+            for (int j = i - 1; j >= 0 && nums[j] > nums[j + 1]; j--) {
                 swap(nums, j, j + 1);
             }
         }
