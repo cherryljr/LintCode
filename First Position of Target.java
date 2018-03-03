@@ -1,14 +1,4 @@
 /*
-    第一个模板 (有一定局限性，根据情况使用，find last position)
-    第二个模板 (更加简洁，泛用性高，优先使用)
-	Keypoints:
-		1. start + 1 < end;  当两个指针相邻或者相交时退出while循环
-		2. start = start + (end - start) / 2;
-		3. nums[mid] ==, <, > 三种情况如何处理
-		4. nums[start], nums[end] ? target.
-*/
-
-/*
 For a given sorted array (ascending order) and a target number, find the first index of this number in O(log n) time complexity.
 If the target number does not exist in the array, return -1.
 
@@ -22,56 +12,14 @@ Tags
 Binary Search Array
 */
 
+/**
+ * Approach: Binary Search
+ * 使用 二分法 的模板即可轻松解决
+ *
+ * Binary Search Template:
+ * https://github.com/cherryljr/NowCoder/blob/master/%E6%95%B0%E5%AD%97%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0.java
+ */
 public class Solution {
-    public int bianrySearch(int[] nums, int target) {
-        if (nums == null || nums.length == 0) {
-            return -1;
-        }
-        
-        int start = 0;
-        int end = nums.length - 1;
-        
-        while (start + 1 < end) {
-            int mid = start + (end - start) / 2;
-            //    为什么不写成 mid = (start + end) / 2;
-            //    防止溢出，当start与end的值都是接近Integer.MAX_VALUE时，将会发生溢出现象
-            if (nums[mid] == target) {
-                end = mid;
-                //  if you want to find the last position, change it to :
-                //	start = mid;
-            } else if (nums[mid] < target) {
-                start = mid;
-            } else if (nums[mid] > target) {
-                end = target;
-            }
-        }
-        
-        //  find the first position when target occurs
-        //  if you want to find the end position
-        //  change the order of the two if :
-        /*
-        if (nums[end] == target) {
-            return end;
-        }
-        if (nums[start] == target) {
-            return start;
-        } 
-        */
-        if (nums[start] == target) {
-            return start;
-        } 
-        if (nums[end] == target) {
-            return end;
-        }
-
-        return -1;
-    }
-}
-
-// 二分法第二套模板  Solution 2 更为简洁
-// 仍然是 Find the First Position / First Bigger Number  (注释里提供了 Find Last Position 的方法)
-// 该模板无需对 nums[start] 和 nums[end] 再进行一次判断，看谁才是答案。
-class Solution {
     /**
      * @param nums: The integer array.
      * @param target: Target to find.
@@ -82,30 +30,32 @@ class Solution {
             return -1;
         }
 
-        int start = 0;
-        int end = nums.length - 1;  
-        while (start < end) {
-            int mid = start + (end - start) / 2;
-            if (nums[mid] < target) {   // 重点依然是处理好 equals 时, mid 的处理情况。参考模板1中的分析
-                start = mid + 1;
+        int pos = lowerBound(nums, target);
+        if (nums[pos] == target) {
+            return pos;
+        } else {
+            return -1;
+        }
+    }
+
+    private int lowerBound(int[] nums, int target) {
+        // 左闭右开
+        // left负责一步步向 right 逼近寻找答案; right 只负责缩小范围
+        int left = 0, right = nums.length;
+        while (left < right) {
+            // 中点选取在靠 起点 的一端（求上界方法里的话是 right,因此向上取整）
+            int mid = left + ((right - left) >> 1);
+            if (target <= nums[mid]) {
+                // 当 target <= nums[mid] 时，说明 符合条件，即 下界 存在于 [left, mid] 中
+                // 因此我们可以直接去掉 [mid+1, right] 这个部分，即 right 移动到 mid. (mid有可能是最终结果)
+                right = mid;
             } else {
-                end = mid;
+                // 否则，我们可以直接去除 [left, mid] 部分，因为他们肯定是不符合条件的。
+                // 即 left 移动到 mid+1,靠近 right 来寻找答案
+                left = mid + 1;
             }
         }
-        //  if you want to find the last position, change it to :
-        //  while (start < end) {
-        //      int mid = start + (end - start) / 2;
-        //      if (nums[mid] <= target) {
-        //          start = mid + 1;
-        //      } else {
-        //          end = mid;
-        //      }
-        //  }
-        //  return end - 1; （此时初始化时 end = nums.length）
-        
-        if (nums[start] == target) {
-            return start;
-        }  
-        return -1;
+
+        return left;
     }
 }
