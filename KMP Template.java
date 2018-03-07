@@ -8,8 +8,12 @@
  *  答案是不可能的，具体证明可以使用 反证法。
  *  假设存在的话，我们就可以在 字符串p 中找到一个更长的 相同前后缀，
  *  这与 next[] 的定义是互相违背的，即除非你 next[] 计算错误，否则不可能发生这种情况。
+ * 
  * 相关练习：
- *
+ * https://github.com/cherryljr/LeetCode/blob/master/Repeated%20String%20Match.java
+ * https://github.com/cherryljr/LeetCode/blob/master/Repeated%20Substring%20Pattern.java
+ * https://github.com/cherryljr/LeetCode/blob/master/Shortest%20Palindrome.java
+ * https://github.com/cherryljr/NowCoder/blob/master/%E5%90%AB%E6%9C%89%E8%BF%9E%E7%BB%AD%E4%B8%A4%E4%B8%AAstr%E4%BD%9C%E4%B8%BA%E5%AD%90%E4%B8%B2%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%97%E7%AC%A6%E4%B8%B2.java
  */
 public class KMP {
 
