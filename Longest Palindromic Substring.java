@@ -1,15 +1,7 @@
-方法1：Manacher算法
-
-方法2: 中心扩散法.将String从中间劈开. 遍历i，从n个不同的点劈开：每次劈开都看是否可以从劈开出作为palindromic的中点延伸。   
-   Worst case: 整个string都是相同字符，time complexity变成： 1 + 2 +３　＋　．．．　＋n = O(n^2)
-
-方法3: 穷举double for loop. O(n^2)
-
-
-```
 /*
-Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, 
-and there exists one unique longest palindromic substring.
+Description
+Given a string S, find the longest palindromic substring in S.
+You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
 
 Example
 Given the string = "abcdzdcab", return "cdzdc".
@@ -17,126 +9,67 @@ Given the string = "abcdzdcab", return "cdzdc".
 Challenge
 O(n2) time is acceptable. Can you do it in O(n) time.
 
-Hide Company Tags Amazon Microsoft Bloomberg
-Hide Tags String
-Hide Similar Problems (H) Shortest Palindrome (E) Palindrome Permutation
+Tags
+String
+ */
 
-
-*/
-
-/*
-	Method 1:
-	O(n) way
-*/
-public class Solution {
-    public String longestPalindrome(String s) {
-        if (s == null || s.length() == 0) {
-            return "";
-        }
-        
-        int length = s.length();    
-        int max = 0;
-        String result = "";
-        for(int i = 1; i <= 2 * length - 1; i++){
-            int count = 1;
-            while(i - count >= 0 && i + count <= 2 * length  && get(s, i - count) == get(s, i + count)){
-                count++;
-            }
-            count--; // there will be one extra count for the outbound #
-            if(count > max) {
-                result = s.substring((i - count) / 2, (i + count) / 2);
-                max = count;
-            }
-        }
-        
-        return result;
-    }
-    
-    private char get(String s, int i) {
-        if(i % 2 == 0)
-            return '#';
-        else 
-            return s.charAt(i / 2);
-    }
-}
-
-
-/*
-	Method 2:
-	Worst case still O(n^2)
-	Find index i to split S into left and right. Check if from i's two sides can form a palindrom.
-	If so, mark the longest, then keep increasing i.
-*/
-public class Solution {
-    public String longestPalindrome(String s) {
-        if (s == null || s.length() <= 1) {
-        	return s;
-        }
-        
-        String rst = "";
-        
-        for (int i = 0; i < s.length(); i++) {
-        	if (i - 1 >= 0 && s.charAt(i - 1) == s.charAt(i)) {
-        		rst = checkPalindrom(s, i-1, i, rst);
-        	}
-        	if (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {
-        		rst = checkPalindrom(s, i, i+1, rst);
-        	}
-        	if (i - 1 >= 0 && i + 1 < s.length() && s.charAt(i - 1) == s.charAt(i + 1)) {
-        		rst = checkPalindrom(s, i-1, i+1, rst);
-        	}
-        }
-        
-        return rst;
-    }
-
-    public String checkPalindrom(String s, int start, int end, String rst) {
-    	while (start - 1 >= 0 && end + 1 < s.length() && s.charAt(start - 1) == s.charAt(end + 1)) {
-    		start--;
-    		end++;
-    	}
-		if (rst.length() < s.substring(start, end + 1).length()) {
-			rst = s.substring(start, end + 1);
-		}
-		
-    	return rst;
-    }
-}
-
-/*
-	Method 3:
-	O(n^2)
-	Thoughts:
-	Like Palindrome Partioning II, try to use isPal[i][j] to verify each string (i,j). 
-	If string(i,j) is valid, note down the (i,j) portion and find the longest.
-	This is a standard O(n^2) process
-*/
+/**
+ * Approach: Manacher
+ * Manacher算法的直接考察，没啥好说的了...
+ * 对该算法不了解的可以参考：
+ * https://github.com/cherryljr/LintCode/blob/master/Manacher%20Template.java
+ */
 public class Solution {
     /**
-     * @param s input string
-     * @return the longest palindromic substring
+     * @param s: input string
+     * @return: the longest palindromic substring
      */
     public String longestPalindrome(String s) {
-    	if (s == null || s.length() == 0) {
-    		return s;
-    	}
-    	
-    	boolean isPal[][] = new boolean[s.length()][s.length()];
-    	String maxStr = "";
-    	
-    	for (int j = 0; j < s.length(); j++) {
-    		for (int i = 0; i <= j; i++) {
-    			if (s.charAt(i) == s.charAt(j) && (j - i <= 1 || isPal[i + 1][j - 1])) {
-    				isPal[i][j] = true;
-    				maxStr = maxStr.length() > s.substring(i, j + 1).length() ? maxStr : s.substring(i, j + 1);
-    			}
-    		}
-    	}//end for j
-    	
-    	return maxStr;
+        if (s == null || s.length() <= 1) {
+            return s;
+        }
+
+        char[] charArr = getManacherString(s);
+        int[] pArr = new int[charArr.length];
+        int pR = -1, center = -1;
+        int max = 0;
+        int c = -1;
+
+        for (int i = 0; i < charArr.length; i++) {
+            pArr[i] = i < pR ? Math.min(pR - i, pArr[2 * center - i]) : 1;
+            while (i + pArr[i] < charArr.length && i - pArr[i] > -1) {
+                if (charArr[i + pArr[i]] == charArr[i - pArr[i]]) {
+                    pArr[i]++;
+                } else {
+                    break;
+                }
+            }
+            if (i + pArr[i] > pR) {
+                pR = i + pArr[i];
+                center = i;
+            }
+            if (pArr[i] > max) {
+                max = pArr[i];
+                c = i;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = c - max + 1; i < c + max; i++) {
+            if (charArr[i] != '#') {
+                sb.append(charArr[i]);
+            }
+        }
+        return sb.toString();
+    }
+    
+    public char[] getManacherString(String str) {
+        char[] charArr = str.toCharArray();
+        char[] rst = new char[charArr.length * 2 + 1];
+        int index = 0;
+        for (int i = 0; i < rst.length; i++) {
+            rst[i] = (i & 1) == 0 ? '#' : charArr[index++];
+        }
+        return rst;
     }
 }
-
-
-
-```
