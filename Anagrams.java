@@ -26,7 +26,7 @@ String Hash Table
  * where N is the length of strs, and K is the maximum length of a string in strs.
  * The outer loop has complexity O(N) as we iterate through each string.
  * Then, we sort each string in O(KlogK) time.
- * Space Complexity: O(N∗K), the total information content stored in ans.
+ * Space Complexity: O(N*K), the total information content stored in ans.
  */
 public class Solution {
     /*
@@ -72,9 +72,9 @@ public class Solution {
  * For example, abbccc will be (1, 2, 3, 0, 0, ..., 0), where there are 26 entries total.
  *
  * Complexity Analysis
- * Time Complexity: O(N∗K), where N is the length of strs, and K is the maximum length of a string in strs.
+ * Time Complexity: O(N*K), where N is the length of strs, and K is the maximum length of a string in strs.
  * Counting each string is linear in the size of the string, and we count every string.
- * Space Complexity: O(N∗K), the total information content stored in ans.
+ * Space Complexity: O(N*K), the total information content stored in ans.
  */
 public class Solution {
     /*
@@ -88,18 +88,10 @@ public class Solution {
         }
 
         HashMap<String, ArrayList<String>> map = new HashMap<>();
-        for (String s : strs) {
-            int[] arr = new int[26];
-            for (int j = 0; j < s.length(); j++) {
-                arr[s.charAt(j) - 'a'] += 1;
-            }
-
-            String key =  Arrays.toString(arr);
-            //	不能使用String.valueOf(arr) / arr.toString();
-            if (!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
-            }
-            map.get(key).add(s);
+        for (String word : strs) {
+            String key =  countCharacter(word);
+            // Use the new method "computeIfAbsent" and Lambda Expression in JDK1.8
+            map.computeIfAbsent(key, x -> new ArrayList<>()).add(word);
         }
 
         // check instance occurs >= 2
@@ -109,5 +101,13 @@ public class Solution {
         }
 
         return rst;
+    }
+    
+    public String countCharacter(String str) {
+        int[] map = new int[26];
+        for (char c : str.toCharArray()) {
+            map[c - 'a']++;
+        }
+        return Arrays.toString(map);
     }
 }
