@@ -68,7 +68,7 @@ public class Solution {
 
 /**
  * Approach 2: Morris Traversal (O(1) Extra Space)
- * 使用了 Morris的中序遍历，解法实现仍然相同。
+ * 使用了 Morris的中序遍历，解法思想仍然相同。
  * 只是使用了更高级的遍历方式来节约了额外空间。
  *
  * 参考：
