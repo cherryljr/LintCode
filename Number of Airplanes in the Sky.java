@@ -122,6 +122,7 @@ public class Solution {
 
         List<TimePoint> timePoints = new ArrayList<>();
         for (Interval flight : airplanes) {
+            // 一段区间将会产生两个 point
             timePoints.add(new TimePoint(flight.start, 1));
             timePoints.add(new TimePoint(flight.end, -1));
         }
