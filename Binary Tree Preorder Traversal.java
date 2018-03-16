@@ -1,13 +1,3 @@
-1. recursive with helper method   
-2. Stack(NON-recursive) push curr, push right, push left. Because Stack is FILO (first in, last out),
-	 we should push the right_child first.
-3. Divide and Conquer
-
-PS.
-	当我们想使用非递归的方法去实现一个原本递归的程序时，通常都会使用到栈这个数据结构。
-	因为这实际上就是在模拟递归时内存中的栈操作的过程。
-	遍历树的非递归方法均是使用栈来完成的。
-```
 /*
 Given a binary tree, return the preorder traversal of its nodes' values.
 
@@ -32,39 +22,15 @@ Tree Binary Tree
 */
 
 
-//Version 1: Traverse / Recursive
-public class Solution {
-    public ArrayList<Integer> preorderTraversal(TreeNode root) {
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        traverse(root, result);
-        return result;
-    }
-    // 把root为跟的preorder加入result里面
-    private void traverse(TreeNode root, ArrayList<Integer> result) {
-        if (root == null) {
-            return;
-        }
-
-        result.add(root.val);
-        traverse(root.left, result);
-        traverse(root.right, result);
-    }
-}
-
-
-//	Version 2: Use Stack to complete it.
-/*
-Thinking process:
-Binary tree traversal are all using stack...
-
-Check if root is null
-use a container to save results
-
-use current node
-put right on stack
-put left on stack
-In next run, the ‘left’ will be on top of stack, and will be taken first. So the order becomes: parent -> left -> right
-*/
+/**
+ * Approach 1: Recursion
+ * If we want to implement the Preorder Traversal.
+ * We just need to print/store the curr.node
+ * when we visited the curr node at the first time.
+ *
+ * Time Complexity:  O(n)
+ * Space Complexity: O(n)
+ */
 
 /**
  * Definition of TreeNode:
@@ -78,18 +44,62 @@ In next run, the ‘left’ will be on top of stack, and will be taken first. So
  * }
  */
 public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Preorder in ArrayList which contains node values.
+     */
     public List<Integer> preorderTraversal(TreeNode root) {
-        Stack<TreeNode> stack = new Stack<TreeNode>();
-        List<Integer> preorder = new ArrayList<Integer>();
-        
         if (root == null) {
-            return preorder;
+            return new ArrayList<>();
         }
-        
+
+        List<Integer> rst = new ArrayList<>();
+        preorder(rst, root);
+        return rst;
+    }
+
+    private void preorder(List<Integer> rst, TreeNode node) {
+        if (node != null) {
+            // Store the node when we visited it firstly
+            rst.add(node.val);
+            // inorder left subtree
+            preorder(rst, node.left);
+            // inorder right subtree
+            preorder(rst, node.right);
+        }
+    }
+}
+
+/**
+ * Approach 2: Using Stack
+ * 1. Check if root is null
+ * 2. use a container to save results
+ *  store current node
+ *  put right on stack
+ *  put left on stack
+ * Note:
+ *  In next run, the ‘left’ will be on top of stack, and will be taken first.
+ *  So the order becomes: parent -> left -> right
+ *
+ * Time Complexity:  O(n)
+ * Space Complexity: O(n)
+ */
+public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Preorder in ArrayList which contains node values.
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        List<Integer> rst = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
         while (!stack.empty()) {
             TreeNode node = stack.pop();
-            preorder.add(node.val);
+            rst.add(node.val);
             if (node.right != null) {
                 stack.push(node.right);
             }
@@ -97,29 +107,78 @@ public class Solution {
                 stack.push(node.left);
             }
         }
-        
-        return preorder;
+
+        return rst;
     }
 }
 
-
-//Version 3: Divide & Conquer
+/**
+ * Approach 3: Morris Traversal
+ * Reference:
+ * https://github.com/cherryljr/LintCode/blob/master/Morris%20Traversal%20Template.java
+ *
+ * Time Complexity:  O(n)
+ * Space Complexity: O(1)
+ */
 public class Solution {
-    public ArrayList<Integer> preorderTraversal(TreeNode root) {
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        // null or leaf
+    /**
+     * @param root: A Tree
+     * @return: Preorder in ArrayList which contains node values.
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
         if (root == null) {
-            return result;
+            return new ArrayList<>();
         }
 
-        // Divide
-        ArrayList<Integer> left = preorderTraversal(root.left);
-        ArrayList<Integer> right = preorderTraversal(root.right);
+        TreeNode curr = root;
+        TreeNode rightMost = null;
+        List<Integer> rst = new ArrayList<>();
+        while (curr != null) {
+            if (curr.left == null) {
+                /*
+                 * If there is no left subtree, then we can visit this node and
+                 * continue traversing right.
+                 */
+                // Store the curr.val when we visit the node firstly
+                rst.add(curr.val);
+                // move to next right node
+                curr = curr.right;
+            } else {
+                // if curr node has a left subtree
+                // then get rightmost node of left subtree
+                rightMost = getRightMostNode(curr);
+                if (rightMost.right == null) {
+                    /*
+                     * If the rightMost node's right subtree is null, then we have never been here before.
+                     * (the first time that we visit the curr node)
+                     * the current node should be the right child of the rightMost node.
+                     */
+                    // Store the curr.val when we visit the node firstly
+                    rst.add(curr.val);
+                    rightMost.right = curr;
+                    curr = curr.left;
+                } else {
+                    /*
+                     * If there is a right subtree, it is a link that we created on a previous pass,
+                     * (the second time that we visit the curr node)
+                     * so we should unlink it and visit this node to avoid infinite loops
+                     */
+                    rightMost.right = null;
+                    curr = curr.right;
+                }
+            }
+        }
 
-        // Conquer
-        result.add(root.val);
-        result.addAll(left);
-        result.addAll(right);
-        return result;
+        return rst;
+    }
+
+    // Get the node with the right most position of left subtree of curr.
+    // Attention: node.right != curr, cuz the node.right may be linked to curr node before.
+    public TreeNode getRightMostNode(TreeNode curr) {
+        TreeNode node = curr.left;
+        while (node.right != null && node.right != curr) {
+            node = node.right;
+        }
+        return node;
     }
 }

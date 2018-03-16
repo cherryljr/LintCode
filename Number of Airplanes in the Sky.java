@@ -73,11 +73,20 @@ public class Solution {
  * 形象点来说就是首先将飞机的 飞行时间段 看成一条条 平行于x轴的线段，
  * 然后我们用一条 垂直于x轴 的直线从头到尾去扫一遍，看在哪些时间段与飞机的飞行线段的交点最多，
  * 那些时间段就是 飞机最多的时候。交点个数就是 天空中飞机最多的架数。
+ * 这就是所谓的 扫描线。
  *
  * 具体实现方法：
- * 对于各个飞行时间段按照 start 时间进行排序（附加start，end的flag，如果time相同时，end在start前）。
- * 那么遍历这个排序过的链表时，也就是相当于在时间线上从前向后顺序移动，
- * 遇到 start 就+1，遇到 end 就-1，记录其中的 最大值max 即可。
+ * 为了实现 扫描线，我们首先需要根据给定的区间信息，建立一个 TimePoint[].而一段区间将会产生 两个 我们需要的时间点。
+ * 我们知道，只有在 起飞/降落 的这个时间点上，天空上飞机的数目才会发生变化（扫描线的交点个数会发生变化）。
+ * 因此我们的 各个时间点 需要包含的信息有：
+ *  时刻（相当于X轴的坐标） 和 在该时间点上发生的动作 (flag) 是 起飞 还是 降落。
+ * 然后我们对各个 TimePoint 按照 时间顺序 进行排序（如果时间相同，那么我们选择降落动作发生在前面即可）。
+ * 这是因为存在一种情况：在一个时间点上，同时有一台飞机要降落，而另一台飞机要起飞。因此我们这边的做法是先让一台降落。
+ * 然后使用 扫描线 从左往右 对排序数组进行扫描，也就是相当于在时间线上从前向后顺序移动，
+ * 遇到 起飞点 就+1，遇到 降落点 就-1，记录其中的 最大值max 即可。
+ * 在 起飞/降落 的表示上，我们直接使用了一个 int 类型，起飞 = 1，降落 = -1。
+ * 不仅能够起到标识（flag）的作用，也能直接拿过来计算。
+ * 在表示具有一定特点的参数时，均可以采用这个技巧如 Building Outline 中的大楼高度 height.
  *
  * 类似的问题还有：火车 => 需要多少个轨道； 公司 => 需要多少间会议室。都是同一类问题的马甲。
  * 扫描线问题共同点：一个区间，告诉你开始时间和结束时间。
@@ -96,6 +105,7 @@ public class Solution {
         @Override
         public int compareTo(TimePoint point) {
             if (this.time == point.time) {
+                // 如果同一个时间点上有 起飞/降落 操作，先降落
                 return this.flag - point.flag;
             } else {
                 return this.time - point.time;
@@ -114,6 +124,7 @@ public class Solution {
 
         List<TimePoint> timePoints = new ArrayList<>();
         for (Interval flight : airplanes) {
+            // 一段区间将会产生两个 point
             timePoints.add(new TimePoint(flight.start, 1));
             timePoints.add(new TimePoint(flight.end, -1));
         }
