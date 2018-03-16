@@ -1,35 +1,29 @@
-建造两个list,并使用两个指针left和right跟踪其当前位置
-
-把满足条件（<x, >=x）的数字分别放到两个list里面
-
-记得用dummyNode track head.
-
-最终使用left.next = rightDummy.next将两个Lsit连接起来。
-
 /*
-33% Accepted
-Given a linked list and a value x, 
+Description
+Given a linked list and a value x,
 partition it such that all nodes less than x come before nodes greater than or equal to x.
 
 You should preserve the original relative order of the nodes in each of the two partitions.
 
-For example,
+Example
 Given 1->4->3->2->5->2->null and x = 3,
 return 1->2->2->4->3->5->null.
 
-Example
-Tags Expand 
-Linked List Two Pointers
-*/
+Tags
+Two Pointers Linked List
+ */
 
-/*
-Thinking process:
-0. dummyPre, dummyPost to store the head of the 2 list
-1. Append node.val < x to listPre
-2. Append node.val >= x to listPost
-3. Link them togeter
-4. return dummyPre.next
-*/
+/**
+ * Approach 2: Two Pointers (Dummy Node)
+ * 使用到了 两个指针。建立了两个 LinkedList.
+ * 将所有 <x 的节点放到了 less 指向的 list 中；
+ * 将所有 >=x 的节点放到了 more 指向的 list 中。
+ * 然后我们只要将这两个 list 连接起来即可。
+ *
+ * 在代码的实现上，我们还需要用到 Dummy Node，因为我们这两个 list 的头节点在一开始是不确定的。
+ *
+ * 时间复杂度为：O(n);  空间复杂度为：O(1)
+ */
 
 /**
  * Definition for ListNode.
@@ -41,37 +35,34 @@ Thinking process:
  *         this.next = null;
  *     }
  * }
- */ 
-public class Solution {
-    /**
-     * @param head: The first node of linked list.
-     * @param x: an integer
-     * @return: a ListNode 
-     */
+ */
+class Solution {
     public ListNode partition(ListNode head, int x) {
-        // write your code here
-        if (head == null || head.next == null) {
-            return head;
+        if (head == null) {
+            return null;
         }
-        
-        ListNode leftDummy = new ListNode(-1);
-        ListNode rightDummy = new ListNode(-1);
-        ListNode left = leftDummy;
-        ListNode right = rightDummy;
-        
+
+        ListNode lessDummy = new ListNode(-1);
+        ListNode moreDummy = new ListNode(-1);
+        ListNode less = lessDummy;
+        ListNode more = moreDummy;
         while (head != null) {
             if (head.val < x) {
-                left.next = head;
-                left = head;
-            } else if (head.val >= x) {
-                right.next = head;
-                right = head;
+                // put the smaller node into the less list
+                less.next = head;
+                less = head;
+            } else {
+                // put the node into the more list (no less than x)
+                more.next = head;
+                more = head;
             }
+            // move the head to the next node
             head = head.next;
         }
-        //	right.next是链表的末尾，要记得置空
-        right.next = null;
-        left.next = rightDummy.next;
-        return leftDummy.next;
+
+        more.next = null;
+        // connect the less list with more list
+        less.next = moreDummy.next;
+        return lessDummy.next;
     }
 }
