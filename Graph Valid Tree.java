@@ -35,7 +35,7 @@ Depth First Search Facebook Zenefits Union Find Breadth First Search Google
  *  参考资料：
  *  https://www.geeksforgeeks.org/union-find/
  */
-class Solution {
+public class Solution {
     /*
      * @param n: An integer
      * @param edges: a list of undirected edges
@@ -43,21 +43,30 @@ class Solution {
      */
     public boolean validTree(int n, int[][] edges) {
         // initialize n isolated islands
-        int[] unionFind = new int[n];
+        int[] parent = new int[n];
+        int[] rank = new int[n];
         for (int i = 0; i < n; i++) {
-            unionFind[i] = i;
+            parent[i] = i;
         }
+        Arrays.fill(rank, 1);
 
         // perform union find
         for (int[] edge : edges) {
-            int roota = compressedFind(unionFind, edge[0]);
-            int rootb = compressedFind(unionFind, edge[1]);
+            int roota = compressedFind(parent, edge[0]);
+            int rootb = compressedFind(parent, edge[1]);
             // if two vertices happen to be in the same set
             // then there's a cycle
             if (roota == rootb) {
                 return false;
             } else {
-                unionFind[roota] = rootb;
+                // keep balance
+                if (rank[roota] <= rank[rootb]) {
+                    parent[roota] = rootb;
+                    rank[rootb] += rank[roota];
+                } else {
+                    parent[rootb] = roota;
+                    rank[roota] += rank[rootb];
+                }
             }
         }
 
