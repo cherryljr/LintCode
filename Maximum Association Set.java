@@ -77,7 +77,6 @@ public class Solution {
             map.get(root).add(str);
         }
 
-        // Find the maximum size set
         List<String> rst = new ArrayList<>();
         for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
             if (entry.getValue().size() > rst.size()) {
@@ -88,17 +87,19 @@ public class Solution {
         return rst;
     }
 
-    // Union Find Template
     class UnionFind {
         Map<String, String> parent;
+        Map<String, Integer> rankMap;
 
         UnionFind() {
             parent = new HashMap<>();
+            rankMap = new HashMap<>();
         }
 
         void build(String[] strs) {
             for (String str : strs) {
                 parent.put(str, str);
+                rankMap.put(str, 1);
             }
         }
 
@@ -114,7 +115,15 @@ public class Solution {
             String aFather = compressedFind(a);
             String bFather = compressedFind(b);
             if (!aFather.equals(bFather)) {
-                parent.put(aFather, bFather);
+                int aFRank = rankMap.get(aFather);
+                int bFRank = rankMap.get(bFather);
+                if (aFRank <= bFRank) {
+                    parent.put(aFather, bFather);
+                    rankMap.put(bFather, aFRank + bFRank);
+                } else {
+                    parent.put(bFather, aFather);
+                    rankMap.put(aFather, aFRank + bFRank);
+                }
             }
         }
     }
