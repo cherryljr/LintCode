@@ -25,6 +25,9 @@ Union Find Google
  * The same as Number of Islands II in LeetCode.
  * You can get detail explanations here:
  * https://github.com/cherryljr/LeetCode/blob/master/Number%20of%20Islands%20II.java
+ *
+ * Union Find Template:
+ * https://github.com/cherryljr/LintCode/blob/master/Find%20the%20Weak%20Connected%20Component%20in%20the%20Directed%20Graph.java
  */
 
 /**
@@ -71,7 +74,7 @@ public class Solution {
             }
             isIsland[index] = true;
             count++;
-            
+
             for (int[] dir : dirs) {
                 int nextX = p.x + dir[0];
                 int nextY = p.y + dir[1];
@@ -82,7 +85,7 @@ public class Solution {
                 }
                 count = uf.union(index, nextP, count);
             }
-            
+
             rst.add(count);
         }
 
@@ -91,11 +94,14 @@ public class Solution {
 
     class UnionFind {
         HashMap<Integer, Integer> parent;
+        HashMap<Integer, Integer> rankMap;
 
         UnionFind(int[] arr) {
             parent = new HashMap<>();
+            rankMap = new HashMap<>();
             for (int i : arr) {
                 parent.put(i, i);
+                rankMap.put(i, 1);
             }
         }
 
@@ -111,7 +117,15 @@ public class Solution {
             int aFather = compressedFind(a);
             int bFather = compressedFind(b);
             if (aFather != bFather) {
-                parent.put(aFather, bFather);
+                int aFRank = rankMap.get(aFather);
+                int bFRank = rankMap.get(bFather);
+                if (aFRank <= bFRank) {
+                    parent.put(aFather, bFather);
+                    rankMap.put(bFather, aFRank + bFRank);
+                } else {
+                    parent.put(bFather, aFather);
+                    rankMap.put(aFather, aFRank + bFRank);
+                }
                 count--;
             }
             return count;
@@ -126,6 +140,9 @@ public class Solution {
  * (The Union Find array can also used as a isIsland array here)
  * You can get detail explanations here:
  * https://github.com/cherryljr/LeetCode/blob/master/Number%20of%20Islands%20II.java
+ *
+ * Union Find Template:
+ * https://github.com/cherryljr/LintCode/blob/master/Find%20the%20Weak%20Connected%20Component%20in%20the%20Directed%20Graph.java
  */
 public class Solution {
     /*
@@ -136,24 +153,25 @@ public class Solution {
      */
     public List<Integer> numIslands2(int m, int n, Point[] positions) {
         List<Integer> rst = new ArrayList<>();
-        if (m <= 0 || n <= 0 || positions == null || positions.length == 0) {
+        if (n <= 0 || m <= 0 || positions == null || positions.length == 0) {
             return rst;
         }
 
-        int[] unionFind = new int[m * n];
-        // Initialize the Union Find
-        Arrays.fill(unionFind, -1);
+        int[] parent = new int[m * n];
+        int[] rank = new int[m * n];
+        // Initialize the Union Find (parent and rank array)
+        Arrays.fill(parent, -1);
+        Arrays.fill(rank, 1);
 
         int count = 0;
         int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (Point p : positions) {
             int index = p.x * n + p.y;
-            // 如果原本这个地方已经有岛屿，在相同位置上再次出现一个岛屿的话，不会对 count 造成任何影响
-            if (unionFind[index] == index) {
+            if (parent[index] == index) {
                 rst.add(count);
                 continue;
             }
-            unionFind[index] = index;
+            parent[index] = index;
             count++;
 
             for (int[] dir : dirs) {
@@ -161,16 +179,20 @@ public class Solution {
                 int nextY = p.y + dir[1];
                 int nextP = nextX * n + nextY;
                 if (nextX < 0 || nextX >= m || nextY < 0 || nextY >= n
-                        || unionFind[nextP] == -1) {
+                        || parent[nextP] == -1) {
                     continue;
                 }
-                // get the big brother of node index
-                int aFather = compressedFind(unionFind, index);
-                // get the big brother of the next node
-                int bFather = compressedFind(unionFind, nextP);
-                // Union the two node
+                int aFather = compressedFind(parent, index);
+                int bFather = compressedFind(parent, nextP);
                 if (aFather != bFather) {
-                    unionFind[aFather] = bFather;
+                    // keep balance
+                    if (rank[aFather] <= rank[bFather]) {
+                        parent[aFather] = bFather;
+                        rank[bFather] += rank[aFather];
+                    } else {
+                        parent[bFather] = aFather;
+                        rank[aFather] += rank[bFather];
+                    }
                     count--;
                 }
             }
@@ -189,4 +211,3 @@ public class Solution {
         return index;
     }
 }
-
