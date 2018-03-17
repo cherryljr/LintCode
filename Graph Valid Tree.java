@@ -32,8 +32,10 @@ Depth First Search Facebook Zenefits Union Find Breadth First Search Google
  *  则说明该图 带环。
  *  因此在本题中我们只需要对 Union Find 的 find() 方法进行稍微的修改，即可实现。
  *
- *  参考资料：
- *  https://www.geeksforgeeks.org/union-find/
+ * Union Template: (HashMap with Detail Explanations)
+ * https://github.com/cherryljr/LintCode/blob/master/Find%20the%20Weak%20Connected%20Component%20in%20the%20Directed%20Graph.java
+ * 参考资料：
+ * https://www.geeksforgeeks.org/union-find/
  */
 public class Solution {
     /*
@@ -43,43 +45,57 @@ public class Solution {
      */
     public boolean validTree(int n, int[][] edges) {
         // initialize n isolated islands
-        int[] parent = new int[n];
-        int[] rank = new int[n];
+        UnionFind uf = new UnionFind(n);
+        // perform union find
+        for (int[] edge : edges) {
+            if (!uf.union(edge[0], edge[1])) {
+                return false;
+            }
+        }
+        // judge it's a Connectivity Graph or not
+        return edges.length == (n - 1);
+    }
+}
+
+// Union Template (Based on Array)
+class UnionFind {
+    int[] parent, rank;
+
+    UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
         }
         Arrays.fill(rank, 1);
-
-        // perform union find
-        for (int[] edge : edges) {
-            int roota = compressedFind(parent, edge[0]);
-            int rootb = compressedFind(parent, edge[1]);
-            // if two vertices happen to be in the same set
-            // then there's a cycle
-            if (roota == rootb) {
-                return false;
-            } else {
-                // keep balance
-                if (rank[roota] <= rank[rootb]) {
-                    parent[roota] = rootb;
-                    rank[rootb] += rank[roota];
-                } else {
-                    parent[rootb] = roota;
-                    rank[roota] += rank[rootb];
-                }
-            }
-        }
-
-        // judge it's a Connectivity Graph or not
-        return edges.length == (n - 1);
     }
 
-    private int compressedFind(int[] unionFind, int index) {
-        while (index != unionFind[index]) {
+    public int compressedFind(int index) {
+        while (index != parent[index]) {
             // Compress Path
-            unionFind[index] = unionFind[unionFind[index]];
-            index = unionFind[index];
+            parent[index] = parent[parent[index]];
+            index = parent[index];
         }
         return index;
+    }
+
+    public boolean union(int a, int b) {
+        int aFather = compressedFind(a);
+        int bFather = compressedFind(b);
+        // if two vertices happen to be in the same set
+        // then there's a cycle
+        if (aFather == bFather) {
+            return false;
+        } else {
+            // keep balance
+            if (rank[aFather] <= rank[bFather]) {
+                parent[aFather] = bFather;
+                rank[bFather] += rank[aFather];
+            } else {
+                parent[bFather] = aFather;
+                rank[aFather] += rank[bFather];
+            }
+        }
+        return true;
     }
 }
