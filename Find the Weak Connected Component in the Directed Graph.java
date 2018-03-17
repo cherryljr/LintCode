@@ -32,6 +32,7 @@ Return {A,B,D}, {C,E,F}. Since there are two connected component which are {A,B,
  * Union Find 中有几个 root节点(Big Brother) 就说明有几个 弱连通区。
  * 最后使用 Map 将属于同一个 Big Brother 管理的节点 add 到同一个 List 中，
  * 然后对该 List 进行排序即可。
+ * (Union 和 Find 操作都可以进行优化，具体优化请参见代码注释)
  * 时间复杂度：将所有节点 Union 起来 O(n) + 联通区排序 O(nlogn)
  *
  * 参考资料：
@@ -95,20 +96,31 @@ public class Solution {
 class UnionFind{
     // HashMap maintaining key - > value (child -> parent) relationship
     HashMap<Integer, Integer> parent;
+    // HashMap maintaining key -> value (node -> node's rank) relationship
+    // rank means that how many nodes in the region. (Big father is the current node)
+    // Note: the define of rank could be changed according to your demands.
+    HashMap<Integer, Integer> rankMap;
 
     UnionFind(HashSet<Integer> labels) {
         parent = new HashMap<>();
-        // 对 Union Find 进行初始化，每个 node 的父亲都是其自身。
+        rankMap = new HashMap<>();
         for (int label : labels) {
+            // 对 Union Find 进行初始化，每个 node 的父亲都是其自身.
             parent.put(label, label);
+            // 对各个node的 权重 进行初始化，初始情况下都为 1.（只包含一个node）
+            rankMap.put(label, 1);
         }
     }
 
-    // Compressed Find - 查找方法（带路径压缩优化），用于查询节点的 最顶级管理者(Big Brother)
-    // 之所以要进行 路径压缩 是因为：
-    // 通过这个优化可以将 Find 的时间复杂度从原来的 O(n) 降低到 O(1).
-    // 一旦第一次遍历过后，之后再次查询时就不需要再一级级地往上寻找 Big Brother，而是可以直接一步找到它。
-    // 从数据结构上来看就是将原来的 链式结构 转换为了 放射状的树型结构。
+    /**
+     * Compressed Find - 查找方法（带路径压缩优化），用于查询节点的 最顶级管理者(Big Brother)
+     * 之所以要进行 路径压缩 是因为：
+     * 通过这个优化可以将 Find 的时间复杂度从原来的 O(n) 降低到 O(1) (操作数需要够大).
+     * 一旦第一次遍历过后，之后再次查询时就不需要再一级级地往上寻找 Big Brother，而是可以直接一步找到它。
+     * 从数据结构上来看就是将原来的 链式结构 转换为了 放射状的树型结构。
+     * @param i 需要搜寻的节点
+     * @return 当节点的 root (Big Brother)
+     */
     public int compressedFind(int i) {
         while (i != parent.get(i)) {
             // Compressed Find
@@ -118,14 +130,37 @@ class UnionFind{
         return i;
     }
 
-    // Union - 合并方法，用于将两个节点合并起来
-    // 记住：合并的时候是将节点各自的 Big Brother 拿去合并，这样才不会出错（非常重要）
+    /**
+     * Union - 合并方法，用于将两个节点合并起来（带权值优化）
+     * 记住：合并的时候是将节点各自的 Big Brother 拿去合并，这样才不会出错（非常重要）
+     * 当我们合并两棵树（区域）的时候，很可能会发生树高度的增加。
+     * 为了保证树尽量维持平衡，花费的时间尽量少，
+     * 我们可以通过 权值 来实现优化。
+     * 具体为：将 权值低的树（区域）并入到 权值高的树（区域）中。
+     * @param a 需要合并的节点 a
+     * @param b 需要合并的节点 b
+     */
     public void union(int a, int b) {
         int aFather = compressedFind(a); // 寻找节点 a 的 Big Brother
         int bFather = compressedFind(b); // 寻找节点 b 的 Big Brother
         // 如果两个节点的 Big Brother 不同，则将他们合并起来。
         if (aFather != bFather) {
-            parent.put(aFather, bFather);
+            // 每次我们比较的时候，只会取 根节点(Big Brother) 的权值进行比较
+            int aFRank = rankMap.get(aFather);
+            int bFRank = rankMap.get(bFather);
+            if (aFRank <= bFRank) {
+                // a节点所述的区域的 根节点(Big Brother) 权值更低，
+                // 因此将其 并入 b节点所属的区域
+                parent.put(aFather, bFather);
+                // 更新 b节点所属的区域的 根节点(Big Brother) 的权值
+                rankMap.put(bFather, aFRank + bFRank);
+            } else {
+                // b节点所述的区域的 根节点(Big Brother) 权值更低，
+                // 因此将其 并入 a节点所属的区域
+                parent.put(bFather, aFather);
+                // 更新 a节点所属的区域的 根节点(Big Brother) 的权值
+                rankMap.put(aFather, aFRank + bFRank);
+            }
         }
     }
 }
