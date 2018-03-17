@@ -35,6 +35,9 @@ Return {A,B,D}, {C,E,F}. Since there are two connected component which are {A,B,
  * (Union 和 Find 操作都可以进行优化，具体优化请参见代码注释)
  * 时间复杂度：将所有节点 Union 起来 O(n) + 联通区排序 O(nlogn)
  *
+ * 数组 版本的模板可以参见：
+ * https://github.com/cherryljr/LintCode/blob/master/Graph%20Valid%20Tree.java
+ *
  * 参考资料：
  * http://blog.csdn.net/dm_vincent/article/details/7655764
  * http://blog.csdn.net/dm_vincent/article/details/7769159
