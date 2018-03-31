@@ -72,6 +72,7 @@ public class Solution {
  * https://github.com/cherryljr/LintCode/blob/master/Unique%20Paths%20II.java
  * https://github.com/cherryljr/LintCode/blob/master/Minimum%20Path%20Sum.java
  * https://github.com/cherryljr/LintCode/blob/master/Edit%20Distance.java
+ * https://github.com/cherryljr/NowCoder/blob/master/Path%20in%20Matrix.java
  */
 public class Solution {
     /**
