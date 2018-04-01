@@ -61,7 +61,7 @@ class Solution {
         }
         // Build the multi tree
         for (int i = 0; i < x.length; i++) {
-            // 利用 edge 记录下从点 x[i] 到 y[i] 的花费
+            // 利用 edge 记录下对应的路径与花费
             nodes[x[i]].edges.add(new Edge(nodes[y[i]], cost[i]));
         }
 
