@@ -43,7 +43,7 @@ Enumeration Matrix
  * 时间复杂度：O(n^3)
  * 
  * 同样考察将 二维矩阵的子矩阵问题 转换传成 一维数组子数组 问题的还有：
- * 
+ * https://github.com/cherryljr/LintCode/blob/master/Maximum%20Submatrix.java
  */
 
 class Solution {
