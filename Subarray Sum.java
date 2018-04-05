@@ -15,8 +15,8 @@ Hash Table Subarray
 
 /**
  * Approach: PreSum + HashMap
- * 累加和为K的最长子数组 的简化版。
- * https://github.com/cherryljr/NowCoder/blob/master/%E7%B4%AF%E5%8A%A0%E5%92%8C%E4%B8%BAK%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E6%95%B0%E7%BB%84.java
+ * Maximum Size Subarray Sum Equals k 的简化版。
+ * https://github.com/cherryljr/LintCode/blob/master/Maximum%20Size%20Subarray%20Sum%20Equals%20k.java
  * 此处 K = 0,并且题目默认只有一个子串和为 K.
  * 我们只需要求出子串的 左右边界即可。
  * 同样的利用 preSum + HashMap 来优化我们的时间复杂度。
