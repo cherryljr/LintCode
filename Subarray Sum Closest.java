@@ -14,24 +14,24 @@ Sort Subarray
 
 /**
  * Approach: PreSum + Sorting
- * Éæ¼°µ½ Subarray Sum ÎÊÌâ£¬Ê×ÏÈÁªÏëµ½µÄ¾ÍÊÇÒªÊ¹ÓÃ Prefix Sum À´½â¾öÎÊÌâ¡£
- * ¸ÃÌâÊÇÔÚ Subarray Sum »ù´¡ÉÏµÄÀ©Õ¹ / ÀÛ¼ÓºÍÎªKµÄ×î³¤×ÓÊı×é µÄ±äĞÎ¡£
- * https://github.com/cherryljr/NowCoder/blob/master/%E7%B4%AF%E5%8A%A0%E5%92%8C%E4%B8%BAK%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E6%95%B0%E7%BB%84.java
+ * æ¶‰åŠåˆ° Subarray Sum é—®é¢˜ï¼Œé¦–å…ˆè”æƒ³åˆ°çš„å°±æ˜¯è¦ä½¿ç”¨ Prefix Sum æ¥è§£å†³é—®é¢˜ã€‚
+ * è¯¥é¢˜æ˜¯åœ¨ Subarray Sum åŸºç¡€ä¸Šçš„æ‰©å±• / Maximum Size Subarray Sum Equals k çš„å˜å½¢ã€‚
+ * https://github.com/cherryljr/LintCode/blob/master/Maximum%20Size%20Subarray%20Sum%20Equals%20k.java
  *
- * Ë¼Â·£º
- * ÔÚ Subarray Sum ÖĞ£¬ÎÒÃÇÍ¨¹ıÁË sum[0~a] = sum[0~b] = x µÃµ½ÁË sum(a ~ b] = 0.
- * ¶ø±¾ÌâĞèÒªµÄÊÇÓë 0 ×îÏà½üµÄ¡£¹ÊÍ¬Ñù½èÖú Prefix Sum,Ö»²»¹ıÎÒÃÇĞèÒªµÄÊÇ½«¸÷¸ö Prefix Sum
- * Ö®¼äµÄ²îÖµ¾¡¿ÉÄÜĞ¡µØÅÅÁĞÔÚÒ»Æğ·½±ãÎÒÃÇ²éÕÒ¡£¶øÄÜ×öµ½ÕâµãµÄ±ãÊÇ ÅÅĞò¡£
- * Òò´ËÎÒÃÇÕâÀï²»ÔÙÊ¹ÓÃ HashMap ¶øÊÇÊ¹ÓÃÁË Array À´ÊµÏÖ¡£
- * µ«ÊÇÒòÎª Array ÎŞ·¨Ïñ HashMap ´¢´æÒ»¸ö¶ÔÓ¦µÄ¼üÖµ¶Ô£¬ËùÒÔÎÒÃÇĞèÒªĞÂ½¨Ò»¸öÀà Point À´´¢´æËüÃÇ¡£
- * £¨µ±È»Ê¹ÓÃ¼òµ¥µÄ¶şÎ¬Êı×éÒ²¿ÉÒÔ£¬Õâ±ßÊÇÎªÁËÊ¹µÃ´úÂë¸ü¼ÓÈİÒ×Àí½â£©
+ * æ€è·¯ï¼š
+ * åœ¨ Subarray Sum ä¸­ï¼Œæˆ‘ä»¬é€šè¿‡äº† sum[0~a] = sum[0~b] = x å¾—åˆ°äº† sum(a ~ b] = 0.
+ * è€Œæœ¬é¢˜éœ€è¦çš„æ˜¯ä¸ 0 æœ€ç›¸è¿‘çš„ã€‚æ•…åŒæ ·å€ŸåŠ© Prefix Sum,åªä¸è¿‡æˆ‘ä»¬éœ€è¦çš„æ˜¯å°†å„ä¸ª Prefix Sum
+ * ä¹‹é—´çš„å·®å€¼å°½å¯èƒ½å°åœ°æ’åˆ—åœ¨ä¸€èµ·æ–¹ä¾¿æˆ‘ä»¬æŸ¥æ‰¾ã€‚è€Œèƒ½åšåˆ°è¿™ç‚¹çš„ä¾¿æ˜¯ æ’åºã€‚
+ * å› æ­¤æˆ‘ä»¬è¿™é‡Œä¸å†ä½¿ç”¨ HashMap è€Œæ˜¯ä½¿ç”¨äº† Array æ¥å®ç°ã€‚
+ * ä½†æ˜¯å› ä¸º Array æ— æ³•åƒ HashMap å‚¨å­˜ä¸€ä¸ªå¯¹åº”çš„é”®å€¼å¯¹ï¼Œæ‰€ä»¥æˆ‘ä»¬éœ€è¦æ–°å»ºä¸€ä¸ªç±» Point æ¥å‚¨å­˜å®ƒä»¬ã€‚
+ * ï¼ˆå½“ç„¶ä½¿ç”¨ç®€å•çš„äºŒç»´æ•°ç»„ä¹Ÿå¯ä»¥ï¼Œè¿™è¾¹æ˜¯ä¸ºäº†ä½¿å¾—ä»£ç æ›´åŠ å®¹æ˜“ç†è§£ï¼‰
  * 
- * ×ö·¨£º
- *  1. ĞÂ½¨ Point Àà£¬°üº¬ preSum ºÍ index¡£
- *  2. ±éÀúÕû¸öÊı×é£¬Ëã³öÃ¿¸öÎ»ÖÃÉÏµÄ preSum ÒÔ¼°¶ÔÓ¦µÄ index ²¢±£´æµ½ map ÖĞ¡£
- *  3. ¶ÔËùÓĞµÃµ½µÄ preSum£¬ÒÀ¾İ preSum µÄ´óĞ¡½øĞĞ Sort (O(nlogn))
- *  4. ±éÀúµÃµ½µÄ map Êı×é£¬Í¨¹ı map[i].preSum - map[i-1].preSum À´±È½ÏµÃµ½×î½Ó½ü 0 µÄ Subarray
- *  5. ×îºó¶Ô index ½øĞĞÒ»´Î sort ±ã¿ÉÒÔµÃµ½×îºó´ğ°¸¡£
+ * åšæ³•ï¼š
+ *  1. æ–°å»º Point ç±»ï¼ŒåŒ…å« preSum å’Œ indexã€‚
+ *  2. éå†æ•´ä¸ªæ•°ç»„ï¼Œç®—å‡ºæ¯ä¸ªä½ç½®ä¸Šçš„ preSum ä»¥åŠå¯¹åº”çš„ index å¹¶ä¿å­˜åˆ° map ä¸­ã€‚
+ *  3. å¯¹æ‰€æœ‰å¾—åˆ°çš„ preSumï¼Œä¾æ® preSum çš„å¤§å°è¿›è¡Œ Sort (O(nlogn))
+ *  4. éå†å¾—åˆ°çš„ map æ•°ç»„ï¼Œé€šè¿‡ map[i].preSum - map[i-1].preSum æ¥æ¯”è¾ƒå¾—åˆ°æœ€æ¥è¿‘ 0 çš„ Subarray
+ *  5. æœ€åå¯¹ index è¿›è¡Œä¸€æ¬¡ sort ä¾¿å¯ä»¥å¾—åˆ°æœ€åç­”æ¡ˆã€‚
  */
 public class Solution {
 
@@ -55,23 +55,23 @@ public class Solution {
         }
 
         Point[] map = new Point[nums.length + 1];
-        // ³õÊ¼»¯ map (µ±Ò»¸öÔªËØ¶¼Ã»ÓĞµÄÊ±ºò£¬preSumÎª0£¬indexÎª-1)
+        // åˆå§‹åŒ– map (å½“ä¸€ä¸ªå…ƒç´ éƒ½æ²¡æœ‰çš„æ—¶å€™ï¼ŒpreSumä¸º0ï¼Œindexä¸º-1)
         map[0] = new Point(0, -1);
         int preSum = 0;
-        // ÒòÎªÎÒÃÇĞèÒª¶Ô preSum ½øĞĞÅÅĞò£¬ËùÒÔÊ¹ÓÃ Êı×é À´´æ´¢preSumºÍÏàÓ¦µÄÎ»ÖÃ.
+        // å› ä¸ºæˆ‘ä»¬éœ€è¦å¯¹ preSum è¿›è¡Œæ’åºï¼Œæ‰€ä»¥ä½¿ç”¨ æ•°ç»„ æ¥å­˜å‚¨preSumå’Œç›¸åº”çš„ä½ç½®.
         for (int i = 0; i < nums.length; i++) {
             preSum += nums[i];
             map[i + 1] = new Point(preSum, i);
         }
 
-        // ¶Ô Point °´´ÓĞ¡µ½´ïµÄË³Ğò½øĞĞÅÅĞò
+        // å¯¹ Point æŒ‰ä»å°åˆ°è¾¾çš„é¡ºåºè¿›è¡Œæ’åº
         Arrays.sort(map, (a, b) ->
                 a.preSum == b.preSum ? a.index - b.index : a.preSum - b.preSum);
         int[] rst = new int[2];
         int diff = Integer.MAX_VALUE;
         for (int i = 1; i < map.length; i++) {
             if (map[i].preSum - map[i - 1].preSum < diff) {
-                // µ±·¢ÏÖ ÏàÁÚ²îÖµ¸üĞ¡µÄ preSum Ê±£¬¸üĞÂ diff ºÍ ×ÓÊı×é×óÓÒ±ß½ç
+                // å½“å‘ç° ç›¸é‚»å·®å€¼æ›´å°çš„ preSum æ—¶ï¼Œæ›´æ–° diff å’Œ å­æ•°ç»„å·¦å³è¾¹ç•Œ
                 diff = map[i].preSum - map[i - 1].preSum;
                 int[] temp = new int[]{map[i].index, map[i - 1].index};
                 Arrays.sort(temp);
