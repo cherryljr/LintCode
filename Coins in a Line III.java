@@ -1,20 +1,3 @@
-�� Coins in a Line II ����Ľ�һ���Ӵ��Ѷȡ�
-������Ҫ����˼·��Ȼ�� II ��ͬ��
-��ȻҪʹ��ÿһ��ȡ��֮�󣬶���ȡ�Ķ��ǽϲ�������ʹ�ö����õ���Ӳ���ܼ�ֵ��С��
-��Ϊÿ��ȡ������ ��/�� ����һ��ȡһ��ֵ����������Ҫ֪��������ÿһ��֮���Ƕ��١�
-Ȼ���ÿ�β������з������ó� ״̬ת�Ʒ��̣��� II ����һ����
-
-��Ϸ���� (State):
-	dp[i][j] ʣ�� i~j �ε�Ӳ��ʱ������ȡ�õ����ֵ
-��Ҿ��� (Function):
-	��ΪӲ���ܼ�ֵһ����Ϊ�˱�֤ ������󣬱�֤ȡ��������ȡ������С���ɡ�
-	(�����뷨�취�ӶԷ�����)
-	dp[i][j] = sum[i][j] - Math.min(dp[i+1][j], dp[i][j-1]);
-	ע�⣺�� i==j ʱ������ֻ��ȡ�� values[i].
-��Ϸ��ֹ (Initialize)��
-	��Ψһʣ�µ�һöӲ�ұ�ȡ��֮����Ϸ������
-	�ʵ� i==j ʱ��dp[i][j] = values[i];
-
 /*
 Description
 There are n coins in a line. 
@@ -35,49 +18,70 @@ Tags
 Array Dynamic Programming Game Theory
 */
 
+/**
+ * Approach: DP
+ * 在 Coins in a Line II 上面的进一步加大难度。
+ * 但是主要解体思路仍然与 II 相同。
+ * 仍然要使得每一次取完之后，对手取的都是较差的情况。使得对手拿到的硬币总价值最小。
+ * 因为每次取可以在 左/右 任意一边取一个值。故我们需要知道数组中每一段之和是多少。
+ * 然后对每次操作进行分析，得出 状态转移方程（和 II 几乎一样）
+ *
+ * 游戏局面 (State):
+ * dp[i][j] 剩下 i~j 段的硬币时，可以取得的最大值（i为左端位置，j为右端位置）
+ * 玩家决策 (Function):
+ * 因为硬币总价值一定，为了保证 先手最大，保证取完后对手能取到的最小即可。
+ * (死命想法办法坑对方即可)
+ * dp[i][j] = sum[i][j] - Math.min(dp[i+1][j], dp[i][j-1]);
+ * 注意：当 i==j 时，我们只能取到 values[i].
+ * 游戏终止 (Initialize)：
+ * 当唯一剩下的一枚硬币被取走之后，游戏结束。
+ * 故当 i==j 时，dp[i][j] = values[i];
+ *
+ * 实际的流程就是一个 填矩阵 的过程。
+ * 我们发现 dp[i][j] 依赖与 dp[i+1][j] 和 dp[i][j-1] 这两个状态。
+ * 并且 左端位置i 永远不可能大于 右端位置j
+ * 因此我们要填的其实是这个矩阵的 右上部分 的一个三角形。
+ * 而初始化的 base 就是这个矩阵的 对角线。
+ * 按照 从下到上，从左到右 的顺序进行递推，得到最终结果：
+ * 矩阵的 右上角 (dp[0][n-1])
+ */
 public class Solution {
-    /*
+    /**
      * @param values: a vector of integers
      * @return: a boolean which equals to true if the first player will win
      */
     public boolean firstWillWin(int[] values) {
-        if (values == null || values.length == 0) {
-            return false;
-        }
-        if (values.length <= 1) {
+        if (values == null || values.length <= 2) {
             return true;
         }
-        
-        // State & Initialize
-        int len = values.length;
-        int[][] sum = new int[len + 1][len + 1];
-        int[][] dp = new int[len + 1][len + 1];
-        // ��������� for-loop ������Ϊ���� i~j ����Ӳ�ҵ��ܼ�ֵ
-        // ��� ѭ���ķ���������⣬ֻҪ��ʵ�ֹ��ܼ��ɡ��� DP ������for-loop����
-        for (int i = 1; i <= len; i++) {
-            for (int j = i; j <= len; j++) {
+
+        int n = values.length;
+        int[][] sum = new int[n][n];
+        int[][] dp = new int[n][n];
+        // 计算出每一段区间[i...j]的价值之和
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
                 if (i == j) {
-                    sum[i][j] = values[i - 1];
+                    sum[i][j] = values[i];
                 } else {
-                    sum[i][j] = sum[i][j - 1] + values[j - 1];   
+                    sum[i][j] = sum[i][j - 1] + values[j];
                 }
             }
         }
-        
-        // Function & Initialize
-        // ע�����Ƿ�������ʣ������ i~j �ε�Ӳ�Ҽ�ֵ��
-        // ��� loop �� i,j Ӧ�ô� len ��ʼ����ʾʣ�µ�Ӳ�� (�� -> ��)
-        for (int i = len; i >= 1; i--) {
-            for (int j = i; j <= len; j++) {
+
+        // Initialize and Function
+        // bottom to top
+        for (int i = n - 1; i >= 0; i--) {
+            // left to right
+            for (int j = i; j < n; j++) {
                 if (i == j) {
-                    dp[i][j] = values[i - 1];
+                    dp[i][j] = values[i];
                 } else {
-                    dp[i][j] = sum[i][j] - Math.min(dp[i+1][j], dp[i][j-1]);
+                    dp[i][j] = sum[i][j] - Math.min(dp[i + 1][j], dp[i][j - 1]);
                 }
             }
         }
-        
-        // Answer
-        return dp[1][len] > sum[1][len] / 2;
+
+        return dp[0][n - 1] > sum[0][n - 1] / 2;
     }
 }
