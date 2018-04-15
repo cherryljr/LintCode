@@ -75,10 +75,9 @@ public class Solution {
                 int subSum = 0;
                 int minSum = 0;
                 for (int k = 1; k <= cols; k++) {
-                    int temp = sum[down][k] - sum[top][k] - (sum[down][k - 1] - sum[top][k - 1]);
-                    subSum += temp;
+                    subSum = sum[down][k] - sum[top][k];
                     max = Math.max(max, subSum - minSum);
-                    minSum = Math.min(minSum, subSum);
+                    minSum = Math.min(minSum, subSum); 
                 }
             }
         }
