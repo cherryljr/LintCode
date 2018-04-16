@@ -1,176 +1,86 @@
-×îĞ¡ÖµÎÊÌâ£¬SourceÎª×Ö·û´®£¬²»ÄÜËæÒâ¸ü»»Î»ÖÃ => Sequence DP
-
-State:
-	f[i]±íÊ¾Ç°i¸ö×Ö·û×îÉÙĞèÒª¶àÉÙ´Îcut²ÅÄÜ±»·Ö¸îÎª»ØÎÄ×Ó×Ö·û´® (×îÉÙ±»·Ö¸îÎª¶àÉÙ¸ö»ØÎÄ×Ó×Ö·û´® - 1)
-Function:
-	f[i] = Math.min(f[j] + 1), ( j < i & j + 1 ~ iÕâÒ»¶Î×Ö·û´®ÊÇÒ»¸ö»ØÎÄ´®) 
-Initialize: 
-	f[0] = -1, f[i] = i ¨C 1 (ÒòÎª³¤¶ÈÎªiµÄ×Ö·û´®×î¶à¿ÉÒÔ½øĞĞi ¨C 1´Îcut)
-Answer:
-	f[s.length()], ¼´f[n].
-	
-×¢Òâµã£º¶ÔÓÚÒ»¸ö³¤¶ÈÎªnµÄ×Ö·û´®³õÊ¼»¯Ê±ÎÒÃÇ³£³£ĞèÒª¿ª±Ù n + 1 µÄÊı×é¿Õ¼ä£¬°Ñ0Î»Áô³öÀ´¡£
-ÒòÎª¶¨ÒåÊÇÇ°i¸ö×Ö·û£¬¹Ê´æÔÚ¶¨Òå£º¡±Ç°0¸ö×Ö·û¡±£¬¼´¿Õ´®¡£¶øÕâÊÇ²»ÄÜ±»ºöÂÔµôµÄ£¬ÒòÎªÓĞĞí¶à½á¹ûÊÇ´ÓÕâÀïµÃµ½µÄ¡£
-ÕâÑù´ğ°¸µÄ½á¹ûÒ²¾ÍÊÇf[s.length()] => f[n].
-
-¸ÃÌâ¿ÉÓÅ»¯µÄµãÔÚÓÚÎÒÃÇ¿ÉÒÔÊÂÏÈ¾Í½« 0~i ÊÇ·ñÎª»ØÎÄ´®½øĞĞÅĞ¶Ï£¬¶ø²»ÊÇ½«Æä·Åµ½DPµÄforÑ­»·ÖĞ¡£
-ÒòÎªisPalindrome²Ù×÷µÄ¸´ÔÓ¶ÈÎªO(N),Èç¹û½«ÆäĞ´DPµÄFunctionÖĞµÄfor loopÖĞ»áÊ¹µÃ³ÌĞòµÄ¸´ÔÓ¶È
-ÓÉÔ­À´µÄ O(N^2) ±ä³É O(N^3)
-
-ÅĞ¶ÏÒ»¸ö×Ö·û´®¸÷¸ö×Ó´®ÊÇ·ñÎª»ØÎÄ´®²¢´¢´æÊµ¼ÊÉÏÒ²ÊÇÒ»¸öDPÎÊÌâ¡£Ëã·¨¸´ÔÓ¶ÈÎª£ºO(N^2)
-State:
-	f[m][n]±íÊ¾×Ö·û´®´Ó m~n ÊÇ·ñÊÇÒ»¸ö»ØÎÄ´®
-Function:
-	µ±f[m+1][n-1]µÄ×Ó´®Îª»ØÎÄ´®£¬²¢ÇÒA[m] == A[n] µÄÊ±ºò, f[m][n]Îª true 
-	¼´ f[m + 1][n - 1] == true && s.charAt(m) == s.charAt(n)
-Initialize: 
-	Ã¿¸ö×ÖÄ¸Æä±¾Éí¶¼ÊÇÒ»¸ö»ØÎÄ´®£¬¹ÊÁîf[i][i] = true
-Answer:
-	f
-
 /*
+Description
 Given a string s, cut s into some substrings such that every substring is a palindrome.
 Return the minimum cuts needed for a palindrome partitioning of s.
+
 Example
-For example, given s = "aab",
-Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
-Tags Expand 
+Given s = "aab",
+Return 1 since the palindrome partitioning ["aa", "b"] could be produced using 1 cut.
+
+Tags 
 Dynamic Programming
+ */
 
-Thinking process:
-DP problem.
-Use a isPal to record if any [i ~ j] is Palindrome, true / false
-    for any char s[i] and s[j], if s[i] == s[j], then need to check if [i + 1, j - 1] is Palindrome, which is just isPal[i + 1, j - 1].
-Use cut[j] to record the minimal cut from char index [0 ~ j] 
-    by default, cut[j] = j because the worst condition is cut j times at each charactor: none 2+ character palindrome, and split into individual chars.
-    update cut[j] by comparing existing cut[j] and (cut[i - 1] + 1).
-At the end, return cut[s.length() - 1].
-*/
-
-/*
-version 1
-f[i] ±íÊ¾Ç°i¸ö×ÖÄ¸£¬×îÉÙ±»ÇĞ¸î¼¸´Î¿ÉÒÔÇĞ¸îÎª¶¼ÊÇ»ØÎÄ´®¡£
-×îºóreturn f[n]
-*/
-
+/**
+ * Approach: DP
+ * æœ€å°å€¼é—®é¢˜ï¼ŒSourceä¸ºå­—ç¬¦ä¸²ï¼Œä¸èƒ½éšæ„æ›´æ¢ä½ç½® => Sequence DP
+ * State:
+ *  dp[i]è¡¨ç¤ºå‰iä¸ªå­—ç¬¦æœ€å°‘éœ€è¦å¤šå°‘æ¬¡cutæ‰èƒ½è¢«åˆ†å‰²ä¸ºå›æ–‡å­å­—ç¬¦ä¸² (æœ€å°‘è¢«åˆ†å‰²ä¸ºå¤šå°‘ä¸ªå›æ–‡å­å­—ç¬¦ä¸² - 1)
+ * Function:
+ *  éå† [0...i-1] çš„å„ä¸ªå­ä¸²ï¼Œå¦‚æœä¸€æ—¦å‘ç°å­ä¸² [j...i-1] æ˜¯ä¸€ä¸ªå›æ–‡ä¸²ï¼Œé‚£ä¹ˆå°±å¯ä»¥æœ‰ï¼š
+ *  dp[i] = Math.min(dp[i], dp[j] + 1)
+ * Initialize:
+ *  dp[0] = -1, dp[i] = i â€“ 1 (å› ä¸ºé•¿åº¦ä¸ºiçš„å­—ç¬¦ä¸²æœ€å¤šå¯ä»¥è¿›è¡Œi â€“ 1æ¬¡cut)
+ * Answer:
+ *  dp[s.length()]
+ * æ³¨æ„ç‚¹ï¼šå¯¹äºä¸€ä¸ªé•¿åº¦ä¸º n çš„å­—ç¬¦ä¸²åˆå§‹åŒ–æ—¶æˆ‘ä»¬å¸¸å¸¸éœ€è¦å¼€è¾Ÿ n + 1 çš„æ•°ç»„ç©ºé—´ï¼ŒæŠŠ0ä½ç•™å‡ºæ¥ã€‚
+ * å› ä¸ºå®šä¹‰æ˜¯å‰iä¸ªå­—ç¬¦ï¼Œæ•…å­˜åœ¨å®šä¹‰ï¼šâ€å‰0ä¸ªå­—ç¬¦â€ï¼Œå³ç©ºä¸²ã€‚è€Œè¿™æ˜¯ä¸èƒ½è¢«å¿½ç•¥æ‰çš„ï¼Œå› ä¸ºæœ‰è®¸å¤šç»“æœæ˜¯ä»è¿™é‡Œå¾—åˆ°çš„ã€‚
+ * è¿™æ ·ç­”æ¡ˆçš„ç»“æœä¹Ÿå°±æ˜¯f[s.length()] => dp[n].
+ *
+ * è¯¥é¢˜å¯ä¼˜åŒ–çš„ç‚¹åœ¨äºæˆ‘ä»¬å¯ä»¥äº‹å…ˆå°±å°† j~i æ˜¯å¦ä¸ºå›æ–‡ä¸²è¿›è¡Œåˆ¤æ–­å¹¶å­˜å‚¨èµ·æ¥ï¼Œè€Œä¸æ˜¯å°†å…¶æ”¾åˆ°DPçš„forå¾ªç¯ä¸­ã€‚
+ * å› ä¸º isPalindrome æ“ä½œçš„å¤æ‚åº¦ä¸ºO(N),å¦‚æœå°†å…¶å†™DPçš„Functionä¸­çš„for loopä¸­ä¼šä½¿å¾—ç¨‹åºçš„å¤æ‚åº¦
+ * ç”±åŸæ¥çš„ O(N^2) å˜æˆ O(N^3)
+ * å…·ä½“çš„ä¼˜åŒ–æ–¹æ³•ä¹Ÿæ˜¯ä¸€ä¸ª DPã€‚
+ * å¯ä»¥å‚è€ƒï¼š
+ * https://github.com/cherryljr/LintCode/blob/master/Palindrome%20Partitioning.java
+ */
 public class Solution {
     /**
-     * @param s a string
-     * @return an integer
+     * @param s: A string
+     * @return: An integer
      */
     public int minCut(String s) {
-        if (s == null || s.length() == 0) {
+        if (s == null || s.length() <= 1) {
             return 0;
         }
-        boolean[][] isPalindrome = getIsPalindrome(s);
-        
-        // State
-        int[] count = new int[s.length() + 1];
-        
-        // Initialize
+
+        int len = s.length();
+        boolean[][] isPalindrome = new boolean[len][len];
+        getIsPalindromeTable(s, isPalindrome);
+
+        int[] dp = new int[len + 1];
+        // åˆå§‹åŒ– dp æ•°ç»„ï¼Œcutçš„æ¬¡æ•° = å›æ–‡å­—ä¸²ä¸ªæ•°-1
         for (int i = 0; i <= s.length(); i++) {
-            count[i] = i - 1;
+            dp[i] = i - 1;
         }
-        
-        // Function
-        for (int i = 1; i <= s.length(); i++) {
-            for (int j = 0; j < i; j++) {
-            //  if (isPalindrome(s, j, i - 1)), Èç¹ûÊ¹ÓÃ¸Ã·½·¨½«Ê¹µÃËã·¨¸´ÔÓ¶ÈÔö¼ÓÖÁO(N^3)
-            //  ¹ÊÊÂÏÈ¼ÆËã³öÊÇ·ñÎª»ØÎÄ´®µÄÖµ£¬È»ºóÖ±½Ó²éÔÄ¼´¿É£¬¶ø²éÔÄµÄ¸´ÔÓµÄÊÇO(1)µÄ.
-                if (isPalindrome[j][i - 1]) {		// isPalindrome¿ª±ÙµÄÊı×éÊÇ[s.length()]´óĞ¡µÄ£¬¹ÊÕâÀïÊÇ j ~ i - 1
-                    count[i] = Math.min(count[i], count[j] + 1);
-                }
-            }
-        }
-        
-        // Answer
-        return count[s.length()];
-    }
-    
-    //	²»Ê¹ÓÃ¸Ã·½·¨
-    private boolean isPalindrome(String s, int start, int end) {
-        for (int i = start, j = end; i < j; i++, j--) {
-            if (s.charAt(i) != s.charAt(j)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    //	ÊÂÏÈÅĞ¶ÏºÃÊÇ·ñÎª»ØÎÄ´®£¬ Ò²ÊÇÒ»¸öDPµÄ½â·¨
-    private boolean[][] getIsPalindrome(String s) {
-    	  // State
-        boolean[][] isPalindrome = new boolean[s.length()][s.length()];
-				
-				// Initialize
-        for (int i = 0; i < s.length(); i++) {
-            isPalindrome[i][i] = true;
-        }
-        for (int i = 0; i < s.length() - 1; i++) {
-            isPalindrome[i][i + 1] = (s.charAt(i) == s.charAt(i + 1));
-        }
-				
-				// Function
-        for (int length = 2; length < s.length(); length++) {
-            for (int start = 0; start + length < s.length(); start++) {
-                isPalindrome[start][start + length]
-                    = isPalindrome[start + 1][start + length - 1] && s.charAt(start) == s.charAt(start + length);
-            }
-        }
-
-        return isPalindrome;
-    }
-};
-
-/*
-version 2
-f[i] ±íÊ¾Ç°i¸ö×ÖÄ¸£¬×îÉÙ¿ÉÒÔ±»·Ö¸îÎª¶àÉÙ¸ö»ØÎÄ´®
-×îºóreturn f[n] - 1
-*/
-public class Solution {
-    private boolean[][] getIsPalindrome(String s) {
-        boolean[][] isPalindrome = new boolean[s.length()][s.length()];
-
-        for (int i = 0; i < s.length(); i++) {
-            isPalindrome[i][i] = true;
-        }
-        for (int i = 0; i < s.length() - 1; i++) {
-            isPalindrome[i][i + 1] = (s.charAt(i) == s.charAt(i + 1));
-        }
-
-        for (int length = 2; length < s.length(); length++) {
-            for (int start = 0; start + length < s.length(); start++) {
-                isPalindrome[start][start + length]
-                    = isPalindrome[start + 1][start + length - 1] && s.charAt(start) == s.charAt(start + length);
-            }
-        }
-
-        return isPalindrome;
-    }
-
-    public int minCut(String s) {
-        if (s == null || s.length() == 0) {
-            return 0;
-        }
-
-        // State
-        boolean[][] isPalindrome = getIsPalindrome(s);
-        
-        // Initialize
-        int[] f = new int[s.length() + 1];
-        f[0] = 0;
-        
-        // Function
-        for (int i = 1; i <= s.length(); i++) {
-            f[i] = Integer.MAX_VALUE; // or f[i] = i
+        for (int i = 1; i <= len; i++) {
             for (int j = 0; j < i; j++) {
                 if (isPalindrome[j][i - 1]) {
-                    f[i] = Math.min(f[i], f[j] + 1);
+                    dp[i] = Math.min(dp[i], dp[j] + 1);
                 }
             }
         }
-				
-				// Answer
-        return f[s.length()] - 1;
+
+        return dp[len];
+    }
+
+    private void getIsPalindromeTable(String s, boolean[][] isPalindrome) {
+        int len = s.length();
+        // Initialize (åˆå§‹åŒ–å¯¹è§’çº¿ä¸Šçš„å€¼)
+        for (int i = 0; i < len; i++) {
+            isPalindrome[i][i] = true;
+        }
+        // åˆå§‹åŒ–å¯¹è§’çº¿ä¸Šé¢ä¸€æ¡å¯¹è§’çº¿çš„å€¼ (å› ä¸ºå…¶ä¹Ÿä¸ä¾èµ–å…¶ä»–ä½ç½®çš„å€¼ï¼Œå¯ä»¥ç›´æ¥ç®—å‡ºï¼‰
+        for (int i = 0; i < len - 1; i++) {
+            isPalindrome[i][i + 1] = (s.charAt(i) == s.charAt(i + 1));
+        }
+
+        // Function (æ ¹æ®åˆå§‹åŒ–å¥½çš„ base case,æ¨ç®—å‡ºå„ä¸ªä½ç½®çš„å€¼)
+        // ä»ä¸‹åˆ°ä¸Šï¼Œä¸€æ¡ä¸€æ¡å¯¹è§’çº¿åœ°é€’æ¨
+        for (int i = len - 3; i >= 0; i--) {
+            for (int j = i + 2; j < len; j++) {
+                isPalindrome[i][j] = isPalindrome[i + 1][j - 1] && s.charAt(i) == s.charAt(j);
+            }
+        }
     }
 }
