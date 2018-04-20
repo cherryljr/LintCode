@@ -1,25 +1,11 @@
-Çó×éºÏµÄ·½°¸¸öÊı£¬Ê¹Æä½á¹ûÇ¡ºÃÊÇTarget => Backpack DP
-Óë¸ÃÌâÏàËÆµÄ DFS / Traverse ÌâÄ¿Îª£ºCombination Sum, ËûÇó½âµÄÊÇËùÓĞµÄ¾ßÌå·½°¸¡£ËùÒÔÊ¹ÓÃ Traverse
-
-State:
-	f[i] ±íÊ¾Êı×éÖĞÔªËØÏà¼Ó½á¹ûÕıºÃÎªiµÄ×éºÏ¸öÊı
-Function:
-	f[i] = f[i] + f[i - nums[j]]   // µ± nums[j] <= i Ê±
-Initialize:
-	f[0] = 1;
-Answer:
-	f[target]
-
 /*
-
 Description
-Given an integer array nums with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
+Given an integer array nums with all positive numbers and no duplicates,
+find the number of possible combinations that add up to a positive integer target.
 
 Notice
-A number in the array can be used multiple times in the combination. 
+A number in the array can be used multiple times in the combination.
 Different orders are counted as different combinations.
-
-Have you met this question in a real interview? Yes
 
 Example
 Given nums = [1, 2, 4], target = 4
@@ -32,32 +18,50 @@ The possible combination ways are:
 [4]
 return 6
 
-Tags 
+Tags
 Dynamic Programming
-
 */
 
-public class Solution {
+/**
+ * Approach: å®Œå…¨èƒŒåŒ…é—®é¢˜
+ * æ±‚ç»„åˆçš„æ–¹æ¡ˆä¸ªæ•°ï¼Œä½¿å…¶ç»“æœæ°å¥½æ˜¯Target
+ * ä¸è¯¥é¢˜ç›¸ä¼¼çš„ DFS / Traverse é¢˜ç›®ä¸ºï¼šCombination Sum, ä»–æ±‚è§£çš„æ˜¯æ‰€æœ‰çš„å…·ä½“æ–¹æ¡ˆã€‚
+ * æ‰€ä»¥ä½¿ç”¨ DFS éå†æ±‚è§£ã€‚
+ * 
+ * è¿™é“é¢˜ç›®ä¸ æ¢é›¶é’± æœ‰ä¸€ç‚¹ç‚¹åŒºåˆ«ã€‚
+ * åœ¨äºï¼šæœ¬é¢˜ä¸­å¦‚æœ é€‰å–çš„é¡ºåºä¸åŒ é‚£ä¹ˆå°±ç®—ä¸åŒçš„æ–¹æ³•ï¼›
+ * è€Œåœ¨ æ¢é›¶é’± ä¸­ï¼Œåªæœ‰é€‰å–çš„å¸å€¼é¢å€¼æˆ–è€…å¼ æ•°ä¸åŒï¼Œæ‰ç®—ä¸åŒçš„æ–¹æ³•ã€‚
+ * 
+ * ä¸ä¼šçš„å¯ä»¥å‚è€ƒ åŠ¨æ€è§„åˆ’çš„æ¼”è¿› -- å®Œå…¨èƒŒåŒ…é—®é¢˜è¯¦è§£ï¼š
+ * https://github.com/cherryljr/NowCoder/blob/master/%E6%8D%A2%E9%9B%B6%E9%92%B1.java
+ */
+class Solution {
     /**
-     * @param nums an integer array and all positive numbers, no duplicates
+     * @param nums   an integer array and all positive numbers, no duplicates
      * @param target an integer
      * @return an integer
      */
     public int backPackVI(int[] nums, int target) {
-        // State
-        int[] f = new int[target + 1];
-        
-        // Initialize
-        f[0] = 1;
-        
-        // Function
-        for (int i = 1; i <= target; ++i)
-            for (int  j = 0; j < nums.length; ++j)
-                if (i >= nums[j])
-                    f[i] += f[i - nums[j]];
-        
-        // Answer
-        return f[target];
-    }
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
 
+        // State
+        int[] dp = new int[target + 1];
+
+        // Initialize
+        dp[0] = 1;
+
+        // Function
+        for (int i = 1; i <= target; i++) {
+            for (int j = 0; j < nums.length; j++) {
+                if (i >= nums[j]) {
+                    dp[i] += dp[i - nums[j]];
+                }
+            }
+        }
+
+        // Answer
+        return dp[target];
+    }
 }
