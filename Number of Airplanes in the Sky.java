@@ -88,8 +88,9 @@ public class Solution {
  * 不仅能够起到标识（flag）的作用，也能直接拿过来计算。
  * 在表示具有一定特点的参数时，均可以采用这个技巧如 Building Outline 中的大楼高度 height.
  *
- * 类似的问题还有：火车 => 需要多少个轨道； 公司 => 需要多少间会议室。都是同一类问题的马甲。
  * 扫描线问题共同点：一个区间，告诉你开始时间和结束时间。
+ * 类似的问题还有：火车 => 需要多少个轨道； 公司 => 需要多少间会议室。都是同一类问题的马甲。
+ * 时间交集：https://github.com/cherryljr/LintCode/blob/master/Time%20Intersection.java
  */
 public class Solution {
     class TimePoint implements Comparable<TimePoint> {
