@@ -56,9 +56,9 @@ public class Solution {
             this.flag = flag;
         }
 
-        // Attention: 当 两个时间点相同时，需要将 结束 放在 开始之前
+        // Attention: 当 两个时间点相同时，需要将 前一个会议的结束 放在 当前会议的开始 之前
         // 因为存在：当一个会议结束时，另外一个会议正好开始的情况
-        // （此时我们认为是不需要安排另外会议室的）
+        // (此时我们认为是不需要安排另外会议室的)
         public int compareTo(TimePoint p) {
             return this.time - p.time == 0
                     ? this.flag - p.flag : this.time - p.time;
