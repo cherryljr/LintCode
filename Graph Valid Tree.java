@@ -17,12 +17,12 @@ Depth First Search Facebook Zenefits Union Find Breadth First Search Google
 
 /**
  * Approach: Union Find
- * 这道题给了我们一个无向图，让我们来判断其是否为一棵树.
+ * 这道题给了我们一个 无向图 ，让我们来判断其是否为一棵树.
  * 我们知道如果是树的话，所有的节点必须是连接的，也就是说必须是连通图，而且不能有环，
  * 所以问题的核心就变成了验证 是否是连通图 和 是否含有环。
  *  1. 是否是连通图？
  *  这个比较好解决，只需要判断 边的条数 是否等于 点的个数-1 即可。
- *  2. 是否含环？
+ *  2. 是否含环？(只能用于判断 无向图, 有向图判环 请使用 拓扑排序)
  *  这里可以使用 DFS/BFS/Union Find 三种方法。
  *  前两种方法大家已经非常熟悉了，这边主要讲一下第三种方法 Union Find.
  *  这是也 并查集 在 判断连通图是否带环 上的应用。
@@ -30,12 +30,14 @@ Depth First Search Facebook Zenefits Union Find Breadth First Search Google
  *  当我们利用 edges 将各个点连通起来的时候，
  *  如果发现 即将相连的edge对应的两个节点有着共同的 root (Big Brother)，
  *  则说明该图 带环。
- *  因此在本题中我们只需要对 Union Find 的 find() 方法进行稍微的修改，即可实现。
+ *  因此在本题中我们只需要对 Union Find 的 union() 方法进行稍微的修改，即可实现。
  *
  * Union Template: (HashMap with Detail Explanations)
  * https://github.com/cherryljr/LintCode/blob/master/Find%20the%20Weak%20Connected%20Component%20in%20the%20Directed%20Graph.java
  * 参考资料：
  * https://www.geeksforgeeks.org/union-find/
+ * 有向图判环(拓扑排序的应用)：
+ * https://github.com/cherryljr/LintCode/blob/master/Directed%20Graph%20Loop.java
  */
 public class Solution {
     /*
