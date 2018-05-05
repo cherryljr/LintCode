@@ -26,8 +26,8 @@ Sort Array LinkedIn Interval Google Facebook Microsoft Bloomberg Yelp Twitter
  *
  * 扫描线详解：
  * https://github.com/cherryljr/LintCode/blob/master/Number%20of%20Airplanes%20in%20the%20Sky.java
- * 与本题类似的，求 大楼轮廓 问题：
- * https://github.com/cherryljr/LintCode/blob/master/Building%20Outline.java
+ * 与本题类似的问题：
+ * 最长场景：https://github.com/cherryljr/LintCode/blob/master/The%20Longest%20Scene.java
  */
 
 /**
