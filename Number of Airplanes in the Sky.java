@@ -82,6 +82,8 @@ public class Solution {
  *  时刻（相当于X轴的坐标） 和 在该时间点上发生的动作 (flag) 是 起飞 还是 降落。
  * 然后我们对各个 TimePoint 按照 时间顺序 进行排序（如果时间相同，那么我们选择降落动作发生在前面即可）。
  * 这是因为存在一种情况：在一个时间点上，同时有一台飞机要降落，而另一台飞机要起飞。因此我们这边的做法是先让一台降落。
+ *  (注意：建立扫描线所需要的结构时，我们需要对 TimePoint 进行排序，此时我们需要考虑好当两个 TimePoint 的 time 值相同时，应该如何排序。
+ *  对于不同的题目要求，我们需要进行不同的排序处理。分析起来还是非常简单的，这里只是想提醒大家不要忘记处理 time 相等的情况)
  * 然后使用 扫描线 从左往右 对排序数组进行扫描，也就是相当于在时间线上从前向后顺序移动，
  * 遇到 起飞点 就+1，遇到 降落点 就-1，记录其中的 最大值max 即可。
  * 在 起飞/降落 的表示上，我们直接使用了一个 int 类型，起飞 = 1，降落 = -1。
@@ -91,6 +93,14 @@ public class Solution {
  * 扫描线问题共同点：一个区间，告诉你开始时间和结束时间。
  * 类似的问题还有：火车 => 需要多少个轨道； 公司 => 需要多少间会议室。都是同一类问题的马甲。
  * 时间交集：https://github.com/cherryljr/LintCode/blob/master/Time%20Intersection.java
+ * 会议室：https://github.com/cherryljr/LintCode/blob/master/Meeting%20Rooms.java
+ * 会议室II：https://github.com/cherryljr/LintCode/blob/master/Meeting%20Rooms%20II.java
+ * 合并区间：https://github.com/cherryljr/LintCode/blob/master/Merge%20Intervals.java
+ * 最长场景（合并区间的升级版）：https://github.com/cherryljr/LintCode/blob/master/The%20Longest%20Scene.java
+ *
+ * 然而实际上扫描线作为解决计算几何方面的利器，经常不会单独靠，而是与 线段树 等结合着一起考，比如经典问题：
+ * 重复矩形的边长计算：http://poj.org/problem?id=1177
+ * 关于扫描线的进一步总结可以参考（ACM难度级别）：http://openinx.github.io/2013/01/01/plane-sweep-thinking/
  */
 public class Solution {
     class TimePoint implements Comparable<TimePoint> {
