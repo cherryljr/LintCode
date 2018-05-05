@@ -113,13 +113,11 @@ public class Solution {
         // Function
         for (int i = 1; i <= A.length; i++) {
             // 注意与 完全背包问题 区分，j是从 m 向 0 进行遍历的
-            for (int j = m; j > 0; j--) {
-                // gurantee the size is big enough to put A[i-1] into the back.
-                if (j >= A[i - 1]) {
-                    // 此处的 dp[j] 相当于 dp[i-1][j]
-                    // dp[j-A[i-1]] 相当于 dp[i-1][j-A[i-1]]
-                    dp[j] = Math.max(dp[j], dp[j - A[i- 1]] + V[i - 1]);
-                }
+            // Gurantee the size is big enough to put A[i-1] into the backpack.
+            for (int j = m; j >= A[i - 1]; j--) {
+                // 此处的 dp[j] 相当于 dp[i-1][j]
+                // dp[j-A[i-1]] 相当于 dp[i-1][j-A[i-1]]
+                dp[j] = Math.max(dp[j], dp[j - A[i- 1]] + V[i - 1]);
             }
         }
 
