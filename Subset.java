@@ -65,7 +65,10 @@ class Solution {
         // deep copy
         // results.add(new ArrayList<>(subset)); 记住这里要new一个List空间用来存储结果才行
         // 这里是遍历所有的子集，所以无需判断条件
-        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中并且 return
+        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中，
+        // 并根据实际情况判断是否需要 return 结束当前调用，来节省相应的时间
+        // 可以直接 return 的有：Combination Sum 系列: https://github.com/cherryljr/LintCode/blob/master/Combination%20Sum.java
+        // 不可以直接 return 的有：Word Ladder II: https://github.com/cherryljr/LeetCode/blob/master/Word%20Ladder%20II.java
         results.add(new ArrayList<Integer>(subset));
 
         //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取.
