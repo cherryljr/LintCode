@@ -64,8 +64,8 @@ class Solution {
         if (nums == null) {
             return results;
         }
-    		//	注意：nums == null与nums.length == 0是不同的
-    		//	虽然大部分情况下他们的处理方式是相同的，但是在本题中是不一样的
+        // 注意：nums == null与nums.length == 0是不同的
+        // 虽然大部分情况下他们的处理方式是相同的，但是在本题中是不一样的
         if(nums.length == 0) {
             results.add(new ArrayList<Integer>());
             return results;
@@ -82,15 +82,15 @@ class Solution {
     
     public void helper(ArrayList<List<Integer>> results, 
                    ArrayList<Integer> list, boolean[] visited, int[] nums) {
-        
         if(list.size() == nums.length) {
             results.add(new ArrayList<Integer>(list));
+            // 当获得一个符合要求的 Permutation 后，我们可以直接 return 来结束当前调用以节省时间
             return;
         }
         
         for(int i = 0; i < nums.length; i++) {
             if (visited[i] || ( i != 0 && nums[i] == nums[i - 1]
-            && !visited[i-1])){
+            && !visited[i-1])) {
                 continue;
             }
             /*
