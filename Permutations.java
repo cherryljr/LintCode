@@ -46,9 +46,7 @@ class Solution {
      * @return: A list of permutations.
      */
     public List<List<Integer>> permute(int[] nums) {
-        // write your code here
         List<List<Integer>> rst = new ArrayList<>();
-        
         if (nums == null) {
             return null;
         }
@@ -66,10 +64,10 @@ class Solution {
     private void helper(List<List<Integer>> rst,
                         List<Integer> list, 
                         int[] nums) {
-        //  results.add(subset); 将符合条件的答案加入到results中，并return
+        // results.add(subset); 将符合条件的答案加入到results中，并return
         if (list.size() == nums.length) {
             rst.add(new ArrayList<Integer>(list));
-            //	记得需要return
+            // 此处可以直接return来节省时间
             return;
         }
         
