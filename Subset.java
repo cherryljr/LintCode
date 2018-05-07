@@ -95,6 +95,9 @@ class Solution {
  * 过程就是 整数 => 二进制 => 对应集合。
  * 当我们判断某一位上的数取或者不取时，仍然可以用到位运算来实现。
  * 只需要用 1 和那一位上的数进行 与操作 即可。
+ *
+ * 该做法在 High Capacity Backpack 中就使用到了（折半枚举）
+ * https://github.com/cherryljr/LintCode/blob/master/High%20Capacity%20Backpack.java
  */
 public class Solution {
 
