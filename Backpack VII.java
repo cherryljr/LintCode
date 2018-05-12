@@ -32,7 +32,7 @@ Return:400
  *
  * 类似的问题还有：
  *  Backpack VIII：
- *
+ *  https://github.com/cherryljr/LintCode/edit/master/Backpack%20VIII.java
  *  美丽的项链：
  *  https://github.com/cherryljr/NowCoder/blob/master/%E7%BE%8E%E4%B8%BD%E7%9A%84%E9%A1%B9%E9%93%BE.java
  */
