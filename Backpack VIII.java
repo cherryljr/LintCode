@@ -27,7 +27,7 @@ Backpack Dynamic Programming
  * 而我们这里是认为一个都不取的方案是成立的，因此结果需要 减去1.
  *
  * 关于 多重背包问题 的详细解析与解法优化可以参考：
- * 
+ * https://github.com/cherryljr/LintCode/edit/master/Backpack%20VII.java
  */
 public class Solution {
     /**
