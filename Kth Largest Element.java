@@ -19,6 +19,7 @@ Sort Quick Sort
 /**
  * 用到的知识点：QuickSelect, 详细介绍参见：
  * https://en.wikipedia.org/wiki/Quickselect
+ * https://github.com/cherryljr/LintCode/blob/master/Sort%20Colors.java
  *
  * 解法的分析历程，一步步推进优化：
  *  1. 对整个数据进行 Sort, 然后取第 k 个元素即可。
@@ -39,8 +40,10 @@ Sort Quick Sort
  *  其本身对应的也就是 随机快速排序 的 partition 方法。
  *  5. BFPRT算法
  *  关于 BFPRT算法，想要了解的可以查看：http://www.jianshu.com/p/a43b0e1712d1
+ *  Get more details here：https://discuss.leetcode.com/topic/14597/solution-explained
  *
- * Get more details here：https://discuss.leetcode.com/topic/14597/solution-explained
+ * 类似的问题：求n个数中的前k小的数（TopK）
+ * https://github.com/cherryljr/NowCoder/blob/master/n%E4%B8%AA%E6%95%B0%E9%87%8C%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA.java
  */
 
 /**
