@@ -45,7 +45,7 @@ LintCode Copyright Heap Matrix
  *  因此总体时间复杂为：O(m * n * log(m + n))
  */
 public class Solution {
-    class Cell {
+    class Cell implements Comparable<Cell> {
         int row;
         int col;
         int height;
@@ -54,6 +54,11 @@ public class Solution {
             this.row = row;
             this.col = col;
             this.height = height;
+        }
+
+        @Override
+        public int compareTo(Cell other) {
+            return this.height - other.height;
         }
     }
 
@@ -66,49 +71,53 @@ public class Solution {
             return 0;
         }
 
-        PriorityQueue<Cell> pq = new PriorityQueue<>(1, (a, b) -> a.height - b.height);
+        PriorityQueue<Cell> pq = new PriorityQueue<>();
         int rows = heights.length, cols = heights[0].length;
         boolean[][] visited = new boolean[rows][cols];
 
-        for (int i = 0; i < rows; i++) {
-            visited[i][0] = true;
-            pq.offer(new Cell(i, 0, heights[i][0]));
-            visited[i][cols - 1] = true;
-            pq.offer(new Cell(i, cols - 1, heights[i][cols - 1]));
-        }
+        // 先将最外围一圈的水位信息放入到优先队列中，并在 visited 中将对应的值置为true
         for (int i = 0; i < cols; i++) {
             visited[0][i] = true;
             pq.offer(new Cell(0, i, heights[0][i]));
             visited[rows - 1][i] = true;
             pq.offer(new Cell(rows - 1, i, heights[rows - 1][i]));
         }
+        for (int i = 1; i < rows - 1; i++) {
+            visited[i][0] = true;
+            pq.offer(new Cell(i, 0, heights[i][0]));
+            visited[i][cols - 1] = true;
+            pq.offer(new Cell(i, cols - 1, heights[i][cols - 1]));
+        }
 
         int rst = 0;
         int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         // 从最外层边界开始，选择水位最低的点开始灌水，检测该点 四周 的所有相邻点（未被遍历过的），
-        // 如果相邻点水位更低，说明可以成功灌水。可以被 Trap 的水位为：cell.height - heights[row][col]
-        // 然后将该相邻点的水位更新为 cell.height. visited 状态置为 true. 并将其 add 到 minHeap 中，完成向内移动。
+        // 如果相邻点水位更低，说明可以成功灌水。可以被 Trap 的水位为：currCell.height - heights[row][col]
+        // 然后将该相邻点的水位更新为 currCell.height. visited 状态置为 true. 并将其 add 到 minHeap 中，完成向内移动。
         // 这样一次灌水操作完成。
         // 如果相邻点水位更高，说明无法成功灌水。直接将该点的 visited 状态置为 true, 然后 add 到 minHeap 中，
         // 同样也完成了向内移动，灌水操作完成。就这样利用类似 BFS 的操作，对所有的相邻点都进行一次灌水操作即可。
         while (!pq.isEmpty()) {
-            Cell cell = pq.poll();
+            Cell currCell = pq.poll();
             for (int[] dir : dirs) {
-                int row = cell.row + dir[0];
-                int col = cell.col + dir[1];
+                int nextRow = currCell.row + dir[0];
+                int nextCol = currCell.col + dir[1];
                 // 如果 超出边界 或者 该点已经被遍历过 则直接跳过
-                if (row < 0 || row >= rows || col < 0 || col >= cols || visited[row][col]) {
+                if (nextRow < 0 || nextRow >= rows || nextCol < 0 || nextCol >= cols || visited[nextRow][nextCol]) {
                     continue;
                 }
-                visited[row][col] = true;
-                // 能否 Trap 到水，以及能够 Trap 到多少水
-                rst += Math.max(0, cell.height - heights[row][col]);
+                visited[nextRow][nextCol] = true;
+                // 只有当 currCell 的水位更高，才能向相邻点灌水，即能 Trap 到水
+                if (currCell.height > heights[nextRow][nextCol]) {
+                    rst += currCell.height - heights[nextRow][nextCol];
+                    // 成功灌水后，相邻点的水位也变成了 currCell.height
+                    heights[nextRow][nextCol] = currCell.height;
+                }
                 // 完成向内移动
-                pq.offer(new Cell(row, col, Math.max(cell.height, heights[row][col])));
+                pq.offer(new Cell(nextRow, nextCol, Math.max(currCell.height, heights[nextRow][nextCol])));
             }
         }
 
         return rst;
     }
 }
-
