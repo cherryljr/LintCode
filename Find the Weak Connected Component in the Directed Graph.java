@@ -41,6 +41,7 @@ Return {A,B,D}, {C,E,F}. Since there are two connected component which are {A,B,
  * 参考资料：
  * http://blog.csdn.net/dm_vincent/article/details/7655764
  * http://blog.csdn.net/dm_vincent/article/details/7769159
+ * https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
  */
 
 /**
