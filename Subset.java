@@ -45,31 +45,48 @@ class Solution {
             return results;
         }
         if (nums.length == 0) {
-            results.add(new ArrayList<Integer>());
+            results.add(new ArrayList<>());
             return results;
         }
 
+        /*
+        这里虽然是因为题目对结果的输出要求从而进行的排序
+        但是需要强调一下：DFS/Backtracking中 通常都需要 对输入进行排序
+        从而利用排序好的特性对枚举过程进行一个 剪枝 操作
+        这点在 Combination Sum, 网易_幸运袋子, Permutations II(去重) 中都有应用
+        所以下次遇到 Backtracking 不管如何，请先排序.确认排序没有任何用处的时候，再去掉该过程也不迟。
+        (而且排序对于想解题思路也很有帮助，当然也存在 DFS 图/树 的时候，那就没法排序了)
+         */
         Arrays.sort(nums);
-        helper(new ArrayList<Integer>(), nums, 0, results);
+        dfs(new ArrayList<>(), nums, 0, results);
         return results;
     }
 
 
     // 递归三要素
     // 1. 递归的定义：在 Nums 中找到所有以 subset 开头的的集合，并放到 results
-    private void helper(ArrayList<Integer> subset,
-                        int[] nums,
-                        int startIndex,
-                        ArrayList<ArrayList<Integer>> results) {
-        // 2. 递归的拆解
-        // deep copy
-        // results.add(new ArrayList<>(subset)); 记住这里要new一个List空间用来存储结果才行
-        // 这里是遍历所有的子集，所以无需判断条件
-        // 其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到resuts中，
-        // 并根据实际情况判断是否需要 return 结束当前调用，来节省相应的时间
-        // 可以直接 return 的有：Combination Sum 系列: https://github.com/cherryljr/LintCode/blob/master/Combination%20Sum.java
-        // 不可以直接 return 的有：Word Ladder II: https://github.com/cherryljr/LeetCode/blob/master/Word%20Ladder%20II.java
-        results.add(new ArrayList<Integer>(subset));
+    private void dfs(ArrayList<Integer> subset,
+                     int[] nums,
+                     int startIndex,
+                     ArrayList<ArrayList<Integer>> results) {
+        /*
+        2. 递归的拆解
+        deep copy
+        ① results.add(new ArrayList<>(subset)); 记住这里要new一个List空间用来存储结果才行
+        ② 这里是遍历所有的子集，所以无需判断条件（均满足条件，我们需要 add 所有的方案）
+        其他条件下，需要判断遍历得到的答案是否满足条件，满足的话将其add到results中，
+        ③ 添加完结果后，根据实际情况判断是否需要直接 return 结束以当前调用，来节省相应的时间
+        可以直接 return 的有 —— Combination Sum 系列：
+            https://github.com/cherryljr/LintCode/blob/master/Combination%20Sum.java
+        从树的遍历角度上理解就，当前路径已经符合要求:sum = target，下面的节点已经不可能再被选择
+        不然就超过 target 了（题目中说明全部为正数）,此时我们可以直接return.
+        不可以直接 return 的有 —— 网易_幸运的袋子：
+            https://github.com/cherryljr/NowCoder/blob/master/%E7%BD%91%E6%98%93_%E5%B9%B8%E8%BF%90%E7%9A%84%E8%A2%8B%E5%AD%90.java
+        依旧从树的遍历上理解，虽然当前路径已经满足要求，(sum > product)。但是当前节点下面的节点仍有被选择的可能。
+        因此这种情况下，我们不能直接 return,否则将错过一些答案。
+        另外，本题也是属于不能直接 return 的，不过它不需要判断条件，自然就容易被大家忽略
+         */
+        results.add(new ArrayList<>(subset));
 
         //  i表示当前loop要取的元素的下标，startIndex表示从该元素开始取.
         //  有些题目中可能会限制i与starIndex的关系.
@@ -79,7 +96,7 @@ class Solution {
             subset.add(nums[i]);
             // 寻找所有以 [1,2] 开头的集合，并扔到 results
             // 注意这里递归传入的是 i+1 表示 startIndex 从下一个位置开始
-            helper(subset, nums, i + 1, results);
+            dfs(subset, nums, i + 1, results);
             // [1,2] -> [1]  回溯
             subset.remove(subset.size() - 1);
         }
