@@ -1,12 +1,3 @@
-1. 可以把integer -> string -> char array.
-
-2. 或者使用 num = num & (num - 1) （该操作为取出num的二进制表示的第i位上的数）
-
-3. 位操作的总结与例题汇总：
-http://blog.csdn.net/black_ox/article/details/46411997
-http://www.jiuzhang.com/tutorial/bit-manipulation/82
-
-```
 /*
 Count how many 1 in binary representation of a 32-bit integer.
 
@@ -20,15 +11,18 @@ Given 1023, return 9
 Challenge
 If the integer is n bits with m 1 bits. Can you do it in O(m) time?
 
-Tags Expand 
+Tags Expand
 Binary Bit Manipulation
-
-Thoughts:
-1. break string into char[]
-2. convert char[] into integer using Character.getNumericValue()
-
 */
 
+// 位操作的总结与例题汇总：
+// http://blog.csdn.net/black_ox/article/details/46411997
+// http://www.jiuzhang.com/tutorial/bit-manipulation/82
+
+/**
+ * Approach 1: Convert Integer to binaryString
+ * 可以把integer -> binaryString -> 计算二进制中有几个1即可
+ */
 public class Solution {
     /**
      * @param num: an integer
@@ -46,11 +40,12 @@ public class Solution {
         }
         return sum;
     }
-};
+}
 
-/************************************* The other way *************************************************/
-//	Use bit manipulation
-
+/**
+ * Approach 2: Bit Manipulation
+ * 使用 num = num & (num - 1) （该操作为去除num的二进制表示的第i位上的数）
+ */
 public class Solution {
     /**
      * @param num: an integer
@@ -58,12 +53,12 @@ public class Solution {
      */
     public int countOnes(int num) {
         int count = 0;
-        
+
         while (num != 0) {
             num = num & (num - 1);
             count++;
         }
-        
+
         return count;
     }
-};
+}
