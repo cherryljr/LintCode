@@ -45,6 +45,14 @@ public class Solution {
 /**
  * Approach 2: Bit Manipulation
  * 使用 num = num & (num - 1) （该操作为去除num的二进制表示的第i位上的数）
+ * 
+ * 插个有趣的题外话：
+ * 可以利用 num & -num 来迅速取出右起连续的 0 以及首次出现的 1 
+ * 如果不清楚这个的可以参考：
+ *  https://github.com/cherryljr/LeetCode/blob/master/Binary%20Index%20Tree%20Template.java
+ *
+ * 用0x077CB531计算末尾0的个数：
+ *  http://www.matrix67.com/blog/archives/3985
  */
 public class Solution {
     /**
