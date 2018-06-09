@@ -53,6 +53,7 @@ public class Solution {
     }
 
     private void dfs(int[] order, int[][] pattern, int[] arr, int startIndex) {
+        // 递归的终止条件，并利用 isGood() 进行了剪枝，使得其不满足时可以提前退出
         if (!isGood(order, arr) || startIndex == pattern.length) {
             return;
         }
@@ -108,7 +109,7 @@ public class Solution {
     }
 
     private void dfs(int[] order, int[][] pattern, int[] arr, int startIndex) {
-        // 递归的终止条件
+        // 递归的终止条件，并利用 isGood() 进行了剪枝，使得其不满足时可以提前退出
         if (!isGood(order, arr) || startIndex == pattern.length) {
             return;
         }
