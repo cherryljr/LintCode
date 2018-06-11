@@ -34,7 +34,7 @@ LeetCode: https://leetcode.com/problems/word-break-ii/description/
  *  https://leetcode.com/problems/word-break-ii/discuss/44167/My-concise-JAVA-solution-based-on-memorized-DFS
  *
  * Word Break:
- *  https://github.com/cherryljr/LintCode/blob/master/Word%20Break.java
+ *  https://github.com/cherryljr/LintCode/blob/master/Word%20Break.java 
  */
 class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {
