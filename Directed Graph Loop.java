@@ -120,6 +120,8 @@ public class Solution {
      * @return: Return if the graph is cyclic
      */
     public boolean isCyclicGraph(int[] start, int[] end) {
+        // 与 Approach 1 中相同，首先我们需要获取所有节点的最大值
+    	// 这样我们才知道需要开多大的空间
         int max = 0;
         for (int i = 0; i < start.length; i++) {
             max = Math.max(max, start[i]);
