@@ -49,7 +49,7 @@ class Solution {
      * @param d: The weight of points set
      * @return: Return the maximum product
      */
-    public int getProduct(int[] x, int[] y, int[] d) {
+    public int getProduct(int[] x, int[] y, int[] d) { 
         Map<Integer, TreeNode> tree = new HashMap<>();
         for (int i = 0; i < d.length; i++) {
             tree.put(i + 1, new TreeNode(d[i]));
