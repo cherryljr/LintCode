@@ -120,8 +120,6 @@ public class Solution {
      * @return: Return if the graph is cyclic
      */
     public boolean isCyclicGraph(int[] start, int[] end) {
-        // 与 Approach 1 中相同，首先我们需要获取所有节点的最大值
-        // 这样我们才知道需要开多大的空间
         int max = 0;
         for (int i = 0; i < start.length; i++) {
             max = Math.max(max, start[i]);
@@ -132,16 +130,14 @@ public class Solution {
         // 用于标记 0~max 范围内，哪些值是节点
         boolean[] isNode = new boolean[max + 1];
         // 初始化 graph
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i <= max; i++) {
-            graph.add(new ArrayList<>());
-        }
-        // 计算各个节点的 入度 并 建立边
+        Map<Integer, List<Integer>> graph = new HashMap<>();
         for (int i = 0; i < start.length; i++) {
+            // Build the graph
+            graph.computeIfAbsent(start[i], x -> new ArrayList<>()).add(end[i]);
+            // 计算各个节点的 入度 信息，并标记为有效点
             indegree[end[i]]++;
             isNode[start[i]] = true;
             isNode[end[i]] = true;
-            graph.get(start[i]).add(end[i]);
         }
 
         // 将所有 入度为0 的节点，加入到 queue 中准备开始 BFS (拓扑排序)
@@ -158,12 +154,14 @@ public class Solution {
         // 开始 BFS
         while (!queue.isEmpty()) {
             int curr = queue.poll();
-            for (int neigh : graph.get(curr)) {
-                indegree[neigh]--;
-                // 如果因为该条边的消失，导致该邻居节点入度减为 0
-                // 说明该节点可以被完成了，故将其加入到 queue 中
-                if (indegree[neigh] == 0) {
-                    queue.offer(neigh);
+            if (graph.containsKey(curr)) {
+                for (int neigh : graph.get(curr)) {
+                    indegree[neigh]--;
+                    // 如果因为该条边的消失，导致该邻居节点入度减为 0
+                    // 说明该节点可以被完成了，故将其加入到 queue 中
+                    if (indegree[neigh] == 0) {
+                        queue.offer(neigh);
+                    }
                 }
             }
         }
