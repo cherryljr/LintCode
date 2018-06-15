@@ -36,6 +36,12 @@ LintCode Copyright Geeks for Geeks Depth First Search Topological Sort Breadth F
  * 每个包都它各自的依赖，比如 C 依赖于 A 和 B，那么在 A,B 被建立之前，C 是无法被创建的。
  * 那 IDE 如何知道这件事呢？这就使用到了 拓扑排序了。
  *
+ * 这里提供的是基于 HashMap 来实现的模板，适用范围更广，相应的运行效率也会比较低。
+ * 通常情况下，我们可以使用 List/Array 来替代实现。
+ *（本题中因为信息由 DirectedGraphNode 类给出，所以使用 HashMap 会更好写）
+ * 基于 List/Array 的拓扑排序模板：
+ *  https://github.com/cherryljr/LintCode/blob/master/Course%20Schedule%20II.java
+ *
  * 参考资料：
  * https://www.youtube.com/watch?v=ddTC4Zovtbc
  * https://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/
