@@ -7,22 +7,36 @@
  *  2. 从 Trie Tree 中删除某一个单词
  *  3. 在 Trie Tree 中搜索某一个单词，看是否存在
  *  4. 在 Trie Tree 中搜索存在几个以 preWord 作为前缀的单词
+ *
+ * 相关应用例题有：
+ * Longest Word in Dictionary:
+ *  https://github.com/cherryljr/LeetCode/blob/master/Longest%20Word%20in%20Dictionary.java
+ * Prefix and Suffix Search:
+ *  https://github.com/cherryljr/LeetCode/blob/master/Prefix%20and%20Suffix%20Search.java
+ * Short Encoding of Words:
+ *  https://github.com/cherryljr/LeetCode/blob/master/Short%20Encoding%20of%20Words.java
+ * Add and Search Word:
+ *  https://github.com/cherryljr/LintCode/blob/master/Add%20and%20Search%20Word.java
+ * Maximum XOR of Two Numbers in an Array:
+ *  https://github.com/cherryljr/LeetCode/blob/master/Maximum%20XOR%20of%20Two%20Numbers%20in%20an%20Array.java
+ * Word Search II:
+ *  https://github.com/cherryljr/LintCode/blob/master/Word%20Search%20II.java
  */
 class TrieTree {
 
     public static class TrieNode {
+        public TrieNode[] child;
         // 插入/删除一个单词时，每当经过节点 node(字符), 其 path +1/-1
         // 这在我们进行 前缀个数 搜索时，非常方便
         public int path;
         // 以当前节点作为结尾的单词有几个（这边考虑了重复的单词）
         // 这个参数可以根据需求进行修改，比如在 Word Search II 我们为了方便直接使用了 String word
         public int end;
-        public TrieNode[] child;
 
         public TrieNode() {
-            path = 0;
-            end = 0;
-            child = new TrieNode[26];
+            this.child = new TrieNode[26];
+            this.path = 0;
+            this.end = 0;
         }
     }
 
@@ -38,37 +52,37 @@ class TrieTree {
             if (word == null) {
                 return;
             }
-            char[] chs = word.toCharArray();
-            TrieNode node = root;
+            char[] chars = word.toCharArray();
+            TrieNode currNode = root;
             int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.child[index] == null) {
-                    node.child[index] = new TrieNode();
+            for (int i = 0; i < chars.length; i++) {
+                index = chars[i] - 'a';
+                if (currNode.child[index] == null) {
+                    currNode.child[index] = new TrieNode();
                 }
-                node = node.child[index];
-                node.path++;
+                currNode = currNode.child[index];
+                currNode.path++;
             }
-            node.end++;
+            currNode.end++;
         }
 
         // 删除单词 word
         public void delete(String word) {
             if (search(word) != 0) {
-                char[] chs = word.toCharArray();
-                TrieNode node = root;
+                char[] chars = word.toCharArray();
+                TrieNode currNode = root;
                 int index = 0;
-                for (int i = 0; i < chs.length; i++) {
-                    index = chs[i] - 'a';
-                    if (--node.child[index].path == 0) {
+                for (int i = 0; i < chars.length; i++) {
+                    index = chars[i] - 'a';
+                    if (--currNode.child[index].path == 0) {
                         // 如果 node 的 path 为 0，说明可以直接移除了，
                         // 同样后面的节点也可以直接移除了，不用就遍历了
-                        node.child[index] = null;
+                        currNode.child[index] = null;
                         return;
                     }
-                    node = node.child[index];
+                    currNode = currNode.child[index];
                 }
-                node.end--;
+                currNode.end--;
             }
         }
 
@@ -77,35 +91,35 @@ class TrieTree {
             if (word == null) {
                 return 0;
             }
-            char[] chs = word.toCharArray();
-            TrieNode node = root;
+            char[] chars = word.toCharArray();
+            TrieNode currNode = root;
             int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.child[index] == null) {
+            for (int i = 0; i < chars.length; i++) {
+                index = chars[i] - 'a';
+                if (currNode.child[index] == null) {
                     return 0;
                 }
-                node = node.child[index];
+                currNode = currNode.child[index];
             }
-            return node.end;
+            return currNode.end;
         }
 
-        // 查找单词前缀 preWord
-        public int prefixNumber(String preWord) {
-            if (preWord == null) {
+        // 查找单词前缀 prefix
+        public int prefixNumber(String prefix) {
+            if (prefix == null) {
                 return 0;
             }
-            char[] chs = preWord.toCharArray();
-            TrieNode node = root;
+            char[] chars = prefix.toCharArray();
+            TrieNode currNode = root;
             int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.child[index] == null) {
+            for (int i = 0; i < chars.length; i++) {
+                index = chars[i] - 'a';
+                if (currNode.child[index] == null) {
                     return 0;
                 }
-                node = node.child[index];
+                currNode = currNode.child[index];
             }
-            return node.path;
+            return currNode.path;
         }
     }
 
@@ -122,12 +136,12 @@ class TrieTree {
         System.out.println(trie.search("cherry"));
         trie.delete("cherry");
         System.out.println(trie.search("cherry"));
-        trie.insert("cherryA");
-        trie.insert("cherryC");
-        trie.insert("cherryB");
-        trie.insert("cherryD");
-        trie.delete("cherryA");
-        System.out.println(trie.search("cherryA"));
+        trie.insert("cherrya");
+        trie.insert("cherryb");
+        trie.insert("cherryc");
+        trie.insert("cherryd");
+        trie.delete("cherrya");
+        System.out.println(trie.search("cherrya"));
         System.out.println(trie.prefixNumber("cherry"));
     }
 
