@@ -16,7 +16,7 @@ Return true because "lintcode" can be break as "lint code".
  *
  * 类似的问题：
  * Largest Sum of Averages：
- * 
+ *  https://github.com/cherryljr/LeetCode/blob/master/Largest%20Sum%20of%20Averages.java
  * Word Break II:
  *  https://github.com/cherryljr/LintCode/blob/master/Word%20Break%20II.java
  */
@@ -41,15 +41,15 @@ public class Solution {
         if (dict.contains(s)) {
             return true;
         }
+        // if the str state has been calculated, return the result directly
+        if (mem.containsKey(s)) {
+            return mem.get(s);
+        }
 
         for (int i = 1; i < s.length(); i++) {
             // the left part (substring)
             String subStr = s.substring(0, i);
-            if (!mem.containsKey(subStr)) {
-                // the subStr state hasn't been calculated, so we need to do recursion of it
-                mem.put(subStr, wordBreak(subStr, mem, dict));
-            }
-            if (dict.contains(s.substring(i)) && mem.get(subStr)) {
+            if (dict.contains(s.substring(i)) && wordBreak(subStr, mem, dict)) {
                 // if the word dictionary contains the right substring (word)
                 // and the left subStr can be break into a space-separated sequence of one or more dictionary words
                 mem.put(s, true);
@@ -61,6 +61,7 @@ public class Solution {
         return false;
     }
 }
+
 
 /**
  * Approach 2: DP
