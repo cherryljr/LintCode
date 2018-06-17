@@ -51,7 +51,12 @@ class Solution {
     }
 
     private List<String> wordBreak(String s, Map<String, List<String>> mem, Set<String> wordSet) {
-        // 因为我们需要的所有方案，因此首先我们需要建立一个 rst 来存储所有的结果
+        // 如果当前值的结果已经被计算过，那么直接返回记录的结果即可
+        if (mem.containsKey(s)) {
+            return mem.get(s);
+        }
+
+        // 因为我们需要的所有方案，因此我们需要建立一个 rst 来存储所有的结果
         List<String> rst = new LinkedList<>();
         // 如果s本身在 wordSet 中，那么其本身就能作为一种方案
         if (wordSet.contains(s)) {
@@ -67,13 +72,9 @@ class Solution {
             }
 
             String left = s.substring(0, i);
-            // 如果左半部分的结果还未被计算过，那么递归调用子过程计算
-            if (!mem.containsKey(left)) {
-                mem.put(left, wordBreak(left, mem, wordSet));
-            }
             // 在左半部分所有结果的末尾添加上右半部分形成的单词
             // 比如 {"cats and", "cat sand"},都要添加上 "dog"
-            List<String> tempRst = append(mem.get(left), right);
+            List<String> tempRst = append(wordBreak(left, mem, wordSet), right);
             for (String temp : tempRst) {
                 rst.add(temp);
             }
