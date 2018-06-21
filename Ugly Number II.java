@@ -61,7 +61,8 @@ public class Solution {
  * 时间复杂度：O(n + T)
  * 
  * Fellow Up:
- * 
+ *  Super Ugly Number:
+ *  https://github.com/cherryljr/LintCode/blob/master/Super%20Ugly%20Number.java
  * 参考资料：
  *  http://zxi.mytechroad.com/blog/math/leetcode-264-ugly-number-ii/
  */
