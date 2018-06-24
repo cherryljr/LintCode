@@ -1,6 +1,6 @@
 /**
  * 这边只是提供了一个 Trie Tree 的模板，实际使用时，
- * 可以在这个基础上根据题目要求进行 修改。
+ * 可以在这个基础上根据题目要求进行修改。
  *
  * 本模板拥有的功能为：
  *  1. 建立 Trie Tree, 根据 insert 方法（即可以向树中 插入 一个单词）
@@ -8,7 +8,7 @@
  *  3. 在 Trie Tree 中搜索某一个单词，看是否存在
  *  4. 在 Trie Tree 中搜索存在几个以 preWord 作为前缀的单词
  *
- * 相关应用例题有：
+ * 相关应用例题有（建议按顺序看哦~）：
  * Longest Word in Dictionary:
  *  https://github.com/cherryljr/LeetCode/blob/master/Longest%20Word%20in%20Dictionary.java
  * Prefix and Suffix Search:
