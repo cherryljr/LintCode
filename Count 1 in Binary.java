@@ -18,6 +18,8 @@ Binary Bit Manipulation
 // 位操作的总结与例题汇总：
 // http://blog.csdn.net/black_ox/article/details/46411997
 // http://www.jiuzhang.com/tutorial/bit-manipulation/82
+// https://www.zhihu.com/question/38206659
+// http://www.matrix67.com/blog/archives/263
 
 /**
  * Approach 1: Convert Integer to binaryString
