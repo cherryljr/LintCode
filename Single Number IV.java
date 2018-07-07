@@ -23,51 +23,42 @@ Binary Search Google
  */
 
 /**
- * Approach 1: Bit Operation and Traversal (Time Limit Exceeded)
+ * Approach 1: Traversal
  * Single Number 最直接的思路，就是采用 异或运算 来求那个只出现一次的元素。
- * 因为题目中说了 重复出现的元素都是 相邻 的。
- * 因此我们可以维持一个计数器 count，
- * 当两个数不想等时 count++，否则count--.
- * 当其值为 2 时，说明前一个数就是那个只出现一次的元素。然后直接跳出循环即可。
- *
- * 然而...超时了，是啊！这么特殊的数据状况怎么可能采用这种方法呢...
- * 我竟然 naive 地认为找到后退出时间会够...
- *
- * 时间复杂度为：O(n)
+ * 但是题目还给了一个非常重要的限制条件 重复出现的元素都是 相邻 的。
+ * 因此如果直接遍历全部的元素，肯定会超时，这点也在 Notice 中说明了。
+ * 于是我们可以利用另一个条件进行稍微的优化：
+ *  每个重复的元素出现且仅出现 两次，并且相邻。
+ * 那么我们可以观察发现：
+ *  Single Number 必定出现在 index 为偶数 的位置上。
+ *  因为如果 nums[i] == nums[i+1] 此时这两个元素相同，组成一对，占去两个位置。
+ *  故 Single Number 只能出现在这些数对之后。（同样出现在第一个也成立）
+ * 因此我们可以对数组进行一次遍历，每次将 nums[i] 与 之后的那个元素进行比较，
+ * 如果相等则组成一个数对， i += 2. 直到我们找到 ingle Number.
+ * 
+ * 时间复杂度：O(n/2) => O(n)
+ * 空间复杂度：O(1)
  */
-class Solution {
+public class Solution {
     /**
      * @param nums: The number array
      * @return: Return the single number
      */
     public int getSingleNumber(int[] nums) {
-        if (nums.length <= 1) {
-            return nums[0];
-        }
-
-        int temp = nums[0], rst = 0;
-        int count = 1;
-        for (int i = 1; i < nums.length; i++) {
-            temp ^= nums[i];
-            if (temp == 0) {
-                count--;
-            } else {
-                count++;
-            }
-            if (count == 2) {
-                rst = i - 1;
-                break;
+        for (int i = 0; i < nums.length - 1; i += 2) {
+            if (nums[i] != nums[i + 1]) {
+                return nums[i];
             }
         }
-
-        return nums[rst];
+        return -1;
     }
 }
 
 /**
  * Approach 2: Binary Search
- * Approach 1 中 O(n) 的方法超时了，那么肯定就需要 O(logn) 的方法了。
- * 并且数据分布又如此特殊，因此我们可以考虑以 二分法 来解决这道问题。
+ * Approach 1 中 O(n) 的方法虽然能够通过，但是表现并不好。
+ * 因此我们想肯定存在 O(logn) 的方法。
+ * 首先，我们可以考虑以 二分法 来解决这道问题。
  * 主要考点就是在于利用 重复的元素必是相邻的 这点来对二分后的情况进行讨论，
  * 从而确定边界的收缩。
  * 代码带有详细注释，直接看代码即可。
@@ -111,6 +102,44 @@ public class Solution {
             }
         }
 
+        return nums[left];
+    }
+}
+
+/**
+ * Approach 3: Binary Search (Optimized)
+ * 对于 Approach 2 中的做法，其实并没有将 Approach 1 解法中的优点很好地继承下来。
+ * 因为每个重复数字出现且仅出现两次，所以我们依旧可以利用这点在 二分 的时候省去一些判断。
+ * 当选取的中点 mid 为 偶数 时，它应该跟其后面的一个元素进行比较。
+ * 当其为 奇数 时，应该跟前一个元素进行比较。
+ * 如果值相等，那说明在这之前的所有元素都是 成对出现 的。
+ * 因此左边界向右移动 left + 1;
+ * 如果值不相等，则说明 Single Number 必定出现在 左半部分，则 右边界 向左移动。
+ * 
+ * 这里在选取需要比较的元素时，使用了位运算的一个小 trick.
+ * 当 mid 为奇数时，我们需要取的是 mid - 1;
+ * 当 mid 为偶数时，我们需要取的是 mid + 1;
+ * 这点与 mid ^ 1 效果是相同的（对 mid二进制 的最后一位进行改变）
+ * 
+ * 时间复杂度：O(logn)
+ */
+public class Solution {
+    /**
+     * @param nums: The number array
+     * @return: Return the single number
+     */
+    public int getSingleNumber(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + ((right - left) >> 1);
+            // int index = mid % 2 == 0 ? mid + 1 : mid - 1;
+            int index = mid ^ 1;
+            if (nums[mid] == nums[index]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
         return nums[left];
     }
 }
