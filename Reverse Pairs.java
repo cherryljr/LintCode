@@ -244,17 +244,19 @@ public class Solution {
  *
  * 过程：
  * 我们使用两个指针 p1, p2分别指向左右两个 subarray 的起始位置。
- * 当 p2 <= right && nums[p1] > nums[p2] 时，右指针 p2 继续向右移动。直到逆序对不成立为止。
- * 这样我们便能够计算出左边部分指针指向 p1 时，有多少个逆序数对。
- * 最后当 p1 遍历到 mid （即遍历完左边的 subarray）后，我们便可以得到总共有多少个逆序对。
- * 最后我们需要将 左半部分的数组 与 右半部分的数组 merge 起来完成排序。
+ * 当 nums[p1] <= nums[p2] 时说明当前不存在逆序对，则单纯地将 nums[p1] 赋值给 helper[index]。(归并排序的赋值过程)
+ * 然后两个指针分别向后移动一位；
+ * 当 nums[p1] > nums[p2] 时，说明存在逆序对，并且因为 左右两半部分是排序好的(从小到大)，因此说明
+ * 从 p1~mid 都比 nums[p2] 大，即存在 mid-p1+1 个逆序对。因此 count += mid-p1+1,
+ * 然后进行赋值过程并向后移动（与归并排序操作相同）
  * 这也体现了 归并排序 是先局部有序，再整体有序。
+ *
  * 代码的具体实现与 MergeSort 差不多，可以参照 MergeSort Template：
- * https://github.com/cherryljr/LintCode/blob/master/MergeSort%20Template.java
+ *  https://github.com/cherryljr/LintCode/blob/master/MergeSort%20Template.java
  * 时间复杂度为：O(nlogn)
  */
 public class Solution {
-    /*
+    /**
      * @param A: an array
      * @return: total of reverse pairs
      */
@@ -270,39 +272,33 @@ public class Solution {
         if (left >= right) {
             return 0;
         }
-
-        int mid = left + ((right - left) >> 1);
+        int mid = left + (right - left >> 1);
         // 结果为左半段数组中的逆序对数 + 右半段数组中的逆序对数 + 左边段数组中 与 右半段数组中 的元素组成的逆序对数
-        return mergeSort(nums, left, mid) + mergeSort(nums, mid + 1, right)
-                + merge(nums, left, mid, right);
+        return mergeSort(nums, left, mid) + mergeSort(nums, mid + 1, right) + merge(nums, left, mid, right);
     }
 
+    // 与归并排序的写法几乎相同，只不过在这过程中计算保留了逆序对的信息
     private int merge(int[] nums, int left, int mid, int right) {
         int[] helper = new int[right - left + 1];
-
-        int i = 0, rst = 0;
-        int p1 = left, p2 = mid + 1, p = mid + 1;
+        int index = 0;
+        int count = 0;  // 逆序对个数
+        int p1 = left, p2 = mid + 1;
+        while (p1 <= mid && p2 <= right) {
+            if (nums[p1] <= nums[p2]) {
+                helper[index++] = nums[p1++];
+            } else {
+                helper[index++] = nums[p2++];
+                count += mid - p1 + 1;
+            }
+        }
         while (p1 <= mid) {
-            // 当 p<=right 并且 能够与 nums[p] 组成逆序对的时候，指针 p 向后移动
-            while (p <= right && nums[p1] > nums[p]) {
-                p++;
-            }
-            // 计算出 合并当前左右两个部分时，由 nums[p1] 所产生的逆序对数
-            rst += p - (mid + 1);
-
-            while (p2 <= right && nums[p1] > nums[p2]) {
-                helper[i++] = nums[p2++];
-            }
-            helper[i++] = nums[p1++];
+            helper[index++] = nums[p1++];
         }
         while (p2 <= right) {
-            helper[i++] = nums[p2++];
+            helper[index++] = nums[p2++];
         }
+        System.arraycopy(helper, 0, nums, left, helper.length);
 
-        // 将排序好的 helper 数组的值拷贝覆盖到原来的数组中
-        for (i = 0; i < helper.length; i++) {
-            nums[left + i] = helper[i];
-        }
-        return rst;
+        return count;
     }
 }
