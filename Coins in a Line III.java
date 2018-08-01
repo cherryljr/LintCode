@@ -31,7 +31,7 @@ Array Dynamic Programming Game Theory
  * 玩家决策 (Function):
  * 因为硬币总价值一定，为了保证 先手最大，保证取完后对手能取到的最小即可。
  * (死命想法办法坑对方即可)
- * dp[i][j] = sum[i][j] - Math.min(dp[i+1][j], dp[i][j-1]);
+ * dp[i][j] = preSum[j + 1] - preSum[i] - Math.min(dp[i+1][j], dp[i][j-1]);
  * 注意：当 i==j 时，我们只能取到 values[i].
  * 游戏终止 (Initialize)：
  * 当唯一剩下的一枚硬币被取走之后，游戏结束。
@@ -51,25 +51,15 @@ public class Solution {
      * @return: a boolean which equals to true if the first player will win
      */
     public boolean firstWillWin(int[] values) {
-        if (values == null || values.length <= 2) {
-            return true;
-        }
-
         int n = values.length;
-        int[][] sum = new int[n][n];
-        int[][] dp = new int[n][n];
-        // 计算出每一段区间[i...j]的价值之和
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                if (i == j) {
-                    sum[i][j] = values[i];
-                } else {
-                    sum[i][j] = sum[i][j - 1] + values[j];
-                }
-            }
+        int[] preSum = new int[n + 1];
+        // 计算前缀和以便后面快速计算出各个区间段之和
+        for (int i = 1; i <= n; i++) {
+            preSum[i] = preSum[i - 1] + values[i - 1];
         }
 
         // Initialize and Function
+        int[][] dp = new int[n][n];
         // bottom to top
         for (int i = n - 1; i >= 0; i--) {
             // left to right
@@ -77,11 +67,12 @@ public class Solution {
                 if (i == j) {
                     dp[i][j] = values[i];
                 } else {
-                    dp[i][j] = sum[i][j] - Math.min(dp[i + 1][j], dp[i][j - 1]);
+                    int sum = preSum[j + 1] - preSum[i];
+                    dp[i][j] = sum - Math.min(dp[i + 1][j], dp[i][j - 1]);
                 }
             }
         }
 
-        return dp[0][n - 1] > sum[0][n - 1] / 2;
+        return dp[0][n - 1] > preSum[n] / 2;
     }
 }
