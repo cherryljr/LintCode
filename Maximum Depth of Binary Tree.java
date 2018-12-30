@@ -1,34 +1,26 @@
-DFS: Divide and conquer. 维持一个最大值。
-
 /*
-61% Accepted
 Given a binary tree, find its maximum depth.
-
 The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
 
 Example
 Given a binary tree as follow:
 
-        1
+  1
+ / \
+2   3
+   / \
+  4   5
+The maximum depth is 3.
+ */
 
-     /     \ 
-
-   2       3
-
-          /    \
-
-        4      5  
-
-The maximum depth is 3
-
-Tags Expand 
-Tree Binary Tree Depth First Search
-
-Thinking process:
-check if root is null, return 0 if so.
-Divide and return integer as the depth
-Conquer: find the max and return depth + 1.
-*/
+/**
+ * Approach: Divide and Conquer
+ * Time Complexity: O(n)
+ * Space Complexity: O(h)
+ *
+ * Reference:
+ *  https://github.com/cherryljr/LeetCode/blob/master/Same%20Tree.java
+ */
 
 /**
  * Definition of TreeNode:
@@ -44,28 +36,16 @@ Conquer: find the max and return depth + 1.
 public class Solution {
     /**
      * @param root: The root of binary tree.
-     * @return: An integer.
+     * @return: An integer
      */
     public int maxDepth(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        
-        int left = maxDepth(root.left);
-        int right = maxDepth(root.right);
-        
-        return Math.max(left, right) + 1;
-    }
-}
-
-//Find all depth and return max alone the way
-public class Solution {
-    public int maxDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
+        if (root.left == null && root.right == null) {
+            return 1;
         }
+
         return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
 }
-
-```
