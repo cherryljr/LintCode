@@ -68,7 +68,7 @@ public class Solution {
 
         int max = 0;
         // 子矩阵上边界
-        for (int top = 0; top <= rows; top++) {
+        for (int top = 0; top < rows; top++) {
             // 子矩阵下边界
             for (int down = top + 1; down <= rows; down++) {
                 // Kadane's Algorithm
