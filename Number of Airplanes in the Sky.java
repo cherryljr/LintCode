@@ -69,7 +69,7 @@ public class Solution {
 }
 
 /**
- * Approach 2: Scan Line
+ * Approach 2: Sweep Line (Scan Line)
  * 形象点来说就是首先将飞机的 飞行时间段 看成一条条 平行于x轴的线段，
  * 然后我们用一条 垂直于x轴 的直线从头到尾去扫一遍，看在哪些时间段与飞机的飞行线段的交点最多，
  * 那些时间段就是 飞机最多的时候。交点个数就是 天空中飞机最多的架数。
