@@ -1,32 +1,37 @@
 /*
-Description
 A string, each character representing a scene. Between two identical characters is considered to be a continuous scene.
-For example: abcda, you can think of these five characters as the same scene.
-Or acafghbeb can think of two aca and beb scenes.
-If there is a coincidence between the scenes, then the scenes are combined.
-For example, abcab, where abca and bcab are coincident, then the five characters are considered to be the same scene.
-Give a string to find the longest scene.
-
-1 <= |str| <=1e5
-str contains only lowercase letters
+For example: abcda, you can think of these five characters as the same scene. Or acafghbeb can think of two aca and beb scenes.
+If there is a coincidence between the scenes, then the scenes are combined. For example, abcab, where abca and bcab are coincident,
+then the five characters are considered to be the same scene. Give a string to find the longest scene.
 
 Example
-Given str = "abcda", return 5.
+Example 1
+Input: "abcda"
+Output: 5
 Explanation:
 The longest scene is "abcda".
 
-Given str = "abcab", return 5.
+Example 2
+Input: "abcab"
+Output: 5
 Explanation:
 The longest scene is "abcab".
+
+Notice
+    1. 1 <= |str| <=1e5
+    2. str contains only lowercase letters
  */
 
 /**
- * Approach 1: Sweep Line
+ * Approach 1: Sweep Line (Similar to Merge Intervals)
  * 与 区间归并(Merge Intervals) 这道题目十分类似
- * https://github.com/cherryljr/LintCode/blob/master/Merge%20Intervals.java
+ *  https://github.com/cherryljr/LintCode/blob/master/Merge%20Intervals.java
+ *
+ * 时间复杂度：O(nlogn)
+ * 空间复杂度：O(n)
  *
  * 扫描线详解：
- * https://github.com/cherryljr/LintCode/blob/master/Number%20of%20Airplanes%20in%20the%20Sky.java
+ *  https://github.com/cherryljr/LintCode/blob/master/Number%20of%20Airplanes%20in%20the%20Sky.java
  */
 public class Solution {
     /**
@@ -48,19 +53,10 @@ public class Solution {
         for (Map.Entry<Character, List<Integer>> entry : map.entrySet()) {
             List<Integer> tempList = entry.getValue();
             // 只有一个数，无法形成区间
-            if (tempList.size() == 1) {
+            if (tempList.size() <= 1) {
                 continue;
             }
-            int start = Integer.MAX_VALUE, end = Integer.MIN_VALUE;
-            for (int index : tempList) {
-                if (index < start) {
-                    start = index;
-                }
-                if (index > end) {
-                    end = index;
-                }
-            }
-            intervals.add(new Interval(start + 1, end + 1));
+            intervals.add(new Interval(tempList.get(0) + 1, tempList.get(tempList.size() - 1) + 1));
         }
 
         // 使用 Sweep Line 处理这些区间段即可
@@ -73,7 +69,7 @@ public class Solution {
 
         int count = 0;
         int pre = 0, preIndex = 0;
-        int rst = 0;
+        int maxLen = 1;
         for (Point p : list) {
             count += p.flag;
             if (pre == 0 && count > 0) {
@@ -81,11 +77,11 @@ public class Solution {
                 preIndex = p.index;
             }
             if (pre != 0 && count == 0) {
-                rst = Math.max(rst, p.index - preIndex + 1);
+                maxLen = Math.max(maxLen, p.index - preIndex + 1);
                 pre = count;
             }
         }
-        return rst;
+        return maxLen;
     }
 
     class Interval {
@@ -106,8 +102,8 @@ public class Solution {
         }
 
         @Override
-        public int compareTo(Point p) {
-            return this.index - p.index == 0 ? this.flag - p.flag : this.index - p.index;
+        public int compareTo(Point other) {
+            return this.index - other.index == 0 ? this.flag - other.flag : this.index - other.index;
         }
     }
 }
@@ -119,6 +115,9 @@ public class Solution {
  * 那么说明上一个区间与当前区间无法连起来，因此我们需要更新当前区间的起点。
  * 否则，说明上一个区间与当前区间存在重合部分，
  * 所以将上一个区间的 pre.end 更新为当前区间的 curr.end。
+ *
+ * 时间复杂度：O(nlogn)
+ * 空间复杂度：O(n)
  */
 public class Solution {
     /**
@@ -140,22 +139,16 @@ public class Solution {
         for (Map.Entry<Character, List<Integer>> entry : map.entrySet()) {
             List<Integer> tempList = entry.getValue();
             // 只有一个数，无法形成区间
-            if (tempList.size() == 1) {
+            if (tempList.size() <= 1) {
                 continue;
             }
-            int start = Integer.MAX_VALUE, end = Integer.MIN_VALUE;
-            for (int index : tempList) {
-                if (index < start) {
-                    start = index;
-                }
-                if (index > end) {
-                    end = index;
-                }
-            }
-            intervals.add(new Interval(start + 1, end + 1));
+            intervals.add(new Interval(tempList.get(0) + 1, tempList.get(tempList.size() - 1) + 1));
         }
         Collections.sort(intervals, (a, b) -> a.start - b.start);
 
+        if (intervals == null || intervals.size() <= 0) {
+            return 1;
+        }
         // Initialize pre and maxLen
         Interval pre = intervals.get(0);
         int maxLen = intervals.get(0).end - intervals.get(0).start + 1;
