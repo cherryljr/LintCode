@@ -52,6 +52,7 @@ public class Solution {
         if (mem[left][right] != Integer.MIN_VALUE) {
             return mem[left][right];
         }
+        // 当前总共只有两种取法，因此在 取最左边硬币 和 取最右边硬币 中选择能够得到最大价值的方案
         mem[left][right] = Math.max(values[left] - dfs(values, left + 1, right, mem), values[right] - dfs(values, left, right - 1, mem));
         return mem[left][right];
     }
