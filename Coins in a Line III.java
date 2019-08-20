@@ -4,22 +4,61 @@ There are n coins in a line.
 Two players take turns to take a coin from one of the ends of the line until there are no more coins left.
 The player with the larger amount of money wins.
 Could you please decide the first player will win or lose?
-
 Example
 Given array A = [3,2,2], return true.
 Given array A = [1,2,4], return true.
 Given array A = [1,20,4], return false.
-
 Challenge
 Follow Up Question:
 If n is even. Is there any hacky algorithm that can decide whether first player will win or lose in O(1) memory and O(n) time?
-
 Tags
 Array Dynamic Programming Game Theory
 */
 
 /**
- * Approach 1: DP
+ * Approach 1: DFS + Memory Search
+ * 对于 DP 的问题，如果一开始写不出来，可以尝试写出递归暴力求解的方案，然后利用记忆化搜索进行优化。
+ * 这里的 mem[i][j] 表示：区间i~j 的硬币，先手取得话可以比后手最多多获得的价值。
+ * （定义成这样是为了优化掉 preSum[i][j] 的计算过程）
+ * 如果不习惯的可以参考 Approach 2 的 DP 做法。
+ *
+ * 时间复杂度：O(n^2)
+ * 空间复杂度：O(n^2)
+ *
+ * PS.如果硬币的个数为 偶数 个，那么这就是一个先手必胜的游戏，具体分析可以详见
+ *  Stone Game: https://github.com/cherryljr/LeetCode/blob/master/Stone%20Game.java
+ * Reference:
+ *  http://zxi.mytechroad.com/blog/leetcode/leetcode-486-predict-the-winner/
+ */
+public class Solution {
+    /**
+     * @param values: a vector of integers
+     * @return: a boolean which equals to true if the first player will win
+     */
+    public boolean firstWillWin(int[] values) {
+        int n = values.length;
+        if (n % 2 == 0) return true;
+        int[][] mem = new int[n][n];
+        for (int[] arr : mem) {
+            Arrays.fill(arr, Integer.MIN_VALUE);
+        }
+        return dfs(values, 0, n - 1, mem) >= 0;
+    }
+
+    private int dfs(int[] values, int left, int right, int[][] mem) {
+        if (left == right) {
+            return values[left];
+        }
+        if (mem[left][right] != Integer.MIN_VALUE) {
+            return mem[left][right];
+        }
+        mem[left][right] = Math.max(values[left] - dfs(values, left + 1, right, mem), values[right] - dfs(values, left, right - 1, mem));
+        return mem[left][right];
+    }
+}
+
+/**
+ * Approach 2: DP
  * 在 Coins in a Line II 上面的进一步加大难度。
  * 但是主要解体思路仍然与 II 相同。
  * 仍然要使得每一次取完之后，对手取的都是较差的情况。使得对手拿到的硬币总价值最小。
@@ -45,11 +84,8 @@ Array Dynamic Programming Game Theory
  * 按照 从下到上，从左到右 的顺序进行递推，得到最终结果：
  * 矩阵的 右上角 (dp[0][n-1])
  *
- * PS.如果硬币的个数为 偶数 个，那么这就是一个先手必胜的游戏，具体分析可以详见
- * Stone Game: https://github.com/cherryljr/LeetCode/blob/master/Stone%20Game.java
- * 
- * 时间复杂度：O(n * sum)
- * 空间复杂度：O(n * sum)
+ * 时间复杂度：O(n^2)
+ * 空间复杂度：O(n^2)
  */
 public class Solution {
     /**
@@ -58,9 +94,7 @@ public class Solution {
      */
     public boolean firstWillWin(int[] values) {
         int n = values.length;
-        if ((n & 1) == 0) {
-            return true;
-        }
+        if (n % 2 == 0) return true;
         int[] preSum = new int[n + 1];
         // 计算前缀和以便后面快速计算出各个区间段之和
         for (int i = 1; i <= n; i++) {
@@ -89,7 +123,11 @@ public class Solution {
 }
 
 /**
- * Approach 2: DP (Space Optimized)
+ * Approach 3: DP (Space Optimized)
+ * 该解法是 Approach 1 的 DP 版本，并且对空间复杂度进行了优化。
+ * 
+ * 时间复杂度：O(n^2)
+ * 空间复杂度：O(n)
  */
 public class Solution {
     /**
@@ -98,10 +136,7 @@ public class Solution {
      */
     public boolean firstWillWin(int[] values) {
         int n = values.length;
-        if ((n & 1) == 0) {
-            return true;
-        }
-
+        if (n % 2 == 0) return true;
         int[] dp = new int[n];
         for (int i = n - 1; i >= 0; i--) {
             for (int j = i; j < n; j++) {
