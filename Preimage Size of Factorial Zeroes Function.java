@@ -21,7 +21,7 @@ Explanation: There is no x such that x! ends in K = 5 zeroes.
 /**
  * Approach 1: Binary Search
  * 题目要求末尾0的个数正好为 k 个，这对于我们而言其实并不好处理。
- * 因此不妨将问题转换成 求末尾至少有 k 个0，这样利用 func(k+1)-func(k) 就能够得到答案了，
+ * 因此不妨将问题转换成 求末尾至少有 k 个0，这样利用 func(k+1)-func(k) 就能够得到答案了， 
  * 也就是所谓的将问题降维到我们所熟悉的一个层次上。
  *
  * 因为一个数 n 的阶乘，随着 n 的增大，末尾0的个数只增不减。
